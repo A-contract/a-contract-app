@@ -10,18 +10,16 @@ const Header = () => {
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-      <AppBar style={{ background: "#0A0910" }}>
+      <AppBar style={{ background: "#0A0910"}}>
         <Toolbar>
         {isMatch ? (
           <>
-            <Typography>A-contract</Typography>
+            <Typography style={{ fontFamily: "Cera Pro" }} >A-contract</Typography>
             <DrawerMenu />
           </>
         ) : (
           <>
-            {/* <div> */}
               <img src={ logo.src } alt="logo" style={{ width: "160px" }} />
-            {/* </div> */}
             
             <Tabs 
               style={{ marginLeft: "auto"}}
@@ -34,9 +32,9 @@ const Header = () => {
                 }
               }}
             >
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Analyse contract" />
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Tariffs" />
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Support" />
+              <Tab style={{ fontFamily: "Cera Pro" }} label="Analyse contract" href="#analyse-contract" />
+              <Tab style={{ fontFamily: "Cera Pro" }} label="Tariffs" href="#tariffs" />
+              <Tab style={{ fontFamily: "Cera Pro" }} label="Support" href="#support" />
             </Tabs>
             <Link style={{ marginLeft: "auto" }} href="cabinet" target="_blank">
               <Button style={{ color: "#ffffff", border: "1px solid #ffffff", fontFamily: "Cera Pro" }} variant="outlined">Sign In</Button>

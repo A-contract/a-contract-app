@@ -7,6 +7,7 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    Typography,
   } from "@mui/material";
 
   import MenuIcon from "@mui/icons-material/Menu";
@@ -19,15 +20,15 @@ const DrawerMenu = () => {
     return (
         <>
             <Drawer
-                anchor="left"
+                anchor="top"
                 open={openDrawer}
                 onClose={() => setOpenDrawer(false)}
             >
-                <List>
+                <List style={{ backgroundColor: "#050408" }}>
                     {sections.map((section, index) => (
                             <ListItemButton key={index}>
                                 <ListItemIcon>
-                                    <ListItemText>{section}</ListItemText>
+                                    <ListItemText primary={<Typography style={{ fontFamily: "Cera Pro", color: "#ffffff" }}>{section}</Typography>} />
                                 </ListItemIcon>    
                             </ListItemButton>
                     ))}
