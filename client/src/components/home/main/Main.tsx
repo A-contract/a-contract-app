@@ -5,15 +5,16 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const Main = () => {
     return (
-        <main style={{ flex: "1 1 auto", position: "relative", maxWidth: "1080px", marginTop: "60px", paddingTop: "20px",  }}>
-        <Container style={{ display: "flex"}}>
-            <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
+        <main style={{ flex: "1 1 auto", maxWidth: "1080px"}}>
+        
+        <Container style={{ display: "flex", paddingTop: "100px"}} id={ "analyse-contract" }> 
+            <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }} >
                 <Typography
                 component="h2"
                 variant="h4"
                 align="center"
                 gutterBottom
-                id={ "analyse-contract" }
+                
                 >
                 Analyse contract 
                 </Typography>
@@ -35,14 +36,14 @@ const Main = () => {
             </Box>
         </Container>
         
-        <Container style={{ display: "flex"}}>
+        <Container style={{ display: "flex", paddingTop: "100px"}} id={ "tariffs" }>
             <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
                 <Typography
                 component="h2"
                 variant="h4"
                 align="center"
                 gutterBottom
-                id={ "tariffs" }
+                
                 >
 
                 Tariffs
@@ -66,14 +67,14 @@ const Main = () => {
             </Box>
         </Container>
 
-        <Container style={{ display: "flex"}}>
+        <Container style={{ display: "flex", paddingTop: "100px"}} id={ "support" }>
             <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
                 <Typography
                 component="h2"
                 variant="h4"
                 align="center"
                 gutterBottom
-                id={ "support" }
+                
                 >
                 Support 
                 </Typography>
