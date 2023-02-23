@@ -1,47 +1,87 @@
 import React, {useState} from 'react';
 import Link from "next/link";
-import {AppBar, Box, Toolbar, Typography, makeStyles, Button, IconButton, Menu, MenuItem, Container, Tooltip, Tabs, Tab, useTheme, useMediaQuery} from "@material-ui/core";
 import DrawerMenu from './DrawerMenu';
 import logo  from '../../../../images/logo.png'
+import { AppBar, Box, Button, Tab, Tabs, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
+
+const sections = [
+  {
+    name: "Analyse contract",
+    href: "#analyse-contract",
+    color: "secondary.light"
+  }, 
+  {
+    name: "Tariffs",
+    href: "#tariffs",
+    color: "secondary.light"
+  }, 
+  {
+    name: "Support",
+    href: "#support",
+    color: "secondary.light"
+  },
+]
 
 const Header = () => {
-  const [value, setValue] = useState();
+  const [valueTab, setValueTab] = useState(0);
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-
+  
   return (
-      <AppBar style={{ background: "#0A0910"}}>
+      <AppBar color="primary">
         <Toolbar>
         {isMatch ? (
           <>
-            <Typography style={{ fontFamily: "Cera Pro" }} >A-contract</Typography>
-            <DrawerMenu />
+            <Box component="div">
+              <Typography>A-contract</Typography>
+            </Box>
+            <Box 
+              component="div" 
+              sx={{ ml: "auto"}}
+            >
+              <DrawerMenu />
+            </Box>
+            
           </>
         ) : (
           <>
-              <img src={ logo.src } alt="logo" style={{ width: "160px" }} />
-            
-            <Tabs 
-              style={{ marginLeft: "auto"}}
-              textColor="inherit" 
-              value={value} 
-              onChange={(e, value) => setValue(value)}
-              TabIndicatorProps={{
-                style: {
-                  backgroundColor: "#ffffff"
-                }
-              }}
+            <Box component="div">
+            {/* add style for logo */}
+              <img 
+                src={ logo.src } 
+                alt="logo" 
+                style={{ width: "160px" }} 
+              /> 
+            </Box>
+            <Box 
+              component="div" 
+              sx={{ mx: "auto"}}
             >
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Analyse contract" href="#analyse-contract" />
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Tariffs" href="#tariffs" />
-              <Tab style={{ fontFamily: "Cera Pro" }} label="Support" href="#support" />
-            </Tabs>
-            <Link style={{ marginLeft: "auto" }} href="cabinet" target="_blank">
-              <Button style={{ color: "#ffffff", border: "1px solid #ffffff", fontFamily: "Cera Pro" }} variant="outlined">Sign In</Button>
-            </Link>
-            <Link style={{ marginLeft: "10px" }} href="cabinet" target="_blank">
-              <Button style={{ fontFamily: "Cera Pro" }} variant="contained">Sign up</Button>
-            </Link>
+              <Tabs 
+                textColor="secondary"
+                value={valueTab} 
+                onChange={(event : any, value : any) => (setValueTab(value))}
+                TabIndicatorProps={{
+                  sx: { backgroundColor: theme.palette.secondary.main }
+                }}
+              >
+                {sections.map((section, index) => (
+                  <Tab key={ index } label={ section.name } href={ section.href } sx={{ color: section.color }}/>
+                ))}
+              </Tabs>
+            </Box>
+            <Box 
+              component="div" 
+              sx={{ mf: "auto" }}
+            >
+              <Link href="cabinet" target="_blank">   
+                <Button variant="outlined" color="secondary">Sign In</Button> 
+              </Link>
+              <Link href="cabinet" target="_blank" style={{ marginLeft: "10px" }}>
+                <Button variant="contained" color="secondary">Sign up</Button> 
+              </Link>
+            </Box>
+            
           </>
         )}
         </Toolbar>

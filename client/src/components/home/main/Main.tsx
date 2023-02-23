@@ -1,4 +1,5 @@
-import {AppBar, Box, Toolbar, Typography, makeStyles, Button, IconButton, Menu, MenuItem, Container, Tooltip, Tabs, Tab, useTheme, useMediaQuery, Grid, Card, CardMedia, CardContent, CardActions} from "@material-ui/core";
+
+import { Box, Container, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];

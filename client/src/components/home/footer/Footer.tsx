@@ -1,5 +1,6 @@
-import {AppBar, Box, Toolbar, Typography, makeStyles, Button, IconButton, Menu, MenuItem, Container, Tooltip, Tabs, Tab, useTheme, useMediaQuery, List} from "@material-ui/core";
-import { ListItem, ListItemButton, ListItemText } from "@mui/material";
+
+
+import { Box, Container, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
 import logo  from '../../../../images/logo.png'
 
 const navigation = ["Analyse contract", "Tariffs", "Support"];

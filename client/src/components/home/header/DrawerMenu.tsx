@@ -1,45 +1,68 @@
 import React, {useState} from 'react';
-import Link from "next/link";
 import {
     Drawer,
     IconButton,
-    List,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Typography,
+    Tab,
+    Tabs,
+    useTheme,
   } from "@mui/material";
 
-  import MenuIcon from "@mui/icons-material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+  
 
-const sections = ["Analyse contract", "Tariffs", "Support"];
+const sections = [
+    {
+      name: "Analyse contract",
+      href: "#analyse-contract",
+      color: "secondary.light"
+    }, 
+    {
+      name: "Tariffs",
+      href: "#tariffs",
+      color: "secondary.light"
+    }, 
+    {
+      name: "Support",
+      href: "#support",
+      color: "secondary.light"
+    },
+]
 
 const DrawerMenu = () => {
+    const [valueTab, setValueTab] = useState(0);
     const [openDrawer, setOpenDrawer] = useState(false);
+    const theme = useTheme();
 
     return (
         <>
-            <Drawer
-                anchor="top"
-                open={openDrawer}
-                onClose={() => setOpenDrawer(false)}
-            >
-                <List style={{ backgroundColor: "#050408" }}>
-                    {sections.map((section, index) => (
-                            <ListItemButton key={index}>
-                                <ListItemIcon>
-                                    <ListItemText primary={<Typography style={{ fontFamily: "Cera Pro", color: "#ffffff" }}>{section}</Typography>} />
-                                </ListItemIcon>    
-                            </ListItemButton>
-                    ))}
-                </List>
-            </Drawer>
-            <IconButton
-                style={{ color: "white", marginLeft: "auto" }}
-                onClick={() => setOpenDrawer(!openDrawer)}
-            >
-                <MenuIcon />
-            </IconButton>
+                <Drawer
+                    anchor="top"
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                >
+                    <Tabs 
+                        orientation="vertical"
+                        textColor="secondary"
+                        sx={{ 
+                            bgcolor: theme.palette.primary.main, 
+                        }}
+                        value={valueTab} 
+                        onChange={(event : any, value : any) => (setValueTab(value))}
+                        TabIndicatorProps={{
+                            sx: { backgroundColor: theme.palette.secondary.main }
+                        }}
+                    >
+                        {sections.map((section, index) => (
+                            <Tab key={ index } label={ section.name } href={ section.href } sx={{ color: section.color }}/>
+                        ))}
+                    </Tabs>
+                </Drawer>
+                <IconButton
+                    sx={{ color: theme.palette.secondary.main}}
+                    onClick={() => setOpenDrawer(!openDrawer)}
+                >
+                    <MenuIcon sx={{ color: theme.palette.secondary.main }} />
+                </IconButton>
         </>
     )
 }
