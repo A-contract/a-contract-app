@@ -76,7 +76,7 @@ const Footer = () => {
                     </Box>
                     <Box component="div" sx={{ display: "flex"}}>
                         {navigation.map((value, index) => (
-                            <Box component="div" key={ index }>
+                            <Box component="div" key={ index } sx={{ pl: "30px"}}>
                                 <List>
                                     <ListItem>
                                         <ListItemText primary={
