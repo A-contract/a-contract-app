@@ -28,7 +28,8 @@ const Header = () => {
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   
   return (
-      <AppBar color="primary">
+      <AppBar color="primary" sx={{ alignItems: "center"}}>
+        <Box component="div"  sx={{ maxWidth: "1300px", width: "inherit"}}>
         <Toolbar>
         {isMatch ? (
           <>
@@ -85,6 +86,8 @@ const Header = () => {
           </>
         )}
         </Toolbar>
+        </Box>
+        
       </AppBar>
   );
 }
