@@ -19,6 +19,6 @@ const theme = responsiveFontSizes(
             fontFamily: 'Cera Pro',
             
         },
-  }));
+    }));
 
 export default theme;
