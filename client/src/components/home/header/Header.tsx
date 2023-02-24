@@ -56,7 +56,7 @@ const Header = () => {
             </Box>
             <Box 
               component="div" 
-              sx={{ mx: "auto"}}
+              sx={{ mr: "auto", ml: "50px"}}
             >
               <Tabs 
                 textColor="secondary"
