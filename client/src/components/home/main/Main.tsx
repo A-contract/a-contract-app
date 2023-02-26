@@ -2,14 +2,12 @@
 import { Box, Container, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 const Main = () => {
     return (
-        <main style={{ flex: "1 1 auto", maxWidth: "1080px"  }}>
+        <Box component="main" sx={{ flex: "1 1 auto", maxWidth: "1300px", px: "25px"}}>
             <Box component="div" id={ "analyse-contract" } sx={{ pt: "80px" }}>
-                <Container style={{ display: "flex"}}>
-                <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
+                <Container sx={{ display: "flex"}}>
+                <Box sx={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
                     <Typography
                     component="h2"
                     variant="h4"
@@ -30,7 +28,7 @@ const Main = () => {
                         with the opportunity to save your time, needed to study contract.
                     </Typography>
                 </Box>
-                <Box style={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
+                <Box sx={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
                     <Typography variant="h6" align="center"  paragraph>
                         Form
                     </Typography>
@@ -38,14 +36,13 @@ const Main = () => {
                 </Container>
             </Box>
             <Box component="div" id={ "tariffs" } sx={{ pt: "80px" }}>
-                <Container style={{ display: "flex"}}>
-                    <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
+                <Container sx={{ display: "flex"}}>
+                    <Box sx={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
                         <Typography
                         component="h2"
                         variant="h4"
                         align="center"
                         gutterBottom
-                        
                         >
 
                         Tariffs
@@ -62,7 +59,7 @@ const Main = () => {
 
                         </Typography>
                     </Box>
-                    <Box style={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
+                    <Box sx={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
                         <Typography variant="h6" align="center"  paragraph>
                         Tariffs
                         </Typography>
@@ -70,7 +67,7 @@ const Main = () => {
                 </Container>
             </Box>
             <Box component="div" id={ "support" } sx={{ pt: "80px" }}>
-                <Container style={{ display: "flex"}}>
+                <Container sx={{ display: "flex"}}>
                 <Box style={{ width: "530px", marginRight: "10px", alignItems: "center" }}>
                     <Typography
                     component="h2"
@@ -95,14 +92,14 @@ const Main = () => {
 
                     </Typography>
                 </Box>
-                <Box style={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
+                <Box sx={{ width: "530px", marginLeft: "10px", alignItems: "center" }}>
                     <Typography variant="h6" align="center"  paragraph>
                     Support
                     </Typography>
                 </Box>
                 </Container>
             </Box>
-        </main>
+        </Box>
     )
 }
 

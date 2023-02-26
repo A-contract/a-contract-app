@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <main className={styles.wrapper }>
-        <Header /> {/* without ThemeProvider / Default stylization */}
+        <Header /> 
         <Main />
         <Footer />
       </main>
