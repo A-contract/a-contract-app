@@ -94,6 +94,9 @@ const Main = () => {
                             </Button>
                         </Box>
                         <Box>
+                            <Typography>By signing up, you agree to our terms of service and privacy policy</Typography>
+                        </Box>
+                        <Box>
                             <Button variant="outlined" sx={{ bgcolor: theme.palette.secondary.main, color: theme.palette.info.main, borderColor: theme.palette.info.main }} >Analyse</Button>
                         </Box>
                     </Paper>
