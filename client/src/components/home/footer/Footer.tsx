@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemText, Toolbar, Typography, useTheme } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Toolbar, Typography, useMediaQuery, useTheme } from "@mui/material";
 import logo  from '../../../../images/logo.png'
 
 
@@ -22,7 +22,7 @@ const navigation = [
                 color: "secondary.main",
             },
         ],
-        color: "secondary.light"
+        color: "secondary.main"
     },
     {
         title: "Legal",
@@ -38,7 +38,7 @@ const navigation = [
                 color: "secondary.main",
             }, 
         ],
-        color: "secondary.light"
+        color: "secondary.main"
     },
     {
         title: "Social",
@@ -59,15 +59,96 @@ const navigation = [
                 color: "secondary.main",
             },
         ],
-        color: "secondary.light"
+        color: "secondary.main"
     },
 ]
 
 const Footer = () => {
+    
     const theme = useTheme();
+    const isMatch = useMediaQuery(theme.breakpoints.down("md"));
     
     return (
-        <Box 
+        <>
+        {isMatch? (
+            <Box 
+            component="footer" 
+            sx={{ 
+                bgcolor: theme.palette.primary.main, 
+                width: "100%", 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center", 
+                py: "20px",
+            }}
+        >
+            <Box 
+                component="div" 
+                sx={{ 
+                    maxWidth: "inherit", 
+                    width: "inherit"
+                }}
+            >
+                <Toolbar 
+                    sx={{ 
+                        display: "flex",  
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                    }}
+                >
+                    <Box 
+                        component="div" 
+                        sx={{ mr: "auto", mb: "20px", pl: "16px" }}
+                    >
+                        <Box 
+                            component="img" 
+                            src={ logo.src } 
+                            alt="logo" 
+                            sx={{ width: "160px" }} 
+                        />
+                        <Typography sx={{ color: theme.palette.secondary.main }}>© 2023, A-contract. All Rights Reserved.</Typography>
+                    </Box>
+                    <Box 
+                        component="div" 
+                        sx={{ 
+                            display: "flex",  
+                            flexDirection: "column",
+                        }}
+                    >
+                        {navigation.map((value, index) => (
+                            <Box 
+                                component="div" 
+                                key={ index } 
+                            >
+                                <List>
+                                    <ListItem>
+                                        <ListItemText primary={
+                                            <Typography sx={{ color: value.color, letterSpacing: "0.7px", fontWeight: "600" }}>{ value.title }</Typography>
+                                        }>
+                                        </ListItemText>
+                                    </ListItem>
+                                    {value.items.map((valueItem, indexItem) => (
+                                        <ListItem 
+                                            component="a" 
+                                            href={ valueItem.href } 
+                                            key={ indexItem }
+                                        >
+                                            <ListItemText primary={
+                                                <Typography sx={{ color: valueItem.color }}>{ valueItem.name }</Typography>
+                                            }></ListItemText>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Box>
+                        ))}
+                    </Box>
+                    
+                </Toolbar>
+            </Box>
+            
+        </Box>
+        ): (
+            <Box 
             component="footer" 
             sx={{ 
                 bgcolor: theme.palette.primary.main, 
@@ -116,7 +197,7 @@ const Footer = () => {
                                 <List>
                                     <ListItem>
                                         <ListItemText primary={
-                                            <Typography sx={{ color: value.color }}>{ value.title }</Typography>
+                                            <Typography sx={{ color: value.color, letterSpacing: "0.7px", fontWeight: "600" }}>{ value.title }</Typography>
                                         }>
                                         </ListItemText>
                                     </ListItem>
@@ -140,6 +221,8 @@ const Footer = () => {
             </Box>
             
         </Box>
+        )}
+        </>  
     )
 }
 
