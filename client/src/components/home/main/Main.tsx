@@ -1,4 +1,7 @@
+
 import { Box, Button, Container, List, ListItem, ListItemIcon, ListItemText, Paper, TextField, Typography, useTheme } from "@mui/material";
+import { DropzoneArea } from "mui-file-dropzone";
+import { useState } from "react";
 
 const analyse = {
         name: "Analyse contract",
@@ -44,7 +47,7 @@ const Main = () => {
     
     return (
         <Box component="main" sx={{ flex: "1 1 auto", maxWidth: "1300px", width: "inherit", px: "25px",  pb: "80px", pt: "0"}}>
-            <Box component="div" id={ "analyse-contract" } sx={{ pt: "120px" }}>
+            <Box component="div" id={ "analyse-contract" } sx={{ pt: "120px"}}>
                 <Container sx={{ display: "flex"}}>
                 <Box sx={{ width: "530px", mr: "10px", alignItems: "center"}}>
                     <Typography
@@ -78,25 +81,30 @@ const Main = () => {
                     </List>
                 </Box>
                 <Box sx={{ width: "530px", ml: "10px", pt: "60px", alignItems: "center" }}>
-                    <Paper variant="outlined" sx={{ height: "400px", borderColor: "#efeeee", bgcolor: "#f9f9f9"}}>
-                        <Box component="h4" sx={{ m: "10px"}}>Title</Box>
+                    <Paper variant="outlined" sx={{ height: "470px", borderColor: "#efeeee", bgcolor: "#f9f9f9", px: "30px", py: "20px"}}>
+                        <Box component="h4">Title</Box>
                         <Box component="div">
-                            <TextField id="outlined-basic" label="Email" variant="outlined" sx={{ bgcolor: theme.palette.secondary.main }} />
+                            <TextField id="outlined-basic" label="Email" variant="outlined" sx={{ bgcolor: theme.palette.secondary.main, width: "300px" }} />
                         </Box>
-                        <Box>
-                            <Button variant="contained" component="label">
-                                Upload File
-                                <Box component="input"
-                                    type="file"
-                                    hidden
-                                />
-                            </Button>
+                        <Box sx={{ width: "300px" }} >
+                            <Box component={DropzoneArea} 
+                                acceptedFiles={['.doc', '.docx,', '.pdf']}
+                                dropzoneText={"Drag and drop an image here or click"}
+                                onChange={(files) => console.log('Files:', files)}
+                            />
                         </Box>
-                        <Box>
+                        <Box sx={{ width: "300px" }} >
                             <Typography>By signing up, you agree to our terms of service and privacy policy</Typography>
                         </Box>
-                        <Box>
-                            <Button variant="outlined" sx={{ bgcolor: theme.palette.secondary.main, color: theme.palette.info.main, borderColor: theme.palette.info.main }} >Analyse</Button>
+                        <Box >
+                            <Button 
+                                variant="outlined" 
+                                sx={{
+                                     bgcolor: theme.palette.secondary.main, 
+                                     color: theme.palette.info.main, 
+                                     borderColor: theme.palette.info.main,
+                                     width: "300px"
+                                }} >Analyse</Button>
                         </Box>
                     </Paper>
                 </Box>
