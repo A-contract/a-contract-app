@@ -14,6 +14,7 @@ const theme = responsiveFontSizes(
             },
             info: {
                 main: "#577C61",
+                dark: "#efeeee"
             },
         },
         typography: {
