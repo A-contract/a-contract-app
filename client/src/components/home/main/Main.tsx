@@ -86,7 +86,7 @@ const Main = () => {
                 <Typography
                   component="h2"
                   variant="h4"
-                  align="left"
+                  align="center"
                   fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
@@ -98,7 +98,7 @@ const Main = () => {
                   variant="outlined"
                   sx={{
                     height: "500px",
-                    width: isMatch ? "350px" : "530px",
+                    width: isMatch ? "358px" : "530px",
                     borderColor: theme.palette.info.dark,
                     bgcolor: "#f9f9f9",
                     px: "30px",
@@ -235,7 +235,7 @@ const Main = () => {
                 <Typography
                   component="h2"
                   variant="h4"
-                  align="left"
+                  align="center"
                   fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
@@ -247,7 +247,7 @@ const Main = () => {
                   variant="outlined"
                   sx={{
                     height: "400px",
-                    width: isMatch ? "350px" : "530px",
+                    width: isMatch ? "358px" : "530px",
                     borderColor: theme.palette.info.dark,
                     bgcolor: "#f9f9f9",
                     px: "30px",
@@ -308,7 +308,7 @@ const Main = () => {
                 <Typography
                   component="h2"
                   variant="h4"
-                  align="left"
+                  align="center"
                   fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
@@ -320,7 +320,7 @@ const Main = () => {
                   variant="outlined"
                   sx={{
                     height: "500px",
-                    width: isMatch ? "350px" : "530px",
+                    width: isMatch ? "358px" : "530px",
                     borderColor: theme.palette.info.dark,
                     bgcolor: "#f9f9f9",
                     px: "30px",

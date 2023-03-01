@@ -18,19 +18,26 @@ const navigation = [
         name: "Analyse contract",
         href: "#analyse-contract",
         color: "secondary.main",
+        pt: "0",
+        pb: "0",
       },
       {
         name: "Tariffs",
         href: "#tariffs",
         color: "secondary.main",
+        pt: "0",
+        pb: "0",
       },
       {
         name: "Support",
         href: "#support",
         color: "secondary.main",
+        pt: "0",
+        pb: "20px",
       },
     ],
     color: "secondary.dark",
+
   },
   {
     title: "Legal",
@@ -39,11 +46,15 @@ const navigation = [
         name: "Terms & Conditions",
         href: "#",
         color: "secondary.main",
+        pt: "0",
+        pb: "0",
       },
       {
-        name: "License",
+        name: "Privacy policy",
         href: "#",
         color: "secondary.main",
+        pt: "0",
+        pb: "20px",
       },
     ],
     color: "secondary.dark",
@@ -55,16 +66,22 @@ const navigation = [
         name: "Telegram",
         href: "#",
         color: "secondary.main",
+        pt: "0",
+        pb: "0",
       },
       {
         name: "Instagram",
         href: "#",
         color: "secondary.main",
+        pt: "0",
+        pb: "0",
       },
       {
         name: "LinkedIn",
         href: "#",
         color: "secondary.main",
+        pt: "0",
+        pb: "20px",
       },
     ],
     color: "secondary.dark",
@@ -137,7 +154,7 @@ const Footer = () => {
                 {navigation.map((value, index) => (
                   <Box component="div" key={index}>
                     <List>
-                      <ListItem>
+                      <ListItem sx={{ pb: "0"}}>
                         <ListItemText
                           primary={
                             <Typography
@@ -158,6 +175,7 @@ const Footer = () => {
                           component="a"
                           href={valueItem.href}
                           key={indexItem}
+                          sx={{ pb: valueItem.pb, pt: valueItem.pt}}
                         >
                           <ListItemText
                             primary={
