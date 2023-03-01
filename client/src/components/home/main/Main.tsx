@@ -13,7 +13,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { DropzoneArea } from "mui-file-dropzone";
-import { useState } from "react";
 
 const analyse = {
   name: "Analyse contract",
@@ -88,6 +87,7 @@ const Main = () => {
                   component="h2"
                   variant="h4"
                   align="left"
+                  fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
                   gutterBottom
@@ -236,6 +236,7 @@ const Main = () => {
                   component="h2"
                   variant="h4"
                   align="left"
+                  fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
                   gutterBottom
@@ -308,6 +309,7 @@ const Main = () => {
                   component="h2"
                   variant="h4"
                   align="left"
+                  fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
                   gutterBottom
@@ -387,6 +389,7 @@ const Main = () => {
                 <Typography
                   component="h2"
                   variant="h4"
+                  fontWeight="600"
                   align="left"
                   pb="10px"
                   color={theme.palette.primary.dark}
@@ -532,6 +535,7 @@ const Main = () => {
                   component="h2"
                   variant="h4"
                   align="left"
+                  fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
                   gutterBottom
@@ -604,6 +608,7 @@ const Main = () => {
                   component="h2"
                   variant="h4"
                   align="left"
+                  fontWeight="600"
                   pb="10px"
                   color={theme.palette.primary.dark}
                   gutterBottom
