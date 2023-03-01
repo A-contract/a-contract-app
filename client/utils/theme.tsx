@@ -1,26 +1,25 @@
-
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
 const theme = responsiveFontSizes(
-    createTheme({
-        palette: {
-            primary: {
-                main: "#0A0910",
-                dark: "#000000"
-            },
-            secondary: {
-                main: "#FFFFFF",
-                light: "#ffffffbf",
-            },
-            info: {
-                main: "#577C61",
-                dark: "#efeeee"
-            },
-        },
-        typography: {
-            fontFamily: 'Cera Pro',
-            
-        },
-    }));
+  createTheme({
+    palette: {
+      primary: {
+        main: "#0A0910",
+        dark: "#000000",
+      },
+      secondary: {
+        main: "#FFFFFF",
+        light: "#ffffffbf",
+      },
+      info: {
+        main: "#577C61",
+        dark: "#efeeee",
+      },
+    },
+    typography: {
+      fontFamily: "Cera Pro Regular",
+    },
+  })
+);
 
 export default theme;
