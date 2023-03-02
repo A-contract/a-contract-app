@@ -74,7 +74,7 @@ const Support = () => {
               <Paper
                 variant="outlined"
                 sx={{
-                  height: "500px",
+                  height: "450px",
                   width: isMatch ? "358px" : "530px",
                   borderColor: theme.palette.info.dark,
                   bgcolor: "#f9f9f9",
@@ -127,6 +127,32 @@ const Support = () => {
                 </Box>
               </Paper>
             </Box>
+            <Box
+              component="div"
+              sx={{
+                maxWidth: "530px",
+                mx: "10px",
+                alignItems: "center",
+                my: "20px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                align="left"
+                color={theme.palette.primary.dark}
+                textAlign="justify"
+                paragraph
+              >
+                Welcome to our Support section! We are here to help you with any
+                questions or issues you may have while using our products or
+                services. Our team of dedicated support professionals is
+                available to assist you with technical troubleshooting,
+                account-related inquiries, billing questions, and any other
+                concerns you may have. We understand that every customer is
+                unique, and we strive to provide personalized solutions that
+                meet your specific needs.
+              </Typography>
+            </Box>
           </Container>
         </Box>
       ) : (
@@ -134,7 +160,7 @@ const Support = () => {
           <Container component="div" sx={{ display: "flex", flexWrap: "wrap" }}>
             <Box
               component="div"
-              sx={{ maxWidth: "530px", alignItems: "center" }}
+              sx={{ maxWidth: "530px", mx: "10px", alignItems: "center" }}
             >
               <Typography
                 component="h2"
@@ -147,10 +173,36 @@ const Support = () => {
               >
                 Support
               </Typography>
+              <Typography
+                variant="h6"
+                align="left"
+                textAlign="justify"
+                color={theme.palette.primary.dark}
+                paragraph
+              >
+                Welcome to our Support section! We are here to help you with any
+                questions or issues you may have while using our products or
+                services. Our team of dedicated support professionals is
+                available to assist you with technical troubleshooting,
+                account-related inquiries, billing questions, and any other
+                concerns you may have. We understand that every customer is
+                unique, and we strive to provide personalized solutions that
+                meet your specific needs.
+              </Typography>
+            </Box>
+            <Box
+              component="div"
+              sx={{
+                maxWidth: "530px",
+                mx: "10px",
+                ml: isMatch ? "0" : "20px",
+                alignItems: "center",
+              }}
+            >
               <Paper
                 variant="outlined"
                 sx={{
-                  height: "420px",
+                  height: "450px",
                   width: isMatch ? "350px" : "530px",
                   borderColor: theme.palette.info.dark,
                   bgcolor: "#f9f9f9",
