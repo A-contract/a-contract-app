@@ -143,9 +143,7 @@ const Support = () => {
                 textAlign="justify"
                 paragraph
               >
-                Welcome to our Support section! We are here to help you with any
-                questions or issues you may have while using our products or
-                services. Our team of dedicated support professionals is
+                Our team of dedicated support professionals is
                 available to assist you with technical troubleshooting,
                 account-related inquiries, billing questions, and any other
                 concerns you may have. We understand that every customer is
@@ -180,12 +178,19 @@ const Support = () => {
                 color={theme.palette.primary.dark}
                 paragraph
               >
-                Welcome to our Support section! We are here to help you with any
-                questions or issues you may have while using our products or
-                services. Our team of dedicated support professionals is
+                Our team of dedicated support professionals is
                 available to assist you with technical troubleshooting,
                 account-related inquiries, billing questions, and any other
-                concerns you may have. We understand that every customer is
+                concerns you may have. 
+                </Typography>
+                <Typography
+                variant="h6"
+                align="left"
+                textAlign="justify"
+                color={theme.palette.primary.dark}
+                paragraph
+              >
+                We understand that every customer is
                 unique, and we strive to provide personalized solutions that
                 meet your specific needs.
               </Typography>
