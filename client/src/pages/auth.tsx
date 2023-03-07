@@ -4,12 +4,12 @@ import Tab from "@mui/material/Tab";
 import { Paper, Tabs } from "@mui/material";
 import SignIn from "@/components/auth/SignIn";
 import SignUp from "@/components/auth/SignUp";
-import { useState } from "react";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
+import { useActions } from "@/hooks/useAction";
 
 const Auth = () => {
-  const activeFormId = useTypedSelector((state: any) => state.activeForm);
-  const [tabValue, setTabValue] = useState(activeFormId);
+  const activeFormId = useTypedSelector((state: any) => state.auth.activeFormId);
+  const { setActiveForm } = useActions();
   const tabs = [<SignIn />, <SignUp />];
 
   return (
@@ -31,9 +31,9 @@ const Auth = () => {
       >
         <Box>
           <Tabs
-            value={tabValue}
+            value={activeFormId}
             onChange={(e, newTabValue: any) => {
-              setTabValue(newTabValue);
+              setActiveForm(newTabValue);
             }}
           >
             <Tab label="Sign in" value={0} sx={{ width: "150px" }}></Tab>
@@ -48,7 +48,7 @@ const Auth = () => {
             padding: "20px",
           }}
         >
-          {tabs[tabValue]}
+          {tabs[activeFormId]}
         </Box>
       </Paper>
     </Box>

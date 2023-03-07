@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  Box,
-  Divider,
   Drawer,
   IconButton,
   Tab,
@@ -10,6 +8,8 @@ import {
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
+import { useTypedSelector } from "@/hooks/useTypeSelector";
+import { useActions } from "@/hooks/useAction";
 
 const sections = [
   {
@@ -60,7 +60,8 @@ const sections = [
 ];
 
 const DrawerMenu = () => {
-  const [valueTab, setValueTab] = useState(0);
+  const activeTab = useTypedSelector((state: any) => state.landPage.activeTabId);
+  const { setActiveTab } = useActions(); 
   const [openDrawer, setOpenDrawer] = useState(false);
   const theme = useTheme();
 
@@ -77,8 +78,8 @@ const DrawerMenu = () => {
           sx={{
             bgcolor: theme.palette.primary.main,
           }}
-          value={valueTab}
-          onChange={(event: any, value: any) => setValueTab(value)}
+          value={activeTab}
+          onChange={(event: any, value: any) => setActiveTab(value)}
           TabIndicatorProps={{
             sx: { backgroundColor: theme.palette.secondary.main },
           }}

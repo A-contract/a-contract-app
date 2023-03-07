@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import DrawerMenu from "./DrawerMenu";
 import logo from "../../../../images/logo.png";
@@ -15,31 +15,39 @@ import {
 } from "@mui/material";
 import { useActions } from "@/hooks/useAction";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
+import { useRouter } from 'next/router'
 
 const sections = [
   {
+    id: 0,
     name: "Analyse contract",
-    href: "#analyse-contract",
+    href: "/#analyse-contract",
     color: "secondary.light",
   },
   {
+    id: 1,
     name: "Tariffs",
-    href: "#tariffs",
+    href: "/#tariffs",
     color: "secondary.light",
   },
   {
+    id: 2,
     name: "Support",
-    href: "#support",
+    href: "/#support",
     color: "secondary.light",
   },
 ];
 
+
 const Header = () => {
-  const activeTab = useTypedSelector((state: any) => state.activeTab);
-  const { setActiveForm, setActiveTab } = useActions();
-  //const [valueTab, setValueTab] = useState(activeTab);
+  const activeTab = useTypedSelector((state: any) => state.landPage.activeTabId);
+  const { setActiveForm, setActiveTab } = useActions(); 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
+  const router = useRouter()
+  
+  //console.log(router )
+  
 
   return (
     <AppBar color="primary" sx={{ alignItems: "center" }}>
