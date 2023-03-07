@@ -41,8 +41,8 @@ const sections = [
   },
   {
     name: "Sign in",
-    href: "cabinet",
-    target: "_blank",
+    href: "auth",
+    target: "",
     color: "secondary.main",
     marginTop: "20px",
     borderTop: "1px outset #ffffff2b",
@@ -50,8 +50,8 @@ const sections = [
   },
   {
     name: "Sign up",
-    href: "cabinet",
-    target: "_blank",
+    href: "auth",
+    target: "",
     color: "secondary.main",
     marginTop: "",
     borderTop: "",

@@ -13,6 +13,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useActions } from "@/hooks/useAction";
+import { useTypedSelector } from "@/hooks/useTypeSelector";
 
 const sections = [
   {
@@ -33,7 +35,9 @@ const sections = [
 ];
 
 const Header = () => {
-  const [valueTab, setValueTab] = useState(0);
+  const activeTab = useTypedSelector((state: any) => state.activeTab);
+  const { setActiveForm, setActiveTab } = useActions();
+  //const [valueTab, setValueTab] = useState(activeTab);
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -71,8 +75,8 @@ const Header = () => {
               >
                 <Tabs
                   textColor="secondary"
-                  value={valueTab}
-                  onChange={(event: any, value: any) => setValueTab(value)}
+                  value={activeTab}
+                  onChange={(event: any, value: any) => setActiveTab(value)}
                   TabIndicatorProps={{
                     sx: { backgroundColor: theme.palette.secondary.main },
                   }}
@@ -88,14 +92,14 @@ const Header = () => {
                 </Tabs>
               </Box>
               <Box component="div" sx={{ mf: "auto" }}>
-                <Link href="cabinet" target="_blank">
+                <Link href="auth" onClick={() => setActiveForm(0)}>
                   <Button variant="outlined" color="secondary">
                     Sign In
                   </Button>
                 </Link>
                 <Link
-                  href="cabinet"
-                  target="_blank"
+                  href="auth"
+                  onClick={() => setActiveForm(1)}
                   style={{ marginLeft: "10px" }}
                 >
                   <Button variant="contained" color="secondary">
