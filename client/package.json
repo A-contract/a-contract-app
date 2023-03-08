@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.10",
     "@mui/system": "^5.11.9",
+    "@mui/x-data-grid": "^6.0.0",
     "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.14.0",

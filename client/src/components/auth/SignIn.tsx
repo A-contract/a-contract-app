@@ -6,6 +6,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import Link from "next/link";
 
 const SignIn = () => {
   const theme = useTheme();
@@ -30,7 +31,7 @@ const SignIn = () => {
           sx={{ width: "300px" }}
         />
       </Box>
-      <Box sx={{ pb: "25px" }}>
+      <Box component={Link} href="cabinet" sx={{ pb: "25px" }}>
         <Button
           variant="outlined"
           //   disableRipple

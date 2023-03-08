@@ -35,7 +35,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.0", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.0", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.13", "@babel/runtime@^7.21.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.21.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.0.tgz#5b55c9d394e5fcf304909a8b00c07dc217b56673"
   integrity sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==
@@ -325,6 +325,28 @@
     "@types/react-is" "^16.7.1 || ^17.0.0"
     prop-types "^15.8.1"
     react-is "^18.2.0"
+
+"@mui/utils@^5.11.7":
+  version "5.11.12"
+  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.11.12.tgz#627f491c0e7267398590af5e6cb14b306170d914"
+  integrity sha512-5vH9B/v8pzkpEPO2HvGM54ToXV6cFdAn8UrvdN8TMEEwpn/ycW0jLiyBcgUlPsQ+xha7hqXCPQYHaYFDIcwaiw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    "@types/prop-types" "^15.7.5"
+    "@types/react-is" "^16.7.1 || ^17.0.0"
+    prop-types "^15.8.1"
+    react-is "^18.2.0"
+
+"@mui/x-data-grid@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-6.0.0.tgz#6588a66023768999336d45fabe47d2eaa396d48a"
+  integrity sha512-jkvDbe8OKOh/4YH7DnM20X6TbDerfaeVCOa6J+PXfDk/GDoNkcSAwIYtn15+hCY3SNWXuTXmJNiNTHxwxLfYBQ==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@mui/utils" "^5.11.7"
+    clsx "^1.2.1"
+    prop-types "^15.8.1"
+    reselect "^4.1.7"
 
 "@next/env@13.1.6":
   version "13.1.6"
