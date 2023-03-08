@@ -1,67 +1,13 @@
 import React, { useState } from "react";
-import {
-  Drawer,
-  IconButton,
-  Tab,
-  Tabs,
-  useTheme,
-} from "@mui/material";
-
+import { Drawer, IconButton, Tab, Tabs, useTheme } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
+import Link from "next/link";
 
-const sections = [
-  {
-    name: "Analyse contract",
-    href: "#analyse-contract",
-    target: "",
-    color: "secondary.main",
-    marginTop: "",
-    borderTop: "",
-    divider: false,
-  },
-  {
-    name: "Tariffs",
-    href: "#tariffs",
-    target: "",
-    color: "secondary.main",
-    marginTop: "",
-    borderTop: "",
-    divider: false,
-  },
-  {
-    name: "Support",
-    href: "#support",
-    target: "",
-    color: "secondary.main",
-    marginTop: "",
-    borderTop: "",
-    divider: true,
-  },
-  {
-    name: "Sign in",
-    href: "auth",
-    target: "",
-    color: "secondary.main",
-    marginTop: "20px",
-    borderTop: "1px outset #ffffff2b",
-    divider: false,
-  },
-  {
-    name: "Sign up",
-    href: "auth",
-    target: "",
-    color: "secondary.main",
-    marginTop: "",
-    borderTop: "",
-    divider: false,
-  },
-];
-
-const DrawerMenu = () => {
-  const activeTab = useTypedSelector((state: any) => state.landPage.activeTabId);
-  const { setActiveTab } = useActions(); 
+const DrawerMenu = (props: any) => {
+  const tabs = props.tabs;
+  const activeTab = props.activeTab;
+  const { setActiveForm, setActiveTab } = useActions();
   const [openDrawer, setOpenDrawer] = useState(false);
   const theme = useTheme();
 
@@ -84,22 +30,50 @@ const DrawerMenu = () => {
             sx: { backgroundColor: theme.palette.secondary.main },
           }}
         >
-          {sections.map((section, index) => (
+          {tabs.map((tab: any, index: number) => (
             <Tab
               key={index}
-              label={section.name}
-              href={section.href}
-              target={section.target}
+              label={tab.name}
+              href={tab.href}
+              target={tab.target}
               sx={{
                 width: "100%",
-                color: section.color,
+                color: tab.color,
                 opacity: "1",
-                mt: section.marginTop,
+                mt: tab.marginTop,
                 mx: "auto",
-                borderTop: section.borderTop,
+                borderTop: tab.borderTop,
               }}
             />
           ))}
+          <Tab
+            component={Link}
+            label="Sign in"
+            href="auth"
+            onClick={() => setActiveForm(0)}
+            sx={{
+              width: "100%",
+              color: "secondary.main",
+              opacity: "1",
+              mt: "20px",
+              mx: "auto",
+              borderTop: "1px outset #ffffff2b",
+            }}
+          />
+          <Tab
+            component={Link}
+            label="Sign up"
+            href="auth"
+            onClick={() => setActiveForm(1)}
+            sx={{
+              width: "100%",
+              color: "secondary.main",
+              opacity: "1",
+              mx: "auto",
+              mt: "",
+              borderTop: "",
+            }}
+          />
         </Tabs>
       </Drawer>
       <IconButton

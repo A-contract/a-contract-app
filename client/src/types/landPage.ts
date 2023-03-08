@@ -1,5 +1,6 @@
 export interface LandPageState {
-  tabs: any[];
+  tabsDesktop: any[];
+  tabsMobile: any[];
   activeTabId: number;
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import DrawerMenu from "./DrawerMenu";
 import logo from "../../../../images/logo.png";
@@ -15,39 +15,23 @@ import {
 } from "@mui/material";
 import { useActions } from "@/hooks/useAction";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
-import { useRouter } from 'next/router'
-
-const sections = [
-  {
-    id: 0,
-    name: "Analyse contract",
-    href: "/#analyse-contract",
-    color: "secondary.light",
-  },
-  {
-    id: 1,
-    name: "Tariffs",
-    href: "/#tariffs",
-    color: "secondary.light",
-  },
-  {
-    id: 2,
-    name: "Support",
-    href: "/#support",
-    color: "secondary.light",
-  },
-];
-
+import { useRouter } from "next/router";
 
 const Header = () => {
-  const activeTab = useTypedSelector((state: any) => state.landPage.activeTabId);
-  const { setActiveForm, setActiveTab } = useActions(); 
+  const landPageState = useTypedSelector((state: any) => state.landPage);
+  const tabs = landPageState.tabsDesktop;
+  const activeTab = landPageState.activeTabId;
+  const { setActiveForm, setActiveTab } = useActions();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  const router = useRouter()
-  
-  //console.log(router )
-  
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.asPath !== "/")
+      setActiveTab(
+        tabs.filter((element: any) => element.href === router.asPath)[0].id
+      );
+  }, []);
 
   return (
     <AppBar color="primary" sx={{ alignItems: "center" }}>
@@ -65,13 +49,15 @@ const Header = () => {
                 <Typography>A-contract</Typography>
               </Box>
               <Box component="div" sx={{ ml: "auto" }}>
-                <DrawerMenu />
+                <DrawerMenu
+                  tabs={landPageState.tabsMobile}
+                  activeTab={activeTab}
+                />
               </Box>
             </>
           ) : (
             <>
               <Box component="div">
-                {/* add style for logo */}
                 <img src={logo.src} alt="logo" style={{ width: "160px" }} />
               </Box>
               <Box
@@ -89,12 +75,12 @@ const Header = () => {
                     sx: { backgroundColor: theme.palette.secondary.main },
                   }}
                 >
-                  {sections.map((section, index) => (
+                  {tabs.map((tab: any, index: number) => (
                     <Tab
                       key={index}
-                      label={section.name}
-                      href={section.href}
-                      sx={{ color: section.color }}
+                      label={tab.name}
+                      href={tab.href}
+                      sx={{ color: tab.color }}
                     />
                   ))}
                 </Tabs>
