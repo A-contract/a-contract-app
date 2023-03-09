@@ -36,7 +36,6 @@ const SignIn = () => {
       <Box sx={{ pb: "25px" }}>
         <TextField
           required
-          helperText="Min of 10 symbols with using special character"
           placeholder={"password"}
           label={"password"}
           type={showPassword ? "text" : "password"}
@@ -61,11 +60,16 @@ const SignIn = () => {
         <Button
           variant="outlined"
           //   disableRipple
+
           sx={{
-            bgcolor: theme.palette.secondary.main,
-            color: theme.palette.info.main,
+            bgcolor: theme.palette.info.light,
+            color: theme.palette.secondary.main,
             borderColor: theme.palette.info.main,
             width: "300px",
+            "&:hover": {
+              bgcolor: theme.palette.info.main,
+              borderColor: theme.palette.info.main,
+            },
           }}
         >
           Sign in

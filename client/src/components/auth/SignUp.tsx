@@ -12,7 +12,6 @@ const SignUp = () => {
       <Box sx={{ pb: "10px" }}>
         <TextField
           required
-          helperText="Incorrect entry."
           placeholder={"email"}
           label={"email"}
           sx={{ width: "300px" }}
@@ -21,7 +20,7 @@ const SignUp = () => {
       <Box sx={{ pb: "25px" }}>
         <TextField
           required
-          helperText="Incorrect entry."
+          helperText="Min of 10 symbols with using special character"
           placeholder={"password"}
           label={"password"}
           type={"password"}
@@ -32,17 +31,31 @@ const SignUp = () => {
         <Button
           variant="outlined"
           sx={{
-            bgcolor: theme.palette.secondary.main,
-            color: theme.palette.info.main,
+            bgcolor: theme.palette.info.light,
+            color: theme.palette.secondary.main,
             borderColor: theme.palette.info.main,
             width: "300px",
+            "&:hover": {
+              bgcolor: theme.palette.info.main,
+              borderColor: theme.palette.info.main,
+            },
           }}
         >
           Sign up
         </Button>
       </Box>
       <Box sx={{ pb: "10px" }}>
-        <Typography sx={{ width: "300px", textAlign: "center" }}>
+        <Typography
+          sx={{
+            width: "300px",
+            textAlign: "center",
+            fontSize: "14px",
+            cursor: "pointer",
+            "&:hover": {
+              color: theme.palette.info.main,
+            },
+          }}
+        >
           By signing up, you agree to our terms of service and privacy policy
         </Typography>
       </Box>
