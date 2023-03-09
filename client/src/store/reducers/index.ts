@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { AuthReducer } from "./AuthReducer";
-import { LandPageReducer } from "./LandPageReducer";
+import { AuthReducer } from "./auth/AuthReducer";
+import { LandPageReducer } from "./landPage/LandPageReducer";
 
 export const rootReducer = combineReducers({
   auth: AuthReducer,

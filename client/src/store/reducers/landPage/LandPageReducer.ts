@@ -2,7 +2,7 @@ import {
   LandPageAction,
   LandPageActionTypes,
   LandPageState,
-} from "../../types/landPage";
+} from "../../../types/landPage";
 
 const initialState: LandPageState = {
   tabsDesktop: [
