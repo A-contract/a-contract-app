@@ -47,7 +47,7 @@ const rows = [
 const Contracts = () => {
   return (
     <>
-      <Box sx={{ width: "400px", pr: "7.5px" }}>
+      <Box sx={{ width: "400px", minWidth: "300px", pr: "7.5px" }}>
         <Paper sx={{ p: "20px" }}>
           <Box sx={{ pb: "30px" }}>
             <Typography>Analyse contract</Typography>
