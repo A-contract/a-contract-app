@@ -11,6 +11,8 @@ const SignUp = () => {
       </Box>
       <Box sx={{ pb: "10px" }}>
         <TextField
+          required
+          helperText="Incorrect entry."
           placeholder={"email"}
           label={"email"}
           sx={{ width: "300px" }}
@@ -18,13 +20,15 @@ const SignUp = () => {
       </Box>
       <Box sx={{ pb: "25px" }}>
         <TextField
+          required
+          helperText="Incorrect entry."
           placeholder={"password"}
           label={"password"}
           type={"password"}
           sx={{ width: "300px" }}
         />
       </Box>
-      <Box component={Link} href="cabinet" sx={{ pb: "25px" }}>
+      <Box component={Link} href="#" sx={{ pb: "25px" }}>
         <Button
           variant="outlined"
           sx={{
@@ -42,11 +46,11 @@ const SignUp = () => {
           By signing up, you agree to our terms of service and privacy policy
         </Typography>
       </Box>
-      <Box sx={{ pb: "10px" }}>
+      {/* <Box sx={{ pb: "10px" }}>
         <Typography sx={{ width: "300px", textAlign: "center" }}>
           Continue with google{" "}
         </Typography>
-      </Box>
+      </Box> */}
     </>
   );
 };

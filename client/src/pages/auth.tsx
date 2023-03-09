@@ -6,10 +6,15 @@ import SignIn from "@/components/auth/SignIn";
 import SignUp from "@/components/auth/SignUp";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
+import logo from "../../images/logo.png";
+import theme from "utils/theme";
+import Link from "next/link";
 
 const Auth = () => {
-  const activeFormId = useTypedSelector((state: any) => state.auth.activeFormId);
-  const { setActiveForm } = useActions();
+  const activeFormId = useTypedSelector(
+    (state: any) => state.auth.activeFormId
+  );
+  const { setActiveForm, setActiveTab } = useActions();
   const tabs = [<SignIn />, <SignUp />];
 
   return (
@@ -19,6 +24,7 @@ const Auth = () => {
         mt: "100px",
         width: "350px",
         maxWidth: "350px",
+        borderRadius: "5px",
       }}
     >
       <Paper
@@ -29,6 +35,33 @@ const Auth = () => {
           flexDirection: "column",
         }}
       >
+        <Box
+          component={Link}
+          href="/"
+          sx={{
+            bgcolor: theme.palette.primary.main,
+            width: "-webkit-fill-available",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            borderRadius: "5px 5px 0 0",
+            mb: "5px",
+          }}
+        >
+          <Box>
+            <Box
+              component="img"
+              src={logo.src}
+              alt="logo"
+              sx={{
+                width: "160px",
+                borderRadius: "5px",
+                p: "10px",
+                mx: "auto",
+              }}
+            />
+          </Box>
+        </Box>
         <Box>
           <Tabs
             value={activeFormId}

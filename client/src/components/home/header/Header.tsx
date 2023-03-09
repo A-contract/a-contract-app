@@ -27,10 +27,11 @@ const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.asPath !== "/")
-      setActiveTab(
-        tabs.filter((element: any) => element.href === router.asPath)[0].id
-      );
+    setActiveTab(
+      router.asPath !== "/"
+        ? tabs.filter((element: any) => element.href === router.asPath)[0].id
+        : 0
+    );
   }, []);
 
   return (
@@ -58,7 +59,14 @@ const Header = () => {
           ) : (
             <>
               <Box component="div">
-                <img src={logo.src} alt="logo" style={{ width: "160px" }} />
+                <Box component="a" href="/">
+                  <Box
+                    component="img"
+                    src={logo.src}
+                    alt="logo"
+                    sx={{ width: "160px" }}
+                  />
+                </Box>
               </Box>
               <Box
                 component="div"
@@ -86,20 +94,25 @@ const Header = () => {
                 </Tabs>
               </Box>
               <Box component="div" sx={{ mf: "auto" }}>
-                <Link href="auth" onClick={() => setActiveForm(0)}>
+                <Box
+                  component={Link}
+                  href="auth"
+                  onClick={() => setActiveForm(0)}
+                >
                   <Button variant="outlined" color="secondary">
                     Sign In
                   </Button>
-                </Link>
-                <Link
+                </Box>
+                <Box
+                  component={Link}
                   href="auth"
                   onClick={() => setActiveForm(1)}
-                  style={{ marginLeft: "10px" }}
+                  sx={{ ml: "10px" }}
                 >
                   <Button variant="contained" color="secondary">
                     Sign up
                   </Button>
-                </Link>
+                </Box>
               </Box>
             </>
           )}

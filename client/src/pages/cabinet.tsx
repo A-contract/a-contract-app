@@ -112,7 +112,6 @@ const Cabinet = () => {
             </ListItem>
           ))}
         </List>
-        <Divider />
         <List>
           <Box component={Link} href="auth">
             <ListItem disablePadding>
