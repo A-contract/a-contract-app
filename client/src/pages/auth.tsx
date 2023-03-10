@@ -14,7 +14,7 @@ const Auth = () => {
   const activeFormId = useTypedSelector(
     (state: any) => state.auth.activeFormId
   );
-  const { setActiveForm, setActiveTab } = useActions();
+  const { setActiveAuthForm } = useActions();
   const tabs = [<SignIn />, <SignUp />];
 
   return (
@@ -66,7 +66,7 @@ const Auth = () => {
           <Tabs
             value={activeFormId}
             onChange={(e, newTabValue: any) => {
-              setActiveForm(newTabValue);
+              setActiveAuthForm(newTabValue);
             }}
           >
             <Tab label="Sign in" value={0} sx={{ width: "150px" }}></Tab>

@@ -1,5 +1,5 @@
 const Setting = () => {
-  return <></>;
+  return <>Setting</>;
 };
 
 export default Setting;

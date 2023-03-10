@@ -7,7 +7,7 @@ import Link from "next/link";
 const DrawerMenu = (props: any) => {
   const tabs = props.tabs;
   const activeTab = props.activeTab;
-  const { setActiveForm, setActiveTab } = useActions();
+  const { setActiveAuthForm, setActiveLandPageTab } = useActions();
   const [openDrawer, setOpenDrawer] = useState(false);
   const theme = useTheme();
 
@@ -25,7 +25,7 @@ const DrawerMenu = (props: any) => {
             bgcolor: theme.palette.primary.main,
           }}
           value={activeTab}
-          onChange={(event: any, value: any) => setActiveTab(value)}
+          onChange={(event: any, value: any) => setActiveLandPageTab(value)}
           TabIndicatorProps={{
             sx: { backgroundColor: theme.palette.secondary.main },
           }}
@@ -50,7 +50,7 @@ const DrawerMenu = (props: any) => {
             component={Link}
             label="Sign in"
             href="auth"
-            onClick={() => setActiveForm(0)}
+            onClick={() => setActiveAuthForm(0)}
             sx={{
               width: "100%",
               color: "secondary.main",
@@ -64,7 +64,7 @@ const DrawerMenu = (props: any) => {
             component={Link}
             label="Sign up"
             href="auth"
-            onClick={() => setActiveForm(1)}
+            onClick={() => setActiveAuthForm(1)}
             sx={{
               width: "100%",
               color: "secondary.main",

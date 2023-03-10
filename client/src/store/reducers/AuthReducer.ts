@@ -1,4 +1,4 @@
-import { AuthState, AuthActionTypes, AuthAction } from "../../../types/auth";
+import { AuthState, AuthActionTypes, AuthAction } from "../../types/auth";
 
 const initialState: AuthState = {
   forms: [
@@ -19,7 +19,7 @@ export const AuthReducer = (
   action: AuthAction
 ): AuthState => {
   switch (action.type) {
-    case AuthActionTypes.SET_ACTIVE_FORM:
+    case AuthActionTypes.SET_ACTIVE_AUTH_FORM:
       return {
         ...state,
         activeFormId: action.payload,

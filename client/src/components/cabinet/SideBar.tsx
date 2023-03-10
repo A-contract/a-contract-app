@@ -6,17 +6,27 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Tab,
+  Tabs,
   Toolbar,
   Typography,
   useTheme,
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import Link from "next/link";
+import { useTypedSelector } from "@/hooks/useTypeSelector";
+import { useActions } from "@/hooks/useAction";
+import logo from "../../../images/logo.png";
 
 const drawerWidth = 200;
 
 const SideBar = () => {
   const theme = useTheme();
+  const cabinetState = useTypedSelector((state: any) => state.cabinet);
+  const { setActiveCabinetTab } = useActions();
+  const tabs = cabinetState.tabs;
+  const activeTab = cabinetState.activeTabId;
+
   return (
     <Drawer
       sx={{
@@ -34,32 +44,61 @@ const SideBar = () => {
       anchor="left"
     >
       <Toolbar>
-        <Typography sx={{ mx: "auto" }}>A-contract</Typography>
+
+        <Box
+                    component="img"
+                    src={logo.src}
+                    alt="logo"
+                    sx={{ width: "140px" }}
+                  />
       </Toolbar>
-      <List>
-        {["Contracts", "Support", "Setting"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon sx={{ mx: "auto" }}>
-                <InboxIcon sx={{ bgcolor: theme.palette.secondary.main }} />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+      <Tabs 
+        orientation="vertical"
+        textColor="secondary"
+        sx={{
+          bgcolor: theme.palette.primary.main,
+          mt: "25px"
+        }}
+        value={activeTab}
+          onChange={(event: any, value: any) => setActiveCabinetTab(value)}
+          TabIndicatorProps={{
+            sx: { display: 'none' },
+          }}
+      >
+        {tabs.map((tab: any, index: number) => (
+          <Tab 
+            key={index} 
+            label={<Box sx={{ ml: "10px"}}><Typography>{tab.name}</Typography></Box>}
+            sx={{
+              width: "100%",
+              color: theme.palette.secondary.main,
+              bgcolor: activeTab === tab.id ? theme.palette.primary.light : "inherit",
+              mx: "auto",
+              textTransform: "inherit",
+              minHeight: "48px",
+              justifyContent: "initial",
+            }}
+            icon={<InboxIcon sx={{ ml: "15px"}} />}
+            iconPosition="start"
+            />
         ))}
-      </List>
-      <List>
-        <Box component={Link} href="auth">
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon sx={{ bgcolor: theme.palette.secondary.main }} />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
-          </ListItem>
+        <Box component={Link} href="auth" sx={{ mt: "15px"}}>
+          <Tab 
+            label={<Box sx={{ ml: "10px"}}><Typography>Logout</Typography></Box>}
+            sx={{
+              width: "100%",
+              color: theme.palette.secondary.main,
+              mx: "auto",
+              textTransform: "inherit",
+              minHeight: "48px",
+              justifyContent: "initial",
+              opacity: "1"
+            }}
+            icon={<InboxIcon sx={{ ml: "15px"}} />}
+            iconPosition="start"
+            />
         </Box>
-      </List>
+      </Tabs>
     </Drawer>
   );
 };

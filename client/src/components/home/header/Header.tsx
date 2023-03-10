@@ -21,13 +21,13 @@ const Header = () => {
   const landPageState = useTypedSelector((state: any) => state.landPage);
   const tabs = landPageState.tabsDesktop;
   const activeTab = landPageState.activeTabId;
-  const { setActiveForm, setActiveTab } = useActions();
+  const { setActiveAuthForm, setActiveLandPageTab } = useActions();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
 
   useEffect(() => {
-    setActiveTab(
+    setActiveLandPageTab(
       router.asPath !== "/"
         ? tabs.filter((element: any) => element.href === router.asPath)[0].id
         : 0
@@ -78,7 +78,7 @@ const Header = () => {
                 <Tabs
                   textColor="secondary"
                   value={activeTab}
-                  onChange={(event: any, value: any) => setActiveTab(value)}
+                  onChange={(event: any, value: any) => setActiveLandPageTab(value)}
                   TabIndicatorProps={{
                     sx: { backgroundColor: theme.palette.secondary.main },
                   }}
@@ -97,7 +97,7 @@ const Header = () => {
                 <Box
                   component={Link}
                   href="auth"
-                  onClick={() => setActiveForm(0)}
+                  onClick={() => setActiveAuthForm(0)}
                 >
                   <Button variant="outlined" color="secondary">
                     Sign In
@@ -106,7 +106,7 @@ const Header = () => {
                 <Box
                   component={Link}
                   href="auth"
-                  onClick={() => setActiveForm(1)}
+                  onClick={() => setActiveAuthForm(1)}
                   sx={{ ml: "10px" }}
                 >
                   <Button variant="contained" color="secondary">

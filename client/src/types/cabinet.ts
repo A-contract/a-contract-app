@@ -1,6 +1,15 @@
 export interface CabinetState {
-  forms: any[];
-  activeFormId: number;
+    tabs: any[];
+    activeTabId: number;
 }
 
-export type CabinetAction = null;
+export enum CabinetActionTypes {
+    SET_ACTIVE_CABINET_TAB = "SET_ACTIVE_CABINET_TAB",
+}
+
+interface SetActiveCabinetTabAction {
+    type: CabinetActionTypes.SET_ACTIVE_CABINET_TAB;
+    payload: number;
+}
+
+export type CabinetAction = SetActiveCabinetTabAction;
