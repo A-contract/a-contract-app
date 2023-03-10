@@ -1,16 +1,16 @@
 import {
-  Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Tab,
-  Tabs,
-  Toolbar,
-  Typography,
-  useTheme,
+    Box,
+    Drawer,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Tab,
+    Tabs,
+    Toolbar,
+    Typography,
+    useTheme,
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import Link from "next/link";
@@ -21,86 +21,99 @@ import logo from "../../../images/logo.png";
 const drawerWidth = 200;
 
 const SideBar = () => {
-  const theme = useTheme();
-  const cabinetState = useTypedSelector((state: any) => state.cabinet);
-  const { setActiveCabinetTab } = useActions();
-  const tabs = cabinetState.tabs;
-  const activeTab = cabinetState.activeTabId;
+    const theme = useTheme();
+    const cabinetState = useTypedSelector((state: any) => state.cabinet);
+    const { setActiveCabinetTab } = useActions();
+    const tabs = cabinetState.tabs;
+    const activeTab = cabinetState.activeTabId;
 
-  return (
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        minWidth: drawerWidth,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          width: "inherit",
-          boxSizing: "border-box",
-          bgcolor: theme.palette.primary.main,
-          color: theme.palette.secondary.main,
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
-      <Toolbar>
-
-        <Box
+    return (
+        <Drawer
+            sx={{
+                width: drawerWidth,
+                minWidth: drawerWidth,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                    width: "inherit",
+                    boxSizing: "border-box",
+                    bgcolor: theme.palette.primary.main,
+                    color: theme.palette.secondary.main,
+                },
+            }}
+            variant="permanent"
+            anchor="left"
+        >
+            <Toolbar>
+                <Box
                     component="img"
                     src={logo.src}
                     alt="logo"
                     sx={{ width: "140px" }}
-                  />
-      </Toolbar>
-      <Tabs 
-        orientation="vertical"
-        textColor="secondary"
-        sx={{
-          bgcolor: theme.palette.primary.main,
-          mt: "25px"
-        }}
-        value={activeTab}
-          onChange={(event: any, value: any) => setActiveCabinetTab(value)}
-          TabIndicatorProps={{
-            sx: { display: 'none' },
-          }}
-      >
-        {tabs.map((tab: any, index: number) => (
-          <Tab 
-            key={index} 
-            label={<Box sx={{ ml: "10px"}}><Typography>{tab.name}</Typography></Box>}
-            sx={{
-              width: "100%",
-              color: theme.palette.secondary.main,
-              bgcolor: activeTab === tab.id ? theme.palette.primary.light : "inherit",
-              mx: "auto",
-              textTransform: "inherit",
-              minHeight: "48px",
-              justifyContent: "initial",
-            }}
-            icon={<InboxIcon sx={{ ml: "15px"}} />}
-            iconPosition="start"
-            />
-        ))}
-        <Box component={Link} href="auth" sx={{ mt: "15px"}}>
-          <Tab 
-            label={<Box sx={{ ml: "10px"}}><Typography>Logout</Typography></Box>}
-            sx={{
-              width: "100%",
-              color: theme.palette.secondary.main,
-              mx: "auto",
-              textTransform: "inherit",
-              minHeight: "48px",
-              justifyContent: "initial",
-              opacity: "1"
-            }}
-            icon={<InboxIcon sx={{ ml: "15px"}} />}
-            iconPosition="start"
-            />
-        </Box>
-      </Tabs>
-    </Drawer>
-  );
+                />
+            </Toolbar>
+            <Tabs
+                orientation="vertical"
+                textColor="secondary"
+                sx={{
+                    bgcolor: theme.palette.primary.main,
+                    mt: "25px",
+                }}
+                value={activeTab}
+                onChange={(event: any, value: any) =>
+                    setActiveCabinetTab(value)
+                }
+                TabIndicatorProps={{
+                    sx: { display: "none" },
+                }}
+            >
+                {tabs.map((tab: any, index: number) => (
+                    <Tab
+                        key={index}
+                        label={
+                            <Box sx={{ ml: "10px" }}>
+                                <Typography>{tab.name}</Typography>
+                            </Box>
+                        }
+                        sx={{
+                            width: "100%",
+                            color: theme.palette.secondary.main,
+                            bgcolor:
+                                activeTab === tab.id
+                                    ? theme.palette.primary.light
+                                    : "inherit",
+                            mx: "auto",
+                            textTransform: "inherit",
+                            minHeight: "48px",
+                            justifyContent: "initial",
+                        }}
+                        icon={<InboxIcon sx={{ ml: "15px" }} />}
+                        iconPosition="start"
+                    />
+                ))}
+                <Tab
+                    component={Link}
+                    href="auth"
+                    label={
+                        <Box sx={{ ml: "10px" }}>
+                            <Typography>Logout</Typography>
+                        </Box>
+                    }
+                    sx={{
+                        width: "100%",
+                        color: theme.palette.secondary.main,
+                        mx: "auto",
+                        mt: "15px",
+                        textTransform: "inherit",
+                        minHeight: "48px",
+                        justifyContent: "initial",
+                        opacity: "1",
+                    }}
+                    icon={<InboxIcon sx={{ ml: "15px" }} />}
+                    iconPosition="start"
+                />
+            </Tabs>
+        </Drawer>
+    );
 };
 
 export default SideBar;
