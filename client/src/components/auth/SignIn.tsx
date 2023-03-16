@@ -18,7 +18,7 @@ import { useState } from "react";
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
-  const { setActiveForm } = useActions();
+  const { setActiveAuthForm } = useActions();
 
   return (
     <>
@@ -103,7 +103,7 @@ const SignIn = () => {
               color: theme.palette.info.main,
             },
           }}
-          onClick={() => setActiveForm(1)}
+          onClick={() => setActiveAuthForm(1)}
         >
           Don't have an account? Sign up{" "}
         </Typography>
