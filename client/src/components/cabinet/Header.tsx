@@ -2,7 +2,7 @@ import { AppBar, Toolbar, useTheme } from "@mui/material";
 
 const drawerWidth = 200;
 
-const Header = () => {
+const Header = (props: any) => {
   const theme = useTheme();
   return (
     <AppBar
@@ -11,9 +11,10 @@ const Header = () => {
         width: `calc(100% - ${drawerWidth}px)`,
         ml: `${drawerWidth}px`,
         bgcolor: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
       }}
     >
-      <Toolbar></Toolbar>
+      <Toolbar>{props.user.name}</Toolbar>
     </AppBar>
   );
 };

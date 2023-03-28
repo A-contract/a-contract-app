@@ -13,12 +13,37 @@ import {
 import Link from "next/link";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
   const { setActiveAuthForm } = useActions();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const submit = () => {
+    axios
+      .post(
+        "http://localhost:8000/api/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(function (response: any) {
+        console.log(response.data.status);
+        if (response.data.status === 202) router.push("/cabinet");
+        if (response.data.status === 401)
+          console.log("Wrong email or password");
+      });
+  };
 
   return (
     <>
@@ -30,6 +55,9 @@ const SignIn = () => {
           required
           placeholder={"email"}
           label={"email"}
+          onChange={(event: any) => {
+            setEmail(event.target.value);
+          }}
           sx={{ width: "300px" }}
         />
       </Box>
@@ -40,6 +68,9 @@ const SignIn = () => {
           label={"password"}
           type={showPassword ? "text" : "password"}
           sx={{ width: "300px" }}
+          onChange={(event: any) => {
+            setPassword(event.target.value);
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -56,11 +87,11 @@ const SignIn = () => {
           }}
         />
       </Box>
-      <Box component={Link} href="cabinet" sx={{ pb: "25px" }}>
+      {/* component={Link} href="cabinet" */}
+      <Box sx={{ pb: "25px" }}>
         <Button
           variant="outlined"
-          //   disableRipple
-
+          onClick={submit}
           sx={{
             bgcolor: theme.palette.info.light,
             color: theme.palette.secondary.main,
@@ -108,11 +139,6 @@ const SignIn = () => {
           Don't have an account? Sign up{" "}
         </Typography>
       </Box>
-      {/* <Box sx={{ pb: "10px" }}>
-        <Typography sx={{ width: "300px", textAlign: "center" }}>
-          Continue with google{" "}
-        </Typography>
-      </Box> */}
     </>
   );
 };
