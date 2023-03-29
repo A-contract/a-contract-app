@@ -8,20 +8,20 @@ const columns: GridColDef[] = [
     field: "firstName",
     headerName: "First name",
     width: 150,
-    editable: true,
+    //editable: true,
   },
   {
     field: "lastName",
     headerName: "Last name",
     width: 150,
-    editable: true,
+    //editable: true,
   },
   {
     field: "age",
     headerName: "Age",
     type: "number",
     width: 110,
-    editable: true,
+    //editable: true,
   },
   {
     field: "fullName",
@@ -79,7 +79,7 @@ const Contracts = () => {
             <Typography>Contracts</Typography>
           </Box>
           <Box sx={{ height: 600, width: "100%" }}>
-            <DataGrid rows={rows} columns={columns} checkboxSelection />
+            <DataGrid rows={rows} columns={columns} /> {/*checkboxSelection */}
           </Box>
         </Paper>
       </Box>

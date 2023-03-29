@@ -7,15 +7,15 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 
 @Controller('api')
-export class AppController {
+export class AuthController {
   constructor(
-    private readonly appService: AppService,
+    private readonly appService: AuthService,
     private jwtService: JwtService,
   ) {}
 
