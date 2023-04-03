@@ -1,11 +1,13 @@
 import { useActions } from "@/hooks/useAction";
 import {
+  Alert,
   Box,
   Button,
   Divider,
   IconButton,
   InputAdornment,
   OutlinedInput,
+  Snackbar,
   TextField,
   Typography,
   useTheme,
@@ -21,28 +23,55 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
   const { setActiveAuthForm } = useActions();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
+  const [validEmail, setValidEmail] = useState({
+    value: "",
+    isValid: true,
+  });
+  const [validPassword, setValidPassword] = useState({
+    value: "",
+    isValid: true,
+  });
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const isValidEmail = (value: string) => {
+    return value.includes("@") && value.includes(".") && value.length > 4;
+  };
+
+  const isValidPassword = (value: string) => {
+    return value.length > 0;
+  };
 
   const submit = () => {
-    axios
-      .post(
-        "http://localhost:8000/api/login",
-        {
-          email: email,
-          password: password,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then(function (response: any) {
-        console.log(response.data.status);
-        if (response.data.status === 202) router.push("/cabinet");
-        if (response.data.status === 401)
-          console.log("Wrong email or password");
+    const email = validEmail.value;
+    const password = validPassword.value;
+    if (isValidEmail(email) && isValidPassword(password)) {
+      axios
+        .post(
+          "http://localhost:8000/api/login",
+          {
+            email: email,
+            password: password,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(function (response: any) {
+          console.log(response.data.status);
+          if (response.data.status === 202) router.push("/cabinet");
+          if (response.data.status === 401) setOpenSnackbar(true);
+        });
+    } else {
+      setValidEmail({
+        value: email,
+        isValid: isValidEmail(email),
       });
+      setValidPassword({
+        value: password,
+        isValid: isValidPassword(password),
+      });
+    }
   };
 
   return (
@@ -55,8 +84,13 @@ const SignIn = () => {
           required
           placeholder={"email"}
           label={"email"}
-          onChange={(event: any) => {
-            setEmail(event.target.value);
+          error={!validEmail.isValid}
+          helperText={!validEmail.isValid ? "Email is not correct" : ""}
+          onChange={(event) => {
+            setValidEmail({
+              value: event.target.value,
+              isValid: true,
+            });
           }}
           sx={{ width: "300px" }}
         />
@@ -68,8 +102,13 @@ const SignIn = () => {
           label={"password"}
           type={showPassword ? "text" : "password"}
           sx={{ width: "300px" }}
-          onChange={(event: any) => {
-            setPassword(event.target.value);
+          error={!validPassword.isValid}
+          helperText={!validPassword.isValid ? "Password is not correct" : ""}
+          onChange={(event) => {
+            setValidPassword({
+              value: event.target.value,
+              isValid: true,
+            });
           }}
           InputProps={{
             endAdornment: (
@@ -87,7 +126,6 @@ const SignIn = () => {
           }}
         />
       </Box>
-      {/* component={Link} href="cabinet" */}
       <Box sx={{ pb: "25px" }}>
         <Button
           variant="outlined"
@@ -139,6 +177,20 @@ const SignIn = () => {
           Don't have an account? Sign up{" "}
         </Typography>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        sx={{
+          left: "auto !important",
+          right: "auto !important",
+          bottom: "20% !important",
+        }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="error">
+          Wrong login or password
+        </Alert>
+      </Snackbar>
     </>
   );
 };

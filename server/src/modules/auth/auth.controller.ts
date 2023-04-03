@@ -27,6 +27,15 @@ export class AuthController {
   ) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    const findUser = await this.appService.findOne({ email: email });
+
+    if (findUser) {
+      return {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'This e-mail already exists',
+      };
+    }
+
     const user = await this.appService.create({
       name,
       email,
@@ -34,13 +43,6 @@ export class AuthController {
     });
 
     delete user.password;
-
-    if (!user) {
-      return {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Invalid email or pass',
-      };
-    }
 
     return {
       status: HttpStatus.ACCEPTED,

@@ -63,12 +63,14 @@ const SideBar = () => {
       anchor="left"
     >
       <Toolbar>
-        <Box
-          component="img"
-          src={logo.src}
-          alt="logo"
-          sx={{ width: "140px" }}
-        />
+        <Link href={"/"}>
+          <Box
+            component="img"
+            src={logo.src}
+            alt="logo"
+            sx={{ width: "140px" }}
+          />
+        </Link>
       </Toolbar>
       <Tabs
         orientation="vertical"

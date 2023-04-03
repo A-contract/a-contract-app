@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import DrawerMenu from "./DrawerMenu";
 import logo from "../../../../images/logo.png";
@@ -16,6 +16,7 @@ import {
 import { useActions } from "@/hooks/useAction";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Header = () => {
   const landPageState = useTypedSelector((state: any) => state.landPage);
@@ -25,6 +26,7 @@ const Header = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
+  const [user, setUser] = useState(false);
 
   useEffect(() => {
     setActiveLandPageTab(
@@ -32,6 +34,15 @@ const Header = () => {
         ? tabs.filter((element: any) => element.href === router.asPath)[0].id
         : 0
     );
+    (async () => {
+      const response = await axios.get("http://localhost:8000/api/user", {
+        withCredentials: true,
+      });
+      //console.log(response.data);
+      if (response.data.status === 202) {
+        setUser(response.data.user);
+      }
+    })();
   }, []);
 
   return (
@@ -78,7 +89,9 @@ const Header = () => {
                 <Tabs
                   textColor="secondary"
                   value={activeTab}
-                  onChange={(event: any, value: any) => setActiveLandPageTab(value)}
+                  onChange={(event: any, value: any) =>
+                    setActiveLandPageTab(value)
+                  }
                   TabIndicatorProps={{
                     sx: { backgroundColor: theme.palette.secondary.main },
                   }}
@@ -93,11 +106,22 @@ const Header = () => {
                   ))}
                 </Tabs>
               </Box>
+
               <Box component="div" sx={{ mf: "auto" }}>
+                {user ? (
+                  <Box component={Link} href="cabinet">
+                    <Button variant="outlined" color="secondary">
+                      Cabinet
+                    </Button>
+                  </Box>
+                ) : (
+                  <></>
+                )}
                 <Box
                   component={Link}
                   href="auth"
                   onClick={() => setActiveAuthForm(0)}
+                  sx={{ ml: "10px" }}
                 >
                   <Button variant="outlined" color="secondary">
                     Sign In

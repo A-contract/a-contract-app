@@ -1,9 +1,11 @@
 import { SyntheticEvent, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   IconButton,
   InputAdornment,
+  Snackbar,
   TextField,
   Typography,
   useTheme,
@@ -11,36 +13,86 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useActions } from "@/hooks/useAction";
 
 const SignUp = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
   const { setActiveAuthForm } = useActions();
+  const [validEmail, setValidEmail] = useState({
+    value: "",
+    isValid: true,
+  });
+  const [validPassword, setValidPassword] = useState({
+    value: "",
+    isValid: true,
+  });
+
+  const isValidEmail = (value: string) => {
+    return value.includes("@") && value.includes(".") && value.length > 4;
+  };
+
+  const isValidPassword = (value: string) => {
+    return value.length > 9;
+  };
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const typesNotifications = [
+    {
+      id: 0,
+      severity: "error" as const,
+      textNotification: "This e-mail already exists",
+    },
+    {
+      id: 1,
+      severity: "success" as const,
+      textNotification: "User successfully registered",
+    },
+  ];
+
+  const [typeNot, setTypeNot] = useState(typesNotifications[0]);
 
   const submit = () => {
-    axios
-      .post(
-        "http://localhost:8000/api/register",
-        {
-          name: email.split("@")[0],
-          email: email,
-          password: password,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then(function (response: any) {
-        console.log(response.data.status);
-        if (response.data.status === 202) setActiveAuthForm(0);
-        if (response.data.status === 401)
-          console.log("Wrong email or password");
+    const email = validEmail.value;
+    const password = validPassword.value;
+    if (isValidEmail(email) && isValidPassword(password)) {
+      axios
+        .post(
+          "http://localhost:8000/api/register",
+          {
+            name: email.split("@")[0],
+            email: email,
+            password: password,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then(function (response: any) {
+          console.log(response.data.status);
+          if (response.data.status === 202) {
+            setTypeNot(typesNotifications[1]);
+            setOpenSnackbar(true);
+            setActiveAuthForm(0);
+            console.log(typeNot);
+          }
+          if (response.data.status === 401) {
+            setTypeNot(typesNotifications[0]);
+            setOpenSnackbar(true);
+            console.log(typeNot);
+          }
+        });
+    } else {
+      setValidEmail({
+        value: email,
+        isValid: isValidEmail(email),
       });
+      setValidPassword({
+        value: password,
+        isValid: isValidPassword(password),
+      });
+    }
   };
 
   return (
@@ -53,8 +105,17 @@ const SignUp = () => {
           required
           placeholder={"email"}
           label={"email"}
-          onChange={(event: any) => {
-            setEmail(event.target.value);
+          error={!validEmail.isValid}
+          helperText={
+            !validEmail.isValid
+              ? "Email is not correct. Example: example@email.com"
+              : ""
+          }
+          onChange={(event) => {
+            setValidEmail({
+              value: event.target.value,
+              isValid: true,
+            });
           }}
           sx={{ width: "300px" }}
         />
@@ -62,12 +123,20 @@ const SignUp = () => {
       <Box sx={{ pb: "25px" }}>
         <TextField
           required
-          helperText="Min of 10 symbols with using special character"
           placeholder={"password"}
           type={showPassword ? "text" : "password"}
           label={"password"}
-          onChange={(event: any) => {
-            setPassword(event.target.value);
+          error={!validPassword.isValid}
+          helperText={
+            !validPassword.isValid
+              ? "Password is not correct. Min of 10 symbols with using special character"
+              : "Min of 10 symbols with using special character"
+          }
+          onChange={(event) => {
+            setValidPassword({
+              value: event.target.value,
+              isValid: true,
+            });
           }}
           InputProps={{
             endAdornment: (
@@ -86,7 +155,6 @@ const SignUp = () => {
           sx={{ width: "300px" }}
         />
       </Box>
-      {/* component={Link} href="#" */}
       <Box sx={{ pb: "25px" }}>
         <Button
           variant="outlined"
@@ -120,6 +188,25 @@ const SignUp = () => {
           By signing up, you agree to our terms of service and privacy policy
         </Typography>
       </Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        sx={{
+          left: "auto !important",
+          right: "auto !important",
+          bottom: "20% !important",
+        }}
+      >
+        <>
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={typeNot.severity}
+          >
+            {typeNot.textNotification}
+          </Alert>
+        </>
+      </Snackbar>
       {/* <Box sx={{ pb: "10px" }}>
         <Typography sx={{ width: "300px", textAlign: "center" }}>
           Continue with google{" "}
