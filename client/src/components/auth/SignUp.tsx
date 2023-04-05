@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -18,7 +18,7 @@ import { useActions } from "@/hooks/useAction";
 const SignUp = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
-  const { setActiveAuthForm } = useActions();
+  //const { setActiveAuthForm } = useActions();
   const [validEmail, setValidEmail] = useState({
     value: "",
     isValid: true,
@@ -38,20 +38,20 @@ const SignUp = () => {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const typesNotifications = [
-    {
-      id: 0,
-      severity: "error" as const,
-      textNotification: "This e-mail already exists",
-    },
-    {
-      id: 1,
-      severity: "success" as const,
-      textNotification: "User successfully registered",
-    },
-  ];
+  const [snackbar, setSnackbar] = useState<any>({
+    message: "",
+    severity: "success",
+  });
 
-  const [typeNot, setTypeNot] = useState(typesNotifications[0]);
+  useEffect(() => {
+    if (openSnackbar) {
+      const timeoutId = setTimeout(() => {
+        setOpenSnackbar(false);
+      }, 3000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [openSnackbar]);
 
   const submit = () => {
     const email = validEmail.value;
@@ -64,23 +64,27 @@ const SignUp = () => {
             name: email.split("@")[0],
             email: email,
             password: password,
+            role: "user",
           },
           {
             withCredentials: true,
           }
         )
         .then(function (response: any) {
-          console.log(response.data.status);
           if (response.data.status === 202) {
-            setTypeNot(typesNotifications[1]);
+            setSnackbar({
+              message: "Successful registration",
+              severity: "success",
+            });
             setOpenSnackbar(true);
-            setActiveAuthForm(0);
-            console.log(typeNot);
+            console.log("Письмо подтверждение отправлено вам на почту.");
           }
           if (response.data.status === 401) {
-            setTypeNot(typesNotifications[0]);
+            setSnackbar({
+              message: "This e-mail already exist",
+              severity: "error",
+            });
             setOpenSnackbar(true);
-            console.log(typeNot);
           }
         });
     } else {
@@ -190,28 +194,16 @@ const SignUp = () => {
       </Box>
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setOpenSnackbar(false)}
-        sx={{
-          left: "auto !important",
-          right: "auto !important",
-          bottom: "20% !important",
-        }}
       >
-        <>
-          <Alert
-            onClose={() => setOpenSnackbar(false)}
-            severity={typeNot.severity}
-          >
-            {typeNot.textNotification}
-          </Alert>
-        </>
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbar.severity}
+        >
+          {snackbar.message}
+        </Alert>
       </Snackbar>
-      {/* <Box sx={{ pb: "10px" }}>
-        <Typography sx={{ width: "300px", textAlign: "center" }}>
-          Continue with google{" "}
-        </Typography>
-      </Box> */}
     </>
   );
 };

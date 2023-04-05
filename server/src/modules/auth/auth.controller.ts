@@ -8,14 +8,19 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { RoleService } from '../role/role.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
+import { Role } from '../../entities/role.entity';
+import { UserRole } from '../../entities/user_roles';
+import { getRepository } from 'typeorm';
 
 @Controller('api')
 export class AuthController {
   constructor(
-    private readonly appService: AuthService,
+    private readonly authService: AuthService,
+    private readonly roleService: RoleService,
     private jwtService: JwtService,
   ) {}
 
@@ -24,10 +29,13 @@ export class AuthController {
     @Body('name') name: string,
     @Body('email') email: string,
     @Body('password') password: string,
+    @Body('role') roleName: string,
   ) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const findUser = await this.appService.findOne({ email: email });
+    const findUser = await this.authService.findOne({ email: email });
+
+    const findRole = await this.roleService.findOne({ name: roleName });
 
     if (findUser) {
       return {
@@ -36,13 +44,19 @@ export class AuthController {
       };
     }
 
-    const user = await this.appService.create({
+    const user = await this.authService.create({
       name,
       email,
       password: hashedPassword,
     });
 
     delete user.password;
+
+    const userRole = new UserRole();
+    userRole.user = user;
+    userRole.role = findRole;
+
+    await getRepository(UserRole).save(userRole);
 
     return {
       status: HttpStatus.ACCEPTED,
@@ -56,7 +70,7 @@ export class AuthController {
     @Body('password') password: string,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const user = await this.appService.findOne({ email });
+    const user = await this.authService.findOne({ email });
 
     if (!user) {
       return {
@@ -100,7 +114,7 @@ export class AuthController {
         };
       }
 
-      const user = await this.appService.findOne({ id: data['id'] });
+      const user = await this.authService.findOne({ id: data['id'] });
 
       const { password, ...result } = user;
 
