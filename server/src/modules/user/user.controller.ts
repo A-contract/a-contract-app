@@ -9,11 +9,17 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../../entities/user.entity';
+import { Roles } from '../../enums/roles.decorator';
+import { Roles as Role } from '../../enums/roles.enum';
 
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
+  // @Post()
+  // @Roles('roles', [Role.ADMIN]) //<-- I dont know how i cam make it!
+  // //What does it mean? it is mean that U have to create controller for access control.
+  // //I have three roles.
   @Get()
   async findAll(): Promise<User[]> {
     return this.userService.findAll();

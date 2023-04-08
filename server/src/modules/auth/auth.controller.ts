@@ -12,7 +12,6 @@ import { RoleService } from '../role/role.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
-import { Role } from '../../entities/role.entity';
 import { UserRole } from '../../entities/user_roles';
 import { getRepository } from 'typeorm';
 
