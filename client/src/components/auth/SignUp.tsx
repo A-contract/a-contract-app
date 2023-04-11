@@ -64,7 +64,7 @@ const SignUp = () => {
             name: email.split("@")[0],
             email: email,
             password: password,
-            role: "user",
+            role: "customer",
           },
           {
             withCredentials: true,

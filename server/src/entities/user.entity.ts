@@ -21,7 +21,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: 'user' })
+  @Column({ default: 'customer' })
   role: string;
 
   @OneToMany(() => UserRole, (userRole) => userRole.user, { cascade: true })

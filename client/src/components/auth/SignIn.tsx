@@ -58,8 +58,8 @@ const SignIn = () => {
           }
         )
         .then(function (response: any) {
-          console.log(response.data.status);
-          if (response.data.status === 202) router.push("/cabinet");
+          if (response.data.status === 202)
+            router.push("/" + response.data.route);
           if (response.data.status === 401) setOpenSnackbar(true);
         });
     } else {

@@ -27,6 +27,7 @@ const Header = () => {
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
   const [user, setUser] = useState(false);
+  const [userRoute, setUserRoute] = useState("");
 
   useEffect(() => {
     setActiveLandPageTab(
@@ -41,6 +42,7 @@ const Header = () => {
       //console.log(response.data);
       if (response.data.status === 202) {
         setUser(response.data.user);
+        setUserRoute(response.data.user.route);
       }
     })();
   }, []);
@@ -109,7 +111,7 @@ const Header = () => {
 
               <Box component="div" sx={{ mf: "auto" }}>
                 {user ? (
-                  <Box component={Link} href="cabinet">
+                  <Box component={Link} href={"/" + userRoute}>
                     <Button variant="outlined" color="secondary">
                       Cabinet
                     </Button>

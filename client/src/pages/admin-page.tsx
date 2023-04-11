@@ -1,15 +1,12 @@
-import Header from "@/components/cabinet/Header";
-import Main from "@/components/cabinet/Main";
-import SideBar from "@/components/cabinet/SideBar";
-import { Box, CssBaseline } from "@mui/material";
+import { Box } from "@mui/material";
 import axios from "axios";
 import router from "next/router";
 import { useEffect, useState } from "react";
 
-const Cabinet = () => {
+const AdminPage = () => {
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState(false);
-  const alowRoles = ["customer", "lawyer"];
+  const alowRoles = ["admin"];
 
   useEffect(() => {
     (async () => {
@@ -26,16 +23,8 @@ const Cabinet = () => {
     })();
   });
 
-  if (auth)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <Header user={user} />
-        <SideBar />
-        <Main />
-      </Box>
-    );
+  if (auth) return <Box sx={{ display: "flex" }}>Admin </Box>;
   else return <></>;
 };
 
-export default Cabinet;
+export default AdminPage;

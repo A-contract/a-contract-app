@@ -95,9 +95,24 @@ export class AuthController {
       path: '/',
     });
 
+    let route = '';
+
+    switch (user.role) {
+      case 'admin':
+        route = 'admin-page';
+        break;
+      case 'customer' || 'lawyer':
+        route = 'cabinet';
+        break;
+      default:
+        route = 'auth';
+        break;
+    }
+
     return {
       status: HttpStatus.ACCEPTED,
       message: 'success',
+      route: route,
     };
   }
 
@@ -113,7 +128,13 @@ export class AuthController {
         };
       }
 
-      const user = await this.authService.findOne({ id: data['id'] });
+      const user: any = await this.authService.findOne({ id: data['id'] });
+      user.route =
+        user.role === 'admin'
+          ? 'admin-page'
+          : user.role === 'customer' || 'lawyer'
+          ? 'cabinet'
+          : 'auth';
 
       const { password, ...result } = user;
 
