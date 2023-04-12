@@ -5,7 +5,25 @@ import {
 } from "../../types/cabinet";
 
 const initialState: CabinetState = {
-  tabs: [
+  lawyerTabs: [
+    {
+      id: 0,
+      name: "Contracts",
+    },
+    {
+      id: 1,
+      name: "Workspace",
+    },
+    {
+      id: 2,
+      name: "Support",
+    },
+    {
+      id: 3,
+      name: "Setting",
+    },
+  ],
+  customerTabs: [
     {
       id: 0,
       name: "Contracts",

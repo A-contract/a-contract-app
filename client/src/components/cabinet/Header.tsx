@@ -4,6 +4,7 @@ const drawerWidth = 200;
 
 const Header = (props: any) => {
   const theme = useTheme();
+
   return (
     <AppBar
       position="fixed"
@@ -14,7 +15,7 @@ const Header = (props: any) => {
         color: theme.palette.primary.main,
       }}
     >
-      <Toolbar>{props.user.name}</Toolbar>
+      <Toolbar>{props.user.email}</Toolbar>
     </AppBar>
   );
 };

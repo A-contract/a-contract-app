@@ -1,5 +1,5 @@
 const Workspace = () => {
-  return <></>;
+  return <>Workspace</>;
 };
 
 export default Workspace;

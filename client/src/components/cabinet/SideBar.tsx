@@ -22,11 +22,17 @@ import router from "next/router";
 
 const drawerWidth = 200;
 
-const SideBar = () => {
+const SideBar = (props: any) => {
   const theme = useTheme();
   const cabinetState = useTypedSelector((state: any) => state.cabinet);
   const { setActiveCabinetTab } = useActions();
-  const tabs = cabinetState.tabs;
+  const userRole = props.user.role;
+  const tabs =
+    userRole === "lawyer"
+      ? cabinetState.lawyerTabs
+      : userRole === "customer"
+      ? cabinetState.customerTabs
+      : [];
   const activeTab = cabinetState.activeTabId;
 
   const logout = () => {

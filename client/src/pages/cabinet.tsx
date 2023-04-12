@@ -31,8 +31,8 @@ const Cabinet = () => {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <Header user={user} />
-        <SideBar />
-        <Main />
+        <SideBar user={user} />
+        <Main user={user} />
       </Box>
     );
   else return <></>;
