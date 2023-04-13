@@ -42,6 +42,7 @@ import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 import { UserRole } from './entities/user_roles';
 import { RoleService } from './modules/role/role.service';
+import { FilesController } from './modules/files/file.controller';
 
 @Module({
   imports: [
@@ -61,7 +62,7 @@ import { RoleService } from './modules/role/role.service';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, FilesController],
   providers: [AuthService, RoleService],
 })
 export class AppModule {}

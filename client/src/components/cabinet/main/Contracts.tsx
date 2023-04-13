@@ -1,6 +1,8 @@
 import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 import { DropzoneArea } from "mui-file-dropzone";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { useRef, useState } from "react";
+import axios from "axios";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -45,6 +47,36 @@ const rows = [
 ];
 
 const Contracts = () => {
+  const [file, setFile] = useState<any>();
+  const dropzoneRef = useRef<any>(null);
+
+  const sendFile = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      axios
+        .post("http://localhost:8000/files/upload", formData, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(function (response: any) {
+          if (response.data.status === 202) {
+            console.log("Ваш файл был успешно загружен!");
+            deleteFile();
+          } else console.log("Bad request");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  const deleteFile = () => {
+    dropzoneRef.current.deleteFile(file, 0);
+  };
+
   return (
     <>
       <Box sx={{ width: "400px", minWidth: "300px", pr: "7.5px" }}>
@@ -55,9 +87,11 @@ const Contracts = () => {
           <Box sx={{ pb: "15px" }}>
             <Box
               component={DropzoneArea}
+              ref={dropzoneRef}
+              filesLimit={1}
               acceptedFiles={[".doc", ".docx,", ".pdf"]}
               dropzoneText={"Attach your contract"}
-              onChange={(files) => console.log("Files:", files)}
+              onChange={(files) => setFile(files[0])}
             />
           </Box>
           <Box sx={{ pb: "15px" }}>
@@ -67,7 +101,11 @@ const Contracts = () => {
             </Typography>
           </Box>
           <Box sx={{ pb: "15px" }}>
-            <Button variant="outlined" sx={{ width: "-webkit-fill-available" }}>
+            <Button
+              variant="outlined"
+              sx={{ width: "-webkit-fill-available" }}
+              onClick={() => sendFile()}
+            >
               Analyse
             </Button>
           </Box>

@@ -1,24 +1,16 @@
 import {
   Box,
   Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Tab,
   Tabs,
   Toolbar,
   Typography,
   useTheme,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import Link from "next/link";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
-import logo from "../../../images/logo.png";
 import axios from "axios";
-import router from "next/router";
 
 const drawerWidth = 200;
 
@@ -38,7 +30,7 @@ const SideBar = (props: any) => {
   const logout = () => {
     axios
       .post(
-        "http://localhost:8000/api/logout",
+        "http://localhost:8000/auth/logout",
         {},
         {
           withCredentials: true,
@@ -72,7 +64,7 @@ const SideBar = (props: any) => {
         <Link href={"/"}>
           <Box
             component="img"
-            src={logo.src}
+            src={"/images/logo.png"}
             alt="logo"
             sx={{ width: "140px" }}
           />
@@ -87,7 +79,6 @@ const SideBar = (props: any) => {
         }}
         value={activeTab}
         onChange={(event: any, value: any) => {
-          console.log(value);
           setActiveCabinetTab(value);
         }}
         TabIndicatorProps={{
@@ -97,11 +88,7 @@ const SideBar = (props: any) => {
         {tabs.map((tab: any, index: number) => (
           <Tab
             key={index}
-            label={
-              <Box sx={{ ml: "10px" }}>
-                <Typography>{tab.name}</Typography>
-              </Box>
-            }
+            label={<Typography sx={{ ml: tab.textml }}>{tab.name}</Typography>}
             sx={{
               width: "100%",
               color: theme.palette.secondary.main,
@@ -112,12 +99,17 @@ const SideBar = (props: any) => {
               minHeight: "48px",
               justifyContent: "initial",
             }}
-            icon={<InboxIcon sx={{ ml: "15px" }} />}
+            icon={
+              <Box
+                component={"img"}
+                src={tab.iconPath}
+                sx={{ ml: tab.iconml }}
+              />
+            }
             iconPosition="start"
           />
         ))}
         <Tab
-          //component={Link}
           onClick={logout}
           label={
             <Box sx={{ ml: "10px" }}>
@@ -134,7 +126,13 @@ const SideBar = (props: any) => {
             justifyContent: "initial",
             opacity: "1",
           }}
-          icon={<InboxIcon sx={{ ml: "15px" }} />}
+          icon={
+            <Box
+              component={"img"}
+              src={"/images/logout_icon.png"}
+              sx={{ ml: "15px" }}
+            />
+          }
           iconPosition="start"
         />
       </Tabs>

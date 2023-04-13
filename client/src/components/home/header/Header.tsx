@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import DrawerMenu from "./DrawerMenu";
-import logo from "../../../../images/logo.png";
 import {
   AppBar,
   Box,
@@ -36,13 +35,13 @@ const Header = () => {
         : 0
     );
     (async () => {
-      const response = await axios.get("http://localhost:8000/api/user", {
+      const response = await axios.get("http://localhost:8000/auth/user", {
         withCredentials: true,
       });
       //console.log(response.data);
       if (response.data.status === 202) {
         setUser(response.data.user);
-        setUserRoute(response.data.user.route);
+        setUserRoute(response.data.route);
       }
     })();
   }, []);
@@ -75,7 +74,7 @@ const Header = () => {
                 <Box component="a" href="/">
                   <Box
                     component="img"
-                    src={logo.src}
+                    src={"images/logo.png"}
                     alt="logo"
                     sx={{ width: "160px" }}
                   />

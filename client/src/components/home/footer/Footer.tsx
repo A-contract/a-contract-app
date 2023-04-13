@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import logo from "../../../../images/logo.png";
 
 const navigation = [
   {
@@ -37,7 +36,6 @@ const navigation = [
       },
     ],
     color: "secondary.dark",
-
   },
   {
     title: "Legal",
@@ -131,7 +129,7 @@ const Footer = () => {
               >
                 <Box
                   component="img"
-                  src={logo.src}
+                  src={"images/logo.png"}
                   alt="logo"
                   sx={{ width: "160px" }}
                 />
@@ -154,7 +152,7 @@ const Footer = () => {
                 {navigation.map((value, index) => (
                   <Box component="div" key={index}>
                     <List>
-                      <ListItem sx={{ pb: "0"}}>
+                      <ListItem sx={{ pb: "0" }}>
                         <ListItemText
                           primary={
                             <Typography
@@ -175,7 +173,7 @@ const Footer = () => {
                           component="a"
                           href={valueItem.href}
                           key={indexItem}
-                          sx={{ pb: valueItem.pb, pt: valueItem.pt}}
+                          sx={{ pb: valueItem.pb, pt: valueItem.pt }}
                         >
                           <ListItemText
                             primary={
@@ -226,7 +224,7 @@ const Footer = () => {
               <Box component="div" sx={{ mr: "auto" }}>
                 <Box
                   component="img"
-                  src={logo.src}
+                  src={"images/logo.png"}
                   alt="logo"
                   sx={{ width: "160px" }}
                 />

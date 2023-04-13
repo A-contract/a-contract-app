@@ -10,7 +10,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get("http://localhost:8000/api/user", {
+      const response = await axios.get("http://localhost:8000/auth/user", {
         withCredentials: true,
       });
       if (response.data.status === 401) router.push("/auth");

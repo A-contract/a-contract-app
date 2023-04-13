@@ -15,7 +15,7 @@ import { Response, Request } from 'express';
 import { UserRole } from '../../entities/user_roles';
 import { getRepository } from 'typeorm';
 
-@Controller('api')
+@Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

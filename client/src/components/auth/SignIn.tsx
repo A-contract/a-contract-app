@@ -3,10 +3,8 @@ import {
   Alert,
   Box,
   Button,
-  Divider,
   IconButton,
   InputAdornment,
-  OutlinedInput,
   Snackbar,
   TextField,
   Typography,
@@ -48,7 +46,7 @@ const SignIn = () => {
     if (isValidEmail(email) && isValidPassword(password)) {
       axios
         .post(
-          "http://localhost:8000/api/login",
+          "http://localhost:8000/auth/login",
           {
             email: email,
             password: password,

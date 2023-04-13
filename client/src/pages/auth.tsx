@@ -6,7 +6,6 @@ import SignIn from "@/components/auth/SignIn";
 import SignUp from "@/components/auth/SignUp";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
-import logo from "../../images/logo.png";
 import theme from "utils/theme";
 import Link from "next/link";
 
@@ -51,7 +50,7 @@ const Auth = () => {
           <Box>
             <Box
               component="img"
-              src={logo.src}
+              src={"/images/logo.png"}
               alt="logo"
               sx={{
                 width: "160px",

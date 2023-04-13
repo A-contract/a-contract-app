@@ -59,7 +59,7 @@ const SignUp = () => {
     if (isValidEmail(email) && isValidPassword(password)) {
       axios
         .post(
-          "http://localhost:8000/api/register",
+          "http://localhost:8000/auth/register",
           {
             name: email.split("@")[0],
             email: email,
