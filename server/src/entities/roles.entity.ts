@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { UserRole } from './user_roles';
+import { UsersRoles } from './users_roles';
 
 @Entity()
-export class Role {
+export class Roles {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,6 +12,6 @@ export class Role {
   @Column({ default: '' })
   permissions: string;
 
-  @OneToMany(() => UserRole, (userRole) => userRole.role, { cascade: true })
-  userRoles: UserRole[];
+  @OneToMany(() => UsersRoles, (userRole) => userRole.role, { cascade: true })
+  userRoles: UsersRoles[];
 }

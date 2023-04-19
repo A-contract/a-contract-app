@@ -5,10 +5,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserRole } from './user_roles';
+import { UsersRoles } from './users_roles';
 
 @Entity()
-export class User {
+export class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,8 +21,8 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => UserRole, (userRole) => userRole.user, { cascade: true })
-  userRoles: UserRole[];
+  @OneToMany(() => UsersRoles, (userRole) => userRole.user, { cascade: true })
+  userRoles: UsersRoles[];
 
   get role(): string {
     return this.userRoles[0]?.role?.name;

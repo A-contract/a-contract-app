@@ -1,61 +1,81 @@
 import { Box, Button, Paper, Typography, useTheme } from "@mui/material";
 import { DropzoneArea } from "mui-file-dropzone";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
+    field: "contractNumber",
+    headerName: "Contract Number",
+    width: 200,
     //editable: true,
   },
   {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
+    field: "contractName",
+    headerName: "Contract Name",
+    width: 200,
     //editable: true,
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 110,
+    field: "paymentStatus",
+    headerName: "Payment Status",
+    type: "true",
+    width: 200,
     //editable: true,
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
+    field: "progressStatus",
+    headerName: "Progress Status",
+    //description: "This column has a value getter and is not sortable.",
+    //sortable: false,
+    width: 200,
   },
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    id: 1,
+    contractNumber: "1",
+    contractName: "qwe123",
+    paymentStatus: false,
+    progressStatus: "payment",
+  },
+  {
+    id: 2,
+    contractNumber: "2",
+    contractName: "tre543",
+    paymentStatus: false,
+    progressStatus: "payment",
+  },
 ];
 
 const Contracts = () => {
   const [file, setFile] = useState<any>();
   const dropzoneRef = useRef<any>(null);
+  const [rows, setRows] = useState<any>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(
+        "http://localhost:8000/contracts/contracts",
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.status === 202) {
+        //setRows(response.data.contracts);
+      }
+    })();
+  });
 
   const sendFile = () => {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
       axios
-        .post("http://localhost:8000/files/upload", formData, {
+        .post("http://localhost:8000/contracts/upload", formData, {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",

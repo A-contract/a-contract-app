@@ -12,7 +12,7 @@ import { RoleService } from '../role/role.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
-import { UserRole } from '../../entities/user_roles';
+import { UsersRoles } from '../../entities/users_roles';
 import { getRepository } from 'typeorm';
 
 @Controller('auth')
@@ -51,11 +51,11 @@ export class AuthController {
 
     delete user.password;
 
-    const userRole = new UserRole();
-    userRole.user = user;
-    userRole.role = findRole;
+    const usersRoles = new UsersRoles();
+    usersRoles.user = user;
+    usersRoles.role = findRole;
 
-    await getRepository(UserRole).save(userRole);
+    await getRepository(UsersRoles).save(usersRoles);
 
     return {
       status: HttpStatus.ACCEPTED,
