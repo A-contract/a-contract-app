@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from '../../entities/user.entity';
+import { Users } from '../../entities/users.entity';
 import { Roles } from '../../enums/roles.decorator';
 import { Roles as Role } from '../../enums/roles.enum';
 
@@ -16,27 +16,23 @@ import { Roles as Role } from '../../enums/roles.enum';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  // @Post()
-  // @Roles('roles', [Role.ADMIN]) //<-- I dont know how i cam make it!
-  // //What does it mean? it is mean that U have to create controller for access control.
-  // //I have three roles.
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<Users[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User> {
+  async findOne(@Param('id') id: number): Promise<Users> {
     return this.userService.findOne(id);
   }
 
   @Post()
-  async create(@Body() user: User): Promise<User> {
+  async create(@Body() user: Users): Promise<Users> {
     return this.userService.create(user);
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() user: User): Promise<User> {
+  async update(@Param('id') id: number, @Body() user: Users): Promise<Users> {
     user.id = id;
     return this.userService.update(id, user);
   }
