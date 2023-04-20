@@ -10,6 +10,9 @@ export class ContractsInProgress {
   contractId: number;
 
   @Column({ length: 50 })
+  originalName: string;
+
+  @Column({ length: 50 })
   name: string;
 
   @Column()
