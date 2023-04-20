@@ -9,6 +9,9 @@ export class Contracts {
   userId: number;
 
   @Column({ length: 50 })
+  originalName: string;
+
+  @Column({ length: 50 })
   name: string;
 
   @Column()

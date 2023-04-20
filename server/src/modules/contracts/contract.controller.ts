@@ -12,11 +12,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ContractService } from './contract.service';
 import { JwtService } from '@nestjs/jwt';
+import { RoleService } from '../role/role.service';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('contracts')
 export class ContractController {
   constructor(
     private readonly contractService: ContractService,
+    private readonly authService: AuthService,
+    private readonly roleService: RoleService,
     private jwtService: JwtService,
   ) {}
 
@@ -25,10 +29,15 @@ export class ContractController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads/contracts',
-        filename: (req, file, callback) => {
-          const fileName = `${file.originalname}`;
-          callback(null, fileName);
-        },
+        filename: ((controller: ContractController) => {
+          return (request, file, callback) => {
+            console.log(
+              controller, //.verifyAsync(request.cookies['jwt'])
+            );
+            const fileName = `${file.originalname}`;
+            callback(null, fileName);
+          };
+        })(this),
       }),
     }),
   )
@@ -41,7 +50,8 @@ export class ContractController {
 
       await this.contractService.create({
         userId: data['id'],
-        name: file.originalname,
+        originalName: file.originalname,
+        name: `${file.originalname}`,
         size: file.size,
         dateUploaded: new Date(),
         pathToFile: './uploads/contracts',
@@ -69,16 +79,21 @@ export class ContractController {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
       const contracts: any = await this.contractService.findAll(data['id']);
+      const user: any = await this.authService.findOne({ id: data['id'] });
 
-      // contracts.foreach((element: any) => {
-
-      // })
-
-      return {
-        status: HttpStatus.ACCEPTED,
-        message: 'success',
-        contracts: contracts,
-      };
+      if (user.role === 'customer') {
+        return {
+          status: HttpStatus.ACCEPTED,
+          message: 'success',
+          contracts: contracts.map((element: any, index: number) => ({
+            id: index + 1,
+            name: element.name,
+            paymentStatus: element.paymentStatus,
+            progressStatus: element.progressStatus,
+          })),
+        };
+      } else if (user.role === 'lawyer') {
+      }
     } catch (e) {
       return {
         status: HttpStatus.BAD_REQUEST,

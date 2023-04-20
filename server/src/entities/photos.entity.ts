@@ -10,6 +10,9 @@ export class Photos {
   contractId: number;
 
   @Column({ length: 50 })
+  originalName: string;
+
+  @Column({ length: 50 })
   name: string;
 
   @Column({ type: 'bigint' })

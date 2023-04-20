@@ -7,13 +7,7 @@ import axios from "axios";
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "contractNumber",
-    headerName: "Contract Number",
-    width: 200,
-    //editable: true,
-  },
-  {
-    field: "contractName",
+    field: "name",
     headerName: "Contract Name",
     width: 200,
     //editable: true,
@@ -34,40 +28,24 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    contractNumber: "1",
-    contractName: "qwe123",
-    paymentStatus: false,
-    progressStatus: "payment",
-  },
-  {
-    id: 2,
-    contractNumber: "2",
-    contractName: "tre543",
-    paymentStatus: false,
-    progressStatus: "payment",
-  },
-];
-
 const Contracts = () => {
   const [file, setFile] = useState<any>();
   const dropzoneRef = useRef<any>(null);
   const [rows, setRows] = useState<any>([]);
 
   useEffect(() => {
-    (async () => {
+    const intervalId = setInterval(async () => {
       const response = await axios.get(
         "http://localhost:8000/contracts/contracts",
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (response.data.status === 202) {
-        //setRows(response.data.contracts);
+        //console.log(response.data);
+        setRows(response.data.contracts);
       }
-    })();
+    }, 100);
+
+    return () => clearInterval(intervalId);
   });
 
   const sendFile = () => {
@@ -82,6 +60,7 @@ const Contracts = () => {
           },
         })
         .then(function (response: any) {
+          console.log(response);
           if (response.data.status === 202) {
             console.log("Ваш файл был успешно загружен!");
             deleteFile();
