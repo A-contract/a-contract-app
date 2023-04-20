@@ -32,7 +32,7 @@ export class ContractController {
         filename: ((controller: ContractController) => {
           return (request, file, callback) => {
             console.log(
-              controller, //.verifyAsync(request.cookies['jwt'])
+              controller.jwtService, //.verifyAsync(request.cookies['jwt'])
             );
             const fileName = `${file.originalname}`;
             callback(null, fileName);
