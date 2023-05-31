@@ -9,7 +9,7 @@ const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Contract Name",
-    width: 200,
+    width: 300,
     //editable: true,
   },
   {
