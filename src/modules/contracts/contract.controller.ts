@@ -31,11 +31,13 @@ export class ContractController {
         destination: './uploads/contracts',
         filename: ((controller: ContractController) => {
           return (request, file, callback) => {
-            console.log(
-              controller.jwtService, //.verifyAsync(request.cookies['jwt'])
-            );
-            const fileName = `${file.originalname}`;
-            callback(null, fileName);
+            const currentDate = new Date();
+            const formattedDate = currentDate
+              .toISOString()
+              .replace(/:/g, '-')
+              .replace(/\./g, '-');
+            file.originalname = `${formattedDate}-${file.originalname}`;
+            callback(null, file.originalname);
           };
         })(this),
       }),
