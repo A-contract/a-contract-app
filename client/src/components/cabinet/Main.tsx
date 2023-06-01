@@ -5,10 +5,18 @@ import Setting from "./main/Setting";
 import Support from "./main/Support";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 
-const lawyerMain = [<Contracts />, <Workspace />, <Support />, <Setting />];
-const customerMain = [<Contracts />, <Support />, <Setting />];
-
 const Main = (props: any) => {
+  const lawyerMain = [
+    <Contracts role={props.user.role} />,
+    <Workspace />,
+    <Support />,
+    <Setting />,
+  ];
+  const customerMain = [
+    <Contracts role={props.user.role} />,
+    <Support />,
+    <Setting />,
+  ];
   const theme = useTheme();
   const cabinetState = useTypedSelector((state: any) => state.cabinet);
   const activeTab = cabinetState.activeTabId;
