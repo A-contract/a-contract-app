@@ -80,9 +80,12 @@ export class ContractController {
   async user(@Req() request: any) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
-      const contracts: any = await this.contractService.findAll(data['id']);
-      const user: any = await this.authService.findOne({ id: data['id'] });
 
+      const user: any = await this.authService.findOne({ id: data['id'] });
+      const contracts: any = await this.contractService.findAll(
+        user.role,
+        data['id'],
+      ); //data['id']
       if (user.role === 'customer') {
         return {
           status: HttpStatus.ACCEPTED,
@@ -95,6 +98,16 @@ export class ContractController {
           })),
         };
       } else if (user.role === 'lawyer') {
+        return {
+          status: HttpStatus.ACCEPTED,
+          message: 'success',
+          contracts: contracts.map((element: any, index: number) => ({
+            id: index + 1,
+            name: element.name,
+            paymentStatus: element.paymentStatus,
+            progressStatus: element.progressStatus,
+          })),
+        };
       }
     } catch (e) {
       return {

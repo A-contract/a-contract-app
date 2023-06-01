@@ -14,7 +14,9 @@ export class ContractService {
     return this.contractRepository.save(data);
   }
 
-  async findAll(id: number): Promise<Contracts[]> {
-    return this.contractRepository.find({ where: { userId: id } });
+  async findAll(role: any, id: number): Promise<Contracts[]> {
+    return this.contractRepository.find(
+      role === 'customer' ? { where: { userId: id } } : {},
+    ); //{ where: { userId: id } }
   }
 }
