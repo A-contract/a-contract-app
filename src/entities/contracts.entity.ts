@@ -24,7 +24,7 @@ export class Contracts {
   pathToFile: string;
 
   @Column()
-  progressStatus: string;
+  progressStatus: number;
 
   @Column()
   paymentStatus: boolean;
