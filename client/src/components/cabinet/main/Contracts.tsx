@@ -32,9 +32,24 @@ const columns: GridColDef[] = [
   {
     field: "progressStatus",
     headerName: "Progress Status",
-    //description: "This column has a value getter and is not sortable.",
-    //sortable: false,
-    width: 200,
+    width: 400,
+    renderCell: (params: any) => {
+      if (params.value === 0) {
+        return (
+          <Button
+            variant="contained"
+            sx={{
+              color: theme.palette.secondary.main,
+              bgcolor: theme.palette.primary.light,
+            }}
+          >
+            Take in processing
+          </Button>
+        );
+      } else {
+        return <span>{params.value}</span>;
+      }
+    },
   },
 ];
 
@@ -52,6 +67,8 @@ const Contracts = (props: any) => {
       );
       console.log(response.data.status);
       if (response.data.status === 202) {
+        // let contracts = response.data.contracts;
+        // console.log(contracts);
         setRows(response.data.contracts);
         console.log(response.data.contracts);
       }
@@ -197,7 +214,7 @@ const Contracts = (props: any) => {
             <Typography>Contracts</Typography>
           </Box>
           <Box sx={{ height: 600, width: "100%" }}>
-            <DataGrid rows={rows} columns={columns} /> {/*checkboxSelection */}
+            <DataGrid rows={rows} columns={columns} />
           </Box>
         </Paper>
       </Box>
