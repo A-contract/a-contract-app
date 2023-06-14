@@ -101,14 +101,40 @@ export class ContractController {
         return {
           status: HttpStatus.ACCEPTED,
           message: 'success',
-          contracts: contracts.map((element: any, index: number) => ({
-            id: index + 1,
-            name: element.name,
-            paymentStatus: element.paymentStatus,
-            progressStatus: element.progressStatus,
-          })),
+          contracts: contracts,
         };
       }
+    } catch (e) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'unsuccess',
+      };
+    }
+  }
+
+  @Post('processing')
+  async processing(@Req() request: any) {
+    try {
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      const user: any = await this.authService.findOne({ id: data['id'] });
+
+      const contract: any = await this.contractService.findOne(request.body.id);
+
+      await this.contractService.createProcessing({
+        contractId: contract.id,
+        originalName: contract.originalName,
+        name: contract.name,
+        size: contract.size,
+        userId: contract.userId,
+        lawerId: user.id,
+        pathToFile: contract.pathToFile,
+      });
+
+      await this.contractService.update(contract.id, 1);
+
+      console.log(request.body.id);
+      console.log(user.id);
     } catch (e) {
       return {
         status: HttpStatus.BAD_REQUEST,

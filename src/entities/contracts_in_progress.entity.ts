@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  BeforeInsert,
+} from 'typeorm';
 import { UsersRoles } from './users_roles';
 
 @Entity()
@@ -30,6 +36,11 @@ export class ContractsInProgress {
   @Column()
   datetimeStart: Date;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   datetimeFinish: Date;
+
+  @BeforeInsert()
+  setStartDateTime() {
+    this.datetimeStart = new Date();
+  }
 }
