@@ -14,63 +14,70 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import theme from "utils/theme";
 
-const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "name",
-    headerName: "Contract Name",
-    width: 300,
-    //editable: true,
-  },
-  {
-    field: "paymentStatus",
-    headerName: "Payment Status",
-    type: "true",
-    width: 200,
-    //editable: true,
-  },
-  {
-    field: "progressStatus",
-    headerName: "Progress Status",
-    width: 400,
-    renderCell: (params: any) => {
-      if (params.value === 0) {
-        return (
-          <Button
-            variant="contained"
-            sx={{
-              color: theme.palette.secondary.main,
-              bgcolor: theme.palette.primary.light,
-            }}
-          >
-            Take in processing
-          </Button>
-        );
-      } else {
-        return <span>{params.value}</span>;
-      }
-    },
-  },
-];
-
 const Contracts = (props: any) => {
   const [file, setFile] = useState<any>();
-  const dropzoneRef = useRef<any>(null);
   const [rows, setRows] = useState<any>([]);
+  const dropzoneRef = useRef<any>(null);
   const isLawyer = props.role === "lawyer" ? true : false;
   const isCustomer = props.role === "customer" ? true : false;
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "Number", width: 90 },
+    {
+      field: "name",
+      headerName: "Contract Name",
+      width: 300,
+      //editable: true,
+    },
+    {
+      field: "paymentStatus",
+      headerName: "Payment Status",
+      type: "true",
+      width: 200,
+      //editable: true,
+    },
+    {
+      field: "progressStatus",
+      headerName: "Progress Status",
+      width: 400,
+      renderCell: (params: any) => {
+        if (params.value === 0) {
+          return (
+            <Button
+              variant="outlined"
+              sx={{
+                color: theme.palette.info.main,
+                bgcolor: theme.palette.secondary.light,
+              }}
+              onClick={() => toProcessingContract(params.row.info.id)}
+            >
+              Take in processing
+            </Button>
+          );
+        } else {
+          return <span>{params.value}</span>;
+        }
+      },
+    },
+  ];
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const response = await axios.get(
         "http://localhost:8000/contracts/contracts",
         { withCredentials: true }
       );
-      console.log(response.data.status);
       if (response.data.status === 202) {
-        // let contracts = response.data.contracts;
-        // console.log(contracts);
-        setRows(response.data.contracts);
-        console.log(response.data.contracts);
+        setRows(
+          response.data.contracts.map((element: any, index: number) => ({
+            id: index + 1,
+            name: element.name,
+            paymentStatus: element.paymentStatus,
+            progressStatus: element.progressStatus,
+            info: {
+              id: element.id,
+              userId: element.userId,
+            },
+          }))
+        );
       }
     }, 100);
 
@@ -105,6 +112,20 @@ const Contracts = (props: any) => {
     dropzoneRef.current.deleteFile(file, 0);
   };
 
+  const toProcessingContract = (id: number) => {
+    console.log("Go to processing!");
+
+    axios.post(
+      "http://localhost:8000/contracts/processing",
+      {
+        id: id,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+  };
+
   return (
     <>
       {isLawyer ? (
@@ -131,6 +152,7 @@ const Contracts = (props: any) => {
                   width: "-webkit-fill-available",
                   height: 40,
                 }}
+                defaultValue={10}
               >
                 <MenuItem value={10}>Ten</MenuItem>
                 <MenuItem value={20}>Twenty</MenuItem>
