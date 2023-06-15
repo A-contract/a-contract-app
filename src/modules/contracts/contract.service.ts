@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contracts } from 'src/entities/contracts.entity';
 import { ContractsInProgress } from 'src/entities/contracts_in_progress.entity';
+import { formatDateTime } from 'src/utils/dateUtils';
 
 @Injectable()
 export class ContractService {
@@ -32,6 +33,17 @@ export class ContractService {
   }
 
   async update(id: any, progressStatus: any): Promise<Contracts> {
+    await this.contractRepository.update(id, {
+      progressStatus: progressStatus,
+    });
+    return await this.contractRepository.findOne(id);
+  }
+
+  async finish(id: any, progressStatus: any): Promise<Contracts> {
+    await this.contractInProgressRepository.update(
+      { datetimeFinish: new Date(formatDateTime()) },
+      { contractId: id },
+    );
     await this.contractRepository.update(id, {
       progressStatus: progressStatus,
     });
