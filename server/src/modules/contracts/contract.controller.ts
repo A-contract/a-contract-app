@@ -14,6 +14,7 @@ import { ContractService } from './contract.service';
 import { JwtService } from '@nestjs/jwt';
 import { RoleService } from '../role/role.service';
 import { AuthService } from '../auth/auth.service';
+import { formatDateTime } from 'src/utils/dateUtils';
 
 @Controller('contracts')
 export class ContractController {
@@ -92,7 +93,7 @@ export class ContractController {
           message: 'success',
           contracts: contracts.map((element: any, index: number) => ({
             id: index + 1,
-            name: element.name,
+            name: element.originalName,
             paymentStatus: element.paymentStatus,
             progressStatus: element.progressStatus,
           })),
@@ -132,9 +133,22 @@ export class ContractController {
       });
 
       await this.contractService.update(contract.id, 1);
+    } catch (e) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'unsuccess',
+      };
+    }
+  }
 
+  @Post('finish')
+  async finish(@Req() request: any) {
+    try {
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      //const user: any = await this.authService.findOne({ id: data['id'] });
       console.log(request.body.id);
-      console.log(user.id);
+      await this.contractService.finish(request.body.id, 2);
     } catch (e) {
       return {
         status: HttpStatus.BAD_REQUEST,

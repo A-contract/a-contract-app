@@ -17,6 +17,12 @@ import theme from "utils/theme";
 const Contracts = (props: any) => {
   const [file, setFile] = useState<any>();
   const [rows, setRows] = useState<any>([]);
+  const [selectedContract, setSelectedContract] = useState<any>({
+    id: null,
+    number: null,
+    name: null,
+    progressStatus: 0,
+  });
   const dropzoneRef = useRef<any>(null);
   const isLawyer = props.role === "lawyer" ? true : false;
   const isCustomer = props.role === "customer" ? true : false;
@@ -40,7 +46,10 @@ const Contracts = (props: any) => {
       headerName: "Progress Status",
       width: 400,
       renderCell: (params: any) => {
-        if (params.value === 0) {
+        if (
+          selectedContract.progressStatus === 0 &&
+          params.row.progressStatus !== 2
+        ) {
           return (
             <Button
               variant="outlined"
@@ -59,6 +68,7 @@ const Contracts = (props: any) => {
       },
     },
   ];
+
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const response = await axios.get(
@@ -66,6 +76,21 @@ const Contracts = (props: any) => {
         { withCredentials: true }
       );
       if (response.data.status === 202) {
+        let indexContract = 0;
+        const filteredContract =
+          response.data.contracts.filter((element: any) => {
+            indexContract++;
+            return element.progressStatus === 1;
+          }) || [];
+
+        if (filteredContract.length > 0)
+          if (filteredContract[0].progressStatus === 1)
+            setSelectedContract({
+              id: filteredContract[0].id,
+              number: indexContract,
+              name: filteredContract[0].name,
+              progressStatus: filteredContract[0].progressStatus,
+            });
         setRows(
           response.data.contracts.map((element: any, index: number) => ({
             id: index + 1,
@@ -82,7 +107,7 @@ const Contracts = (props: any) => {
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [selectedContract, rows]);
 
   const sendFile = () => {
     if (file) {
@@ -96,7 +121,6 @@ const Contracts = (props: any) => {
           },
         })
         .then(function (response: any) {
-          console.log(response);
           if (response.data.status === 202) {
             console.log("Ваш файл был успешно загружен!");
             deleteFile();
@@ -113,8 +137,6 @@ const Contracts = (props: any) => {
   };
 
   const toProcessingContract = (id: number) => {
-    console.log("Go to processing!");
-
     axios.post(
       "http://localhost:8000/contracts/processing",
       {
@@ -124,6 +146,27 @@ const Contracts = (props: any) => {
         withCredentials: true,
       }
     );
+  };
+
+  const finishContract = () => {
+    console.log(selectedContract);
+    if (selectedContract.progressStatus) {
+      setSelectedContract({
+        id: null,
+        number: null,
+        name: null,
+        progressStatus: 0,
+      });
+      axios.post(
+        "http://localhost:8000/contracts/finish",
+        {
+          id: selectedContract.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+    }
   };
 
   return (
@@ -172,22 +215,81 @@ const Contracts = (props: any) => {
             <Box sx={{ pb: "30px" }}>
               <Typography>Selected contract</Typography>
             </Box>
-            <Box sx={{ pb: "15px", color: theme.palette.primary.main }}>
-              <Typography>Number</Typography>
-            </Box>
-            <Box sx={{ pb: "15px", color: theme.palette.primary.main }}>
-              <Typography>Name</Typography>
-            </Box>
-            <Box sx={{ pb: "15px", color: theme.palette.primary.main }}>
-              <Typography>Progress status</Typography>
-            </Box>
-            <Box sx={{ pb: "15px" }}>
-              <Button
-                variant="outlined"
-                sx={{ width: "-webkit-fill-available" }}
+            <Box sx={{ pb: "20px", display: "flex", flexDirection: "row" }}>
+              <Box
+                sx={{
+                  width: "120px",
+                  color: theme.palette.primary.main,
+                }}
               >
-                Filter
-              </Button>
+                <Typography>Number</Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "160px",
+                }}
+              >
+                <Typography>{selectedContract.number}</Typography>
+              </Box>
+            </Box>
+            <Box sx={{ pb: "20px", display: "flex", flexDirection: "row" }}>
+              <Box
+                sx={{
+                  width: "120px",
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Typography>Name</Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "160px",
+                }}
+              >
+                <Typography>{selectedContract.name}</Typography>
+              </Box>
+            </Box>
+            <Box sx={{ pb: "10px", display: "flex", flexDirection: "row" }}>
+              <Box
+                sx={{
+                  mt: "2px",
+                  width: "120px",
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <Typography>Progress status</Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "160px",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  sx={{
+                    height: "32px",
+                    width: "100px",
+                    visibility:
+                      selectedContract.progressStatus === 1
+                        ? "visible"
+                        : "hidden",
+                  }}
+                  onClick={() => finishContract()}
+                >
+                  Finish
+                </Button>
+              </Box>
             </Box>
           </Paper>
         </Box>
