@@ -13,8 +13,13 @@ import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import theme from "utils/theme";
+import { useActions } from "@/hooks/useAction";
+import { useTypedSelector } from "@/hooks/useTypeSelector";
+import { useDispatch } from "react-redux";
 
 const Contracts = (props: any) => {
+  const { setDataFile, updateDraft } = useActions();
+  const workspaceState = useTypedSelector((state: any) => state.workspace);
   const [file, setFile] = useState<any>();
   const [rows, setRows] = useState<any>([]);
   const [selectedContract, setSelectedContract] = useState<any>({
@@ -84,13 +89,25 @@ const Contracts = (props: any) => {
           }) || [];
 
         if (filteredContract.length > 0)
-          if (filteredContract[0].progressStatus === 1)
+          if (filteredContract[0].progressStatus === 1) {
             setSelectedContract({
               id: filteredContract[0].id,
               number: indexContract,
               name: filteredContract[0].name,
               progressStatus: filteredContract[0].progressStatus,
             });
+            console.log(response.data.content);
+            setDataFile({
+              id: filteredContract[0].id,
+              number: indexContract,
+              name: filteredContract[0].name,
+              progressStatus: filteredContract[0].progressStatus,
+              content: "",
+            });
+
+            // if (!workspaceState.draft.edited)
+            //   updateDraft({ content: "", edited: true });
+          }
         setRows(
           response.data.contracts.map((element: any, index: number) => ({
             id: index + 1,
@@ -104,10 +121,10 @@ const Contracts = (props: any) => {
           }))
         );
       }
-    }, 100);
+    }, 50);
 
     return () => clearInterval(intervalId);
-  }, [selectedContract, rows]);
+  }, []);
 
   const sendFile = () => {
     if (file) {

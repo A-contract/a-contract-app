@@ -1,7 +1,7 @@
 import {
   CabinetState,
-  CabinetAction,
   CabinetActionTypes,
+  CabinetAction,
 } from "../../types/cabinet";
 
 const initialState: CabinetState = {
