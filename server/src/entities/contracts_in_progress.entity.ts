@@ -22,7 +22,7 @@ export class ContractsInProgress {
   userId: number;
 
   @Column()
-  lawerId: number;
+  lawyerId: number;
 
   @Column()
   pathToFile: string;
