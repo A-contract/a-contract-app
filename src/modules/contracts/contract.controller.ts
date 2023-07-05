@@ -14,7 +14,9 @@ import { ContractService } from './contract.service';
 import { JwtService } from '@nestjs/jwt';
 import { RoleService } from '../role/role.service';
 import { AuthService } from '../auth/auth.service';
-import { formatDateTime } from 'src/utils/dateUtils';
+import * as fs from 'fs-extra';
+import { createReadStream } from 'fs';
+import { convertDocxToHtml } from 'src/utils/docsFormatter';
 
 @Controller('contracts')
 export class ContractController {
@@ -86,7 +88,7 @@ export class ContractController {
       const contracts: any = await this.contractService.findAll(
         user.role,
         data['id'],
-      ); //data['id']
+      );
       if (user.role === 'customer') {
         return {
           status: HttpStatus.ACCEPTED,
@@ -128,7 +130,7 @@ export class ContractController {
         name: contract.name,
         size: contract.size,
         userId: contract.userId,
-        lawerId: user.id,
+        lawyerId: user.id,
         pathToFile: contract.pathToFile,
       });
 
@@ -141,13 +143,42 @@ export class ContractController {
     }
   }
 
+  @Get('contractInProcess')
+  async contractInProcess(@Req() request: any) {
+    try {
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      const user: any = await this.authService.findOne({ id: data['id'] });
+
+      const contract: any = await this.contractService.findSelected(user.id);
+
+      //const docContent = createReadStream(contract.pathToFile);
+      let content = '';
+
+      await convertDocxToHtml(
+        contract.pathToFile + '/' + contract.originalName,
+      ).then((result) => {
+        content = result;
+      });
+
+      return {
+        status: HttpStatus.ACCEPTED,
+        message: 'success',
+        contracts: contract,
+        content: content,
+      };
+    } catch (e) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'unsuccess',
+      };
+    }
+  }
+
   @Post('finish')
   async finish(@Req() request: any) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
-
-      //const user: any = await this.authService.findOne({ id: data['id'] });
-      console.log(request.body.id);
       await this.contractService.finish(request.body.id, 2);
     } catch (e) {
       return {

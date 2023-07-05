@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, createQueryBuilder } from 'typeorm';
 import { Contracts } from 'src/entities/contracts.entity';
 import { ContractsInProgress } from 'src/entities/contracts_in_progress.entity';
 import { formatDateTime } from 'src/utils/dateUtils';
@@ -29,10 +29,12 @@ export class ContractService {
   }
 
   async createProcessing(data: any): Promise<ContractsInProgress> {
+    //console.log(data);
     return this.contractInProgressRepository.save(data);
   }
 
   async update(id: any, progressStatus: any): Promise<Contracts> {
+    //console.log(id);
     await this.contractRepository.update(id, {
       progressStatus: progressStatus,
     });
@@ -48,5 +50,19 @@ export class ContractService {
       progressStatus: progressStatus,
     });
     return await this.contractRepository.findOne(id);
+  }
+
+  async findSelected(lawyerId: number): Promise<ContractsInProgress> {
+    const selectedContract = await this.contractInProgressRepository
+      .createQueryBuilder('contracts_in_progress')
+      .leftJoin(
+        'contracts',
+        'contracts',
+        'contracts.id = contracts_in_progress.contractId',
+      )
+      .where('contracts.progressStatus = :status', { status: 1 })
+      .andWhere('contracts_in_progress.lawyerId = :lawyerId', { lawyerId })
+      .getOne();
+    return selectedContract;
   }
 }
