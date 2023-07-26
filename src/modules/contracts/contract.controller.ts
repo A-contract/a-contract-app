@@ -17,6 +17,7 @@ import { AuthService } from '../auth/auth.service';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { convertDocxToHtml } from 'src/utils/docsFormatter';
+import { copyFileWithReplacement } from 'src/utils/fileUtils';
 
 @Controller('contracts')
 export class ContractController {
@@ -89,6 +90,7 @@ export class ContractController {
         user.role,
         data['id'],
       );
+
       if (user.role === 'customer') {
         return {
           status: HttpStatus.ACCEPTED,
@@ -135,6 +137,13 @@ export class ContractController {
       });
 
       await this.contractService.update(contract.id, 1);
+
+      // Пример использования функции
+      const sourceFilePath = contract.pathToFile + '/' + contract.originalName;
+      const destinationFilePath =
+        './uploads/contracts_in_progress/' + contract.originalName;
+
+      copyFileWithReplacement(sourceFilePath, destinationFilePath);
     } catch (e) {
       return {
         status: HttpStatus.BAD_REQUEST,
@@ -152,7 +161,6 @@ export class ContractController {
 
       const contract: any = await this.contractService.findSelected(user.id);
 
-      //const docContent = createReadStream(contract.pathToFile);
       let content = '';
 
       await convertDocxToHtml(
@@ -173,6 +181,12 @@ export class ContractController {
         message: 'unsuccess',
       };
     }
+  }
+
+  @Post('download')
+  async download(@Req() request: any) {
+    try {
+    } catch (error) {}
   }
 
   @Post('finish')
