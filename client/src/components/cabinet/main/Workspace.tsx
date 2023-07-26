@@ -71,35 +71,13 @@ const Workspace = () => {
     },
   };
 
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "link",
-    "image",
-    "indent",
-    "indent-",
-    "table",
-    "row-above",
-    "row-below",
-    "column-left",
-    "column-right",
-    "row-remove",
-    "column-remove",
-  ];
-
   return (
     <Paper sx={{ p: "20px", width: "1000px", borderCollapse: "collapse" }}>
       <ReactQuill
         theme="snow"
         value={workspaceState.draft.content}
         onChange={draftEditorOnChange}
-        formats={formats}
+        //formats={formats}
         modules={modules}
       />
     </Paper>

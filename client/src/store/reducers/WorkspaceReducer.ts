@@ -16,6 +16,7 @@ const initialState: WorkspaceState = {
     content: null,
     edited: false,
   },
+  
 };
 
 export const WorkspaceReducer = (

@@ -44,17 +44,9 @@ const Contracts = (props: any) => {
       headerName: "Payment Status",
       type: "true",
       width: 200,
-      //editable: true,
-    },
-    {
-      field: "progressStatus",
-      headerName: "Progress Status",
-      width: 400,
       renderCell: (params: any) => {
-        if (
-          selectedContract.progressStatus === 0 &&
-          params.row.progressStatus !== 2
-        ) {
+        if (params.row.paymentStatus) return <>Paid</>;
+        else if (isCustomer)
           return (
             <Button
               variant="outlined"
@@ -62,13 +54,94 @@ const Contracts = (props: any) => {
                 color: theme.palette.info.main,
                 bgcolor: theme.palette.secondary.light,
               }}
-              onClick={() => toProcessingContract(params.row.info.id)}
             >
-              Take in processing
+              To pay
             </Button>
           );
-        } else {
-          return <span>{params.value}</span>;
+        else if (isLawyer) {
+          return <>Not paid</>;
+        }
+      },
+    },
+    {
+      field: "progressStatus",
+      headerName: "Progress Status",
+      width: 250,
+      renderCell: (params: any) => {
+        if (isLawyer) {
+          if (
+            selectedContract.progressStatus !== 1 &&
+            params.row.paymentStatus === true
+          ) {
+            return (
+              <Button
+                variant="outlined"
+                sx={{
+                  color: theme.palette.info.main,
+                  bgcolor: theme.palette.secondary.light,
+                }}
+                onClick={() => toProcessingContract(params.row.info.id)}
+              >
+                Take in processing
+              </Button>
+            );
+          } else if (
+            params.row.name === selectedContract.name &&
+            selectedContract.progressStatus === 1
+          )
+            return <>In process</>;
+          else if (
+            (params.row.progressStatus === 1 || 2) &&
+            params.row.paymentStatus === true
+          ) {
+            return <>Pending process</>;
+          }
+        } else if (isCustomer) {
+          if (params.row.paymentStatus === false) return <>Wait for payment</>;
+          else if (params.row.progressStatus === 1) return <>In process</>;
+          else if (params.row.progressStatus === 2) return <>Ready</>;
+          else if (
+            params.row.progressStatus === 0 &&
+            params.row.paymentStatus === true
+          )
+            return <>In process</>;
+        }
+      },
+    },
+    {
+      field: "Download",
+      headerName: "Download document",
+      type: "true",
+      width: 250,
+      renderCell: (params: any) => {
+        if (isLawyer) {
+          return (
+            <Button
+              variant="outlined"
+              sx={{
+                color: theme.palette.info.main,
+                bgcolor: theme.palette.secondary.light,
+              }}
+            >
+              Download
+            </Button>
+          );
+        } else if (isCustomer) {
+          if (params.row.progressStatus === 2) {
+            return (
+              <Button
+                variant="outlined"
+                sx={{
+                  color: theme.palette.info.main,
+                  bgcolor: theme.palette.secondary.light,
+                }}
+              >
+                Download
+              </Button>
+            );
+          } else {
+            return <>No</>;
+          }
         }
       },
     },
@@ -90,13 +163,13 @@ const Contracts = (props: any) => {
 
         if (filteredContract.length > 0)
           if (filteredContract[0].progressStatus === 1) {
+            console.log(filteredContract[0].id);
             setSelectedContract({
               id: filteredContract[0].id,
               number: indexContract,
               name: filteredContract[0].name,
               progressStatus: filteredContract[0].progressStatus,
             });
-            console.log(response.data.content);
             setDataFile({
               id: filteredContract[0].id,
               number: indexContract,
@@ -104,9 +177,6 @@ const Contracts = (props: any) => {
               progressStatus: filteredContract[0].progressStatus,
               content: "",
             });
-
-            // if (!workspaceState.draft.edited)
-            //   updateDraft({ content: "", edited: true });
           }
         setRows(
           response.data.contracts.map((element: any, index: number) => ({
@@ -121,7 +191,7 @@ const Contracts = (props: any) => {
           }))
         );
       }
-    }, 50);
+    }, 100);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -165,31 +235,36 @@ const Contracts = (props: any) => {
     );
   };
 
-  const finishContract = () => {
+  const finishContract = async () => {
     console.log(selectedContract);
     if (selectedContract.progressStatus) {
-      setSelectedContract({
-        id: null,
-        number: null,
-        name: null,
-        progressStatus: 0,
-      });
-      axios.post(
-        "http://localhost:8000/contracts/finish",
-        {
-          id: selectedContract.id,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      try {
+        await axios.post(
+          "http://localhost:8000/contracts/finish",
+          {
+            id: selectedContract.id,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+
+        setSelectedContract({
+          id: null,
+          number: null,
+          name: null,
+          progressStatus: 0,
+        });
+      } catch (error) {
+        console.error("Error finishing contract:", error);
+      }
     }
   };
 
   return (
     <>
       {isLawyer ? (
-        <Box sx={{ width: "400px", minWidth: "300px", pr: "7.5px" }}>
+        <Box sx={{ width: "500px", minWidth: "300px", pr: "7.5px" }}>
           <Paper sx={{ p: "20px" }}>
             <Box sx={{ pb: "30px" }}>
               <Typography>Filters</Typography>
@@ -273,40 +348,37 @@ const Contracts = (props: any) => {
                 <Typography>{selectedContract.name}</Typography>
               </Box>
             </Box>
-            <Box sx={{ pb: "10px", display: "flex", flexDirection: "row" }}>
-              <Box
-                sx={{
-                  mt: "2px",
-                  width: "120px",
-                  color: theme.palette.primary.main,
-                }}
-              >
-                <Typography>Progress status</Typography>
-              </Box>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "160px",
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  sx={{
-                    height: "32px",
-                    width: "100px",
-                    visibility:
-                      selectedContract.progressStatus === 1
-                        ? "visible"
-                        : "hidden",
-                  }}
-                  onClick={() => finishContract()}
-                >
-                  Finish
-                </Button>
+            {selectedContract.progressStatus === 1 ? (
+              <Box sx={{ pb: "15px", minHeight: "200px" }}>
+                <Box
+                  component={DropzoneArea}
+                  ref={dropzoneRef}
+                  filesLimit={1}
+                  acceptedFiles={[".doc", ".docx,", ".pdf"]}
+                  dropzoneText={"Attach document"}
+                  onChange={(files) => setFile(files[0])}
+                />
               </Box>
+            ) : (
+              <></>
+            )}
+
+            <Box sx={{ pb: "10px", display: "flex", flexDirection: "row" }}>
+              <Button
+                variant="outlined"
+                sx={{
+                  height: "32px",
+                  width: "-webkit-fill-available",
+                  visibility:
+                    selectedContract.progressStatus === 1
+                      ? "visible"
+                      : "hidden",
+                }}
+                onClick={() => finishContract()}
+              >
+                Finish
+              </Button>
             </Box>
           </Paper>
         </Box>

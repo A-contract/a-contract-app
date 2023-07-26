@@ -23,9 +23,23 @@ export class ContractService {
   }
 
   async findAll(role: any, id: number): Promise<Contracts[]> {
-    return this.contractRepository.find(
-      role === 'customer' ? { where: { userId: id } } : {},
-    ); //{ where: { userId: id } }
+    const query = this.contractRepository
+      .createQueryBuilder('contracts')
+      .select(['contracts'])
+      .leftJoin(
+        'contracts_in_progress',
+        'contracts_in_progress',
+        'contracts_in_progress.contractId = contracts.id',
+      );
+    if (role === 'customer') {
+      query.where('contracts.userId = :id', { id });
+    } else if (role === 'lawyer') {
+      query
+        .where('contracts_in_progress.lawyerId = :id', { id })
+        .orWhere('contracts.paymentStatus = 1');
+    }
+
+    return await query.getMany();
   }
 
   async createProcessing(data: any): Promise<ContractsInProgress> {
