@@ -3,8 +3,10 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Req,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,6 +20,7 @@ import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { convertDocxToHtml } from 'src/utils/docsFormatter';
 import { copyFileWithReplacement } from 'src/utils/fileUtils';
+import path, { join } from 'path';
 
 @Controller('contracts')
 export class ContractController {
@@ -53,6 +56,13 @@ export class ContractController {
   ) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      if (!data) {
+        return {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'success',
+        };
+      }
 
       await this.contractService.create({
         userId: data['id'],
@@ -122,6 +132,13 @@ export class ContractController {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
 
+      if (!data) {
+        return {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'success',
+        };
+      }
+
       const user: any = await this.authService.findOne({ id: data['id'] });
 
       const contract: any = await this.contractService.findOne(request.body.id);
@@ -157,6 +174,13 @@ export class ContractController {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
 
+      if (!data) {
+        return {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'success',
+        };
+      }
+
       const user: any = await this.authService.findOne({ id: data['id'] });
 
       const contract: any = await this.contractService.findSelected(user.id);
@@ -184,15 +208,46 @@ export class ContractController {
   }
 
   @Post('download')
-  async download(@Req() request: any) {
-    try {
-    } catch (error) {}
+  async downloadFile(@Res() response: any, @Req() request: any) {
+    const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+    if (!data) {
+      return {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'success',
+      };
+    }
+    const user: any = await this.authService.findOne({ id: data['id'] });
+
+    if (user.role === 'lawyer') {
+      const fileName = request.body.fileName;
+      const filePath = './uploads/contracts/' + fileName;
+      return response.sendFile(filePath, { root: '.' });
+    } else if (user.role === 'customer') {
+      const fileName = request.body.fileName;
+      const filePath =
+        './uploads/contracts_ready/' +
+        fileName.substr(0, fileName.lastIndexOf('.')) +
+        '.pdf';
+      return response.sendFile(filePath, { root: '.' });
+    } else
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'unsuccess',
+      };
   }
 
   @Post('finish')
   async finish(@Req() request: any) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      if (!data) {
+        return {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'success',
+        };
+      }
       await this.contractService.finish(request.body.id, 2);
     } catch (e) {
       return {
