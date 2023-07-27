@@ -24,7 +24,7 @@ const Cabinet = () => {
         } else router.push("/auth");
       }
     })();
-  });
+  }, [auth, user]);
 
   if (auth)
     return (

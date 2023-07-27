@@ -122,6 +122,7 @@ const Contracts = (props: any) => {
                 color: theme.palette.info.main,
                 bgcolor: theme.palette.secondary.light,
               }}
+              onClick={() => downloadContract(params.row)}
             >
               Download
             </Button>
@@ -135,6 +136,14 @@ const Contracts = (props: any) => {
                   color: theme.palette.info.main,
                   bgcolor: theme.palette.secondary.light,
                 }}
+                onClick={() =>
+                  downloadContract(
+                    params.row.name.substr(
+                      0,
+                      params.row.name.lastIndexOf(".")
+                    ) + ".pdf"
+                  )
+                }
               >
                 Download
               </Button>
@@ -163,7 +172,6 @@ const Contracts = (props: any) => {
 
         if (filteredContract.length > 0)
           if (filteredContract[0].progressStatus === 1) {
-            console.log(filteredContract[0].id);
             setSelectedContract({
               id: filteredContract[0].id,
               number: indexContract,
@@ -194,7 +202,7 @@ const Contracts = (props: any) => {
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [selectedContract]);
 
   const sendFile = () => {
     if (file) {
@@ -235,8 +243,35 @@ const Contracts = (props: any) => {
     );
   };
 
+  const downloadContract = async (name: any) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/contracts/download",
+        {
+          fileName: name,
+        },
+        {
+          withCredentials: true,
+          responseType: "blob",
+        }
+      );
+
+      const url = URL.createObjectURL(response.data);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   const finishContract = async () => {
-    console.log(selectedContract);
     if (selectedContract.progressStatus) {
       try {
         await axios.post(
