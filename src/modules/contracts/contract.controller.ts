@@ -64,9 +64,11 @@ export class ContractController {
         };
       }
 
+      const { originalName } = JSON.parse(request.body.data);
+
       await this.contractService.create({
         userId: data['id'],
-        originalName: file.originalname,
+        originalName: originalName,
         name: `${file.originalname}`,
         size: file.size,
         dateUploaded: new Date(),
@@ -76,7 +78,7 @@ export class ContractController {
       });
 
       return {
-        status: HttpStatus.ACCEPTED,
+        status: HttpStatus.OK,
         message: 'success',
       };
     } catch (error) {
@@ -103,20 +105,28 @@ export class ContractController {
 
       if (user.role === 'customer') {
         return {
-          status: HttpStatus.ACCEPTED,
+          status: HttpStatus.OK,
           message: 'success',
           contracts: contracts.map((element: any, index: number) => ({
             id: index + 1,
-            name: element.originalName,
+            originalName: element.originalName,
             paymentStatus: element.paymentStatus,
             progressStatus: element.progressStatus,
+            name: element.name,
           })),
         };
       } else if (user.role === 'lawyer') {
         return {
-          status: HttpStatus.ACCEPTED,
+          status: HttpStatus.OK,
           message: 'success',
-          contracts: contracts,
+          contracts: contracts.map((element: any, index: number) => ({
+            id: element.id,
+            userId: element.userId,
+            originalName: element.originalName,
+            name: element.name,
+            paymentStatus: element.paymentStatus,
+            progressStatus: element.progressStatus,
+          })),
         };
       }
     } catch (e) {
@@ -156,9 +166,9 @@ export class ContractController {
       await this.contractService.update(contract.id, 1);
 
       // Пример использования функции
-      const sourceFilePath = contract.pathToFile + '/' + contract.originalName;
+      const sourceFilePath = contract.pathToFile + '/' + contract.name;
       const destinationFilePath =
-        './uploads/contracts_in_progress/' + contract.originalName;
+        './uploads/contracts_in_progress/' + contract.name;
 
       copyFileWithReplacement(sourceFilePath, destinationFilePath);
     } catch (e) {
@@ -187,14 +197,14 @@ export class ContractController {
 
       let content = '';
 
-      await convertDocxToHtml(
-        contract.pathToFile + '/' + contract.originalName,
-      ).then((result) => {
-        content = result;
-      });
+      await convertDocxToHtml(contract.pathToFile + '/' + contract.name).then(
+        (result) => {
+          content = result;
+        },
+      );
 
       return {
-        status: HttpStatus.ACCEPTED,
+        status: HttpStatus.OK,
         message: 'success',
         contracts: contract,
         content: content,
@@ -222,6 +232,7 @@ export class ContractController {
     if (user.role === 'lawyer') {
       const fileName = request.body.fileName;
       const filePath = './uploads/contracts/' + fileName;
+      console.log(filePath);
       return response.sendFile(filePath, { root: '.' });
     } else if (user.role === 'customer') {
       const fileName = request.body.fileName;
@@ -238,17 +249,34 @@ export class ContractController {
   }
 
   @Post('finish')
-  async finish(@Req() request: any) {
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/contracts_ready',
+        filename: ((controller: ContractController) => {
+          return (request, file, callback) => {
+            callback(null, file.originalname);
+          };
+        })(this),
+      }),
+    }),
+  )
+  async finish(@UploadedFile() file: Express.Multer.File, @Req() request: any) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
-
       if (!data) {
         return {
           status: HttpStatus.UNAUTHORIZED,
           message: 'success',
         };
       }
-      await this.contractService.finish(request.body.id, 2);
+      const { selectedContract } = JSON.parse(request.body.data);
+      await this.contractService.finish(selectedContract.id, 2);
+
+      return {
+        status: HttpStatus.OK,
+        message: 'success',
+      };
     } catch (e) {
       return {
         status: HttpStatus.BAD_REQUEST,

@@ -58,7 +58,7 @@ export class AuthController {
     await getRepository(UsersRoles).save(usersRoles);
 
     return {
-      status: HttpStatus.ACCEPTED,
+      status: HttpStatus.OK,
       message: 'success',
     };
   }
@@ -103,7 +103,7 @@ export class AuthController {
     else route = 'auth';
 
     return {
-      status: HttpStatus.ACCEPTED,
+      status: HttpStatus.OK,
       message: 'success',
       route: route,
     };
@@ -130,7 +130,7 @@ export class AuthController {
       else user.route = 'auth';
 
       return {
-        status: HttpStatus.ACCEPTED,
+        status: HttpStatus.OK,
         message: 'success',
         user: { username, email, role },
         route: user.route,
