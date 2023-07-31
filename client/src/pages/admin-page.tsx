@@ -1,4 +1,7 @@
-import { Box } from "@mui/material";
+import Header from "@/components/admin-panel/Header";
+import Main from "@/components/admin-panel/Main";
+import SideBar from "@/components/admin-panel/SideBar";
+import { Box, CssBaseline } from "@mui/material";
 import axios from "axios";
 import router from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +17,7 @@ const AdminPage = () => {
         withCredentials: true,
       });
       if (response.data.status === 401) router.push("/auth");
-      if (response.data.status === 202) {
+      if (response.data.status === 200) {
         if (alowRoles.includes(response.data.user.role)) {
           setAuth(true);
           setUser(response.data.user);
@@ -23,7 +26,15 @@ const AdminPage = () => {
     })();
   });
 
-  if (auth) return <Box sx={{ display: "flex" }}>Admin </Box>;
+  if (auth)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <Header user={user} />
+        <SideBar user={user} />
+        <Main user={user} />
+      </Box>
+    );
   else return <></>;
 };
 

@@ -39,7 +39,7 @@ const Header = () => {
         withCredentials: true,
       });
       //console.log(response.data);
-      if (response.data.status === 202) {
+      if (response.data.status === 200) {
         setUser(response.data.user);
         setUserRoute(response.data.route);
       }

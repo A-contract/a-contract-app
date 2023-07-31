@@ -16,14 +16,12 @@ const Workspace = () => {
   const { updateDraft } = useActions();
 
   useEffect(() => {
-    console.log("kek");
     axios
       .get("http://localhost:8000/contracts/contractInProcess", {
         withCredentials: true,
       })
       .then((response) => {
-        if (response.data.status === 202) {
-          console.log(response.data);
+        if (response.data.status === 200) {
           if (!workspaceState.draft.edited) {
             console.log(response.data.content);
             updateDraft({
@@ -36,50 +34,48 @@ const Workspace = () => {
   }, []);
 
   const draftEditorOnChange = (content: any) => {
-    console.log(content);
     updateDraft({ content: content, edited: true });
   };
 
-  const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"], // Основные стили текста
-    ["blockquote"], // Цитата и блок кода
-    [{ color: [] }, { background: [] }], // Выделение текста цветом
-    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Заголовки
-    [{ list: "ordered" }, { list: "bullet" }], // Нумерованный и маркированный списки
-    ["link", "image"], // Вставка ссылок и изображений
-    [
-      "table",
-      "column-left",
-      "column-right",
-      "row-above",
-      "row-below",
-      "row-remove",
-      "column-remove",
-    ], // Таблицы
-    ["comment"], // Комментарии
-    ["clean"], // Удаление форматирования
-  ];
+  // const toolbarOptions = [
+  //   ["bold", "italic", "underline", "strike"], // Основные стили текста
+  //   ["blockquote"], // Цитата и блок кода
+  //   [{ color: [] }, { background: [] }], // Выделение текста цветом
+  //   [{ header: [1, 2, 3, 4, 5, 6, false] }], // Заголовки
+  //   [{ list: "ordered" }, { list: "bullet" }], // Нумерованный и маркированный списки
+  //   ["link", "image"], // Вставка ссылок и изображений
+  //   [
+  //     "table",
+  //     "column-left",
+  //     "column-right",
+  //     "row-above",
+  //     "row-below",
+  //     "row-remove",
+  //     "column-remove",
+  //   ], // Таблицы
+  //   ["comment"], // Комментарии
+  //   ["clean"], // Удаление форматирования
+  // ];
 
-  const modules = {
-    toolbar: toolbarOptions,
-    table: {
-      tableClassName: "my-table",
-      cellClassName: "my-cell",
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
+  // const modules = {
+  //   toolbar: toolbarOptions,
+  //   table: {
+  //     tableClassName: "my-table",
+  //     cellClassName: "my-cell",
+  //   },
+  //   clipboard: {
+  //     matchVisual: false,
+  //   },
+  // };
 
   return (
     <Paper sx={{ p: "20px", width: "1000px", borderCollapse: "collapse" }}>
-      <ReactQuill
+      {/* <ReactQuill
         theme="snow"
-        value={workspaceState.draft.content}
+        //value={workspaceState.draft.content}
         onChange={draftEditorOnChange}
-        //formats={formats}
-        modules={modules}
-      />
+        //modules={modules}
+      /> */}
     </Paper>
   );
 };

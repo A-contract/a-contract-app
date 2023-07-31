@@ -17,7 +17,7 @@ const Cabinet = () => {
         withCredentials: true,
       });
       if (response.data.status === 401) router.push("/auth");
-      if (response.data.status === 202) {
+      if (response.data.status === 200) {
         if (alowRoles.includes(response.data.user.role)) {
           setAuth(true);
           setUser(response.data.user);

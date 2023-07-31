@@ -25,16 +25,17 @@ const Contracts = (props: any) => {
   const [selectedContract, setSelectedContract] = useState<any>({
     id: null,
     number: null,
-    name: null,
+    originalName: null,
     progressStatus: 0,
   });
+  const selectedContractRef = useRef(selectedContract);
   const dropzoneRef = useRef<any>(null);
   const isLawyer = props.role === "lawyer" ? true : false;
   const isCustomer = props.role === "customer" ? true : false;
   const columns: GridColDef[] = [
     { field: "id", headerName: "Number", width: 90 },
     {
-      field: "name",
+      field: "originalName",
       headerName: "Contract Name",
       width: 300,
       //editable: true,
@@ -86,11 +87,12 @@ const Contracts = (props: any) => {
               </Button>
             );
           } else if (
-            params.row.name === selectedContract.name &&
+            params.row.info.name === selectedContract.originalName &&
             selectedContract.progressStatus === 1
-          )
+          ) {
+            console.log(selectedContract);
             return <>In process</>;
-          else if (
+          } else if (
             (params.row.progressStatus === 1 || 2) &&
             params.row.paymentStatus === true
           ) {
@@ -122,7 +124,14 @@ const Contracts = (props: any) => {
                 color: theme.palette.info.main,
                 bgcolor: theme.palette.secondary.light,
               }}
-              onClick={() => downloadContract(params.row)}
+              onClick={() =>
+                downloadContract(
+                  params.row.info.name.substr(
+                    0,
+                    params.row.info.name.lastIndexOf(".")
+                  ) + ".docx"
+                )
+              }
             >
               Download
             </Button>
@@ -138,9 +147,9 @@ const Contracts = (props: any) => {
                 }}
                 onClick={() =>
                   downloadContract(
-                    params.row.name.substr(
+                    params.row.info.name.substr(
                       0,
-                      params.row.name.lastIndexOf(".")
+                      params.row.info.name.lastIndexOf(".")
                     ) + ".pdf"
                   )
                 }
@@ -158,56 +167,71 @@ const Contracts = (props: any) => {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      const response = await axios.get(
-        "http://localhost:8000/contracts/contracts",
-        { withCredentials: true }
-      );
-      if (response.data.status === 202) {
-        let indexContract = 0;
-        const filteredContract =
-          response.data.contracts.filter((element: any) => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/contracts/contracts",
+          { withCredentials: true }
+        );
+        if (response.status === 200) {
+          const contracts = response.data.contracts;
+          let indexContract = 0;
+          const filteredContract = contracts.filter((element: any) => {
             indexContract++;
             return element.progressStatus === 1;
-          }) || [];
+          });
 
-        if (filteredContract.length > 0)
-          if (filteredContract[0].progressStatus === 1) {
+          if (
+            filteredContract.length > 0 &&
+            filteredContract[0].progressStatus === 1
+          ) {
             setSelectedContract({
               id: filteredContract[0].id,
               number: indexContract,
-              name: filteredContract[0].name,
+              originalName: filteredContract[0].originalName,
               progressStatus: filteredContract[0].progressStatus,
             });
             setDataFile({
               id: filteredContract[0].id,
               number: indexContract,
-              name: filteredContract[0].name,
+              originalName: filteredContract[0].originalName,
               progressStatus: filteredContract[0].progressStatus,
               content: "",
             });
           }
-        setRows(
-          response.data.contracts.map((element: any, index: number) => ({
-            id: index + 1,
-            name: element.name,
-            paymentStatus: element.paymentStatus,
-            progressStatus: element.progressStatus,
-            info: {
-              id: element.id,
-              userId: element.userId,
-            },
-          }))
-        );
+
+          setRows(
+            contracts.map((element: any, index: number) => ({
+              id: index + 1,
+              originalName: element.originalName,
+              paymentStatus: element.paymentStatus,
+              progressStatus: element.progressStatus,
+              info: {
+                id: element.id,
+                userId: element.userId,
+                name: element.name,
+              },
+            }))
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
     }, 100);
 
     return () => clearInterval(intervalId);
-  }, [selectedContract]);
+  }, [selectedContractRef.current]);
 
-  const sendFile = () => {
+  const sendContract = () => {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
+      const originalName = file.name;
+      const dataToSubmit = {
+        originalName,
+        file: formData.get("file"),
+      };
+
+      formData.append("data", JSON.stringify(dataToSubmit));
       axios
         .post("http://localhost:8000/contracts/upload", formData, {
           withCredentials: true,
@@ -216,7 +240,7 @@ const Contracts = (props: any) => {
           },
         })
         .then(function (response: any) {
-          if (response.data.status === 202) {
+          if (response.data.status === 200) {
             console.log("Ваш файл был успешно загружен!");
             deleteFile();
           } else console.log("Bad request");
@@ -232,6 +256,7 @@ const Contracts = (props: any) => {
   };
 
   const toProcessingContract = (id: number) => {
+    console.log(id);
     axios.post(
       "http://localhost:8000/contracts/processing",
       {
@@ -244,6 +269,7 @@ const Contracts = (props: any) => {
   };
 
   const downloadContract = async (name: any) => {
+    console.log(name);
     try {
       const response = await axios.post(
         "http://localhost:8000/contracts/download",
@@ -271,28 +297,48 @@ const Contracts = (props: any) => {
     }
   };
 
-  const finishContract = async () => {
-    if (selectedContract.progressStatus) {
-      try {
-        await axios.post(
-          "http://localhost:8000/contracts/finish",
-          {
-            id: selectedContract.id,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+  const finishContract = () => {
+    if (selectedContract.progressStatus && file) {
+      const formData = new FormData();
+      formData.append(
+        "file",
+        file,
+        selectedContract.originalName.substr(
+          0,
+          selectedContract.originalName.lastIndexOf(".")
+        ) + ".pdf"
+      );
 
-        setSelectedContract({
-          id: null,
-          number: null,
-          name: null,
-          progressStatus: 0,
+      const dataToSubmit = {
+        selectedContract,
+        file: formData.get("file"),
+      };
+
+      formData.append("data", JSON.stringify(dataToSubmit));
+
+      axios
+        .post("http://localhost:8000/contracts/finish", formData, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(function (response: any) {
+          if (response.data.status === 200) {
+            console.log("Ваш файл был успешно загружен!");
+
+            setSelectedContract({
+              id: null,
+              number: null,
+              name: null,
+              progressStatus: 0,
+            });
+            deleteFile();
+          } else console.log("Bad request");
+        })
+        .catch(function (error) {
+          console.log(error);
         });
-      } catch (error) {
-        console.error("Error finishing contract:", error);
-      }
     }
   };
 
@@ -380,7 +426,7 @@ const Contracts = (props: any) => {
                   width: "160px",
                 }}
               >
-                <Typography>{selectedContract.name}</Typography>
+                <Typography>{selectedContract.originalName}</Typography>
               </Box>
             </Box>
 
@@ -410,6 +456,7 @@ const Contracts = (props: any) => {
                       ? "visible"
                       : "hidden",
                 }}
+                disabled={!file ? true : false}
                 onClick={() => finishContract()}
               >
                 Finish
@@ -446,7 +493,7 @@ const Contracts = (props: any) => {
               <Button
                 variant="outlined"
                 sx={{ width: "-webkit-fill-available" }}
-                onClick={() => sendFile()}
+                onClick={() => sendContract()}
               >
                 Analyse
               </Button>
