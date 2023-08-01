@@ -11,21 +11,17 @@ import Link from "next/link";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
 import axios from "axios";
+import { setActiveAdminPageTab } from "@/store/action-creators/adminPage";
 
 const drawerWidth = 200;
 
 const SideBar = (props: any) => {
   const theme = useTheme();
-  //const cabinetState = useTypedSelector((state: any) => state.cabinet);
-  //const { setActiveCabinetTab } = useActions();
+  const adminPageState = useTypedSelector((state: any) => state.adminPage);
+  const { setActiveCabinetTab } = useActions();
   const userRole = props.user.role;
-  // const tabs =
-  //   userRole === "lawyer"
-  //     ? cabinetState.lawyerTabs
-  //     : userRole === "customer"
-  //     ? cabinetState.customerTabs
-  //     : [];
-  //const activeTab = cabinetState.activeTabId;
+  const tabs = userRole === "admin" ? adminPageState.adminTabs : [];
+  const activeTab = adminPageState.activeTabId;
 
   const logout = () => {
     axios
@@ -37,7 +33,7 @@ const SideBar = (props: any) => {
         }
       )
       .then(function (response: any) {
-        //setActiveCabinetTab(0);
+        setActiveAdminPageTab(0);
       })
       .catch(function (error: any) {
         console.log(error);
@@ -78,14 +74,14 @@ const SideBar = (props: any) => {
           mt: "25px",
         }}
         value={null}
-        // onChange={(event: any, value: any) => {
-        //   setActiveCabinetTab(value);
-        // }}
-        // TabIndicatorProps={{
-        //   sx: { display: "none" },
-        // }}
+        onChange={(event: any, value: any) => {
+          setActiveCabinetTab(value);
+        }}
+        TabIndicatorProps={{
+          sx: { display: "none" },
+        }}
       >
-        {/* {tabs.map((tab: any, index: number) => (
+        {tabs.map((tab: any, index: number) => (
           <Tab
             key={index}
             label={<Typography sx={{ ml: tab.textml }}>{tab.name}</Typography>}
@@ -108,7 +104,7 @@ const SideBar = (props: any) => {
             }
             iconPosition="start"
           />
-        ))} */}
+        ))}
         <Tab
           onClick={logout}
           value={null}

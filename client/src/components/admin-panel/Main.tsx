@@ -1,13 +1,14 @@
 import { Box, useTheme } from "@mui/material";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
+import Users from "./main/Users";
 
 const Main = (props: any) => {
-  //const adminMain = [<>Admin</>];
+  const adminMain = [<Users />];
   const theme = useTheme();
-  const cabinetState = useTypedSelector((state: any) => state.cabinet);
-  const activeTab = cabinetState.activeTabId;
+  const adminPageState = useTypedSelector((state: any) => state.adminPage);
+  const activeTab = adminPageState.activeTabId;
   const userRole = props.user.role;
-  //const main = adminMain;
+  const main = adminMain;
 
   return (
     <Box
@@ -21,7 +22,7 @@ const Main = (props: any) => {
         bgcolor: theme.palette.secondary.dark,
       }}
     >
-      {/* {main[activeTab]} */}
+      {main[activeTab]}
     </Box>
   );
 };
