@@ -6,6 +6,7 @@ import { ContractsInProgress } from 'src/entities/contracts_in_progress.entity';
 import { formatDateTime } from 'src/utils/dateUtils';
 import { Users } from 'src/entities/users.entity';
 import { Roles } from 'src/entities/roles.entity';
+import { UsersRoles } from 'src/entities/users_roles';
 
 @Injectable()
 export class AdminService {
@@ -14,25 +15,17 @@ export class AdminService {
     private readonly userRepository: Repository<Users>,
     @InjectRepository(Roles)
     private readonly roleRepository: Repository<Roles>,
+    @InjectRepository(UsersRoles)
+    private readonly userRolesRepository: Repository<UsersRoles>,
   ) {}
 
-  //   async findAll(role: any, id: number): Promise<Contracts[]> {
-  //     const query = this.userRepository
-  //       .createQueryBuilder('contracts')
-  //       .select(['contracts'])
-  //       .leftJoin(
-  //         'contracts_in_progress',
-  //         'contracts_in_progress',
-  //         'contracts_in_progress.contractId = contracts.id',
-  //       );
-  //     if (role === 'customer') {
-  //       query.where('contracts.userId = :id', { id });
-  //     } else if (role === 'lawyer') {
-  //       query
-  //         .where('contracts_in_progress.lawyerId = :id', { id })
-  //         .orWhere('contracts.paymentStatus = 1');
-  //     }
+  async findAll(): Promise<Users[]> {
+    const query = this.userRepository
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.userRoles', 'userRoles')
+      .leftJoinAndSelect('userRoles.role', 'role')
+      .getMany();
 
-  //     return await query.getMany();
-  //   }
+    return query;
+  }
 }

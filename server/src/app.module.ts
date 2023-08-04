@@ -12,6 +12,8 @@ import { Contracts } from './entities/contracts.entity';
 import { ContractsInProgress } from './entities/contracts_in_progress.entity';
 import { Photos } from './entities/photos.entity';
 import { ContractService } from './modules/contracts/contract.service';
+import { AdminController } from './modules/admin/admin.controller';
+import { AdminService } from './modules/admin/admin.service';
 
 @Module({
   imports: [
@@ -45,7 +47,12 @@ import { ContractService } from './modules/contracts/contract.service';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [AuthController, ContractController, ContractController],
-  providers: [AuthService, RoleService, ContractService],
+  controllers: [
+    AuthController,
+    ContractController,
+    ContractController,
+    AdminController,
+  ],
+  providers: [AuthService, RoleService, ContractService, AdminService],
 })
 export class AppModule {}

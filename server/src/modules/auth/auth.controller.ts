@@ -26,6 +26,8 @@ export class AuthController {
   @Post('register')
   async register(
     @Body('name') name: string,
+    @Body('surname') surname: string,
+    @Body('username') username: string,
     @Body('email') email: string,
     @Body('password') password: string,
     @Body('role') roleName: string,
@@ -42,10 +44,13 @@ export class AuthController {
         message: 'This e-mail already exists',
       };
     }
+    console.log(password);
 
     const user = await this.authService.create({
-      name,
-      email,
+      name: name,
+      surname: surname,
+      username: username,
+      email: email,
       password: hashedPassword,
     });
 
