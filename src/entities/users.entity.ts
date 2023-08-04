@@ -13,6 +13,12 @@ export class Users {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
+  surname: string;
+
+  @Column({ unique: true })
   username: string;
 
   @Column({ unique: true })
