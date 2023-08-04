@@ -15,6 +15,25 @@ const initialState: AdminPageState = {
     },
   ],
   activeTabId: 0,
+
+  registerForm: {
+    role: {
+      value: "",
+      isValid: true,
+    },
+    name: {
+      value: "",
+      isValid: true,
+    },
+    surname: {
+      value: "",
+      isValid: true,
+    },
+    email: {
+      value: "",
+      isValid: true,
+    },
+  },
 };
 
 export const AdminPageReducer = (
@@ -26,6 +45,11 @@ export const AdminPageReducer = (
       return {
         ...state,
         activeTabId: action.payload,
+      };
+    case AdminPageActionTypes.SET_REGISTER_FORM_FIELDS:
+      return {
+        ...state,
+        registerForm: action.payload,
       };
     default:
       return state;

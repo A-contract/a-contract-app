@@ -20,14 +20,14 @@ const Auth = () => {
     <Box
       sx={{
         mx: "auto",
-        mt: "100px",
+        mt: "10px",
         width: "350px",
         maxWidth: "350px",
         borderRadius: "5px",
       }}
     >
       <Paper
-        elevation={20}
+        elevation={5}
         sx={{
           display: "flex",
           alignItems: "center",

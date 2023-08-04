@@ -1,10 +1,12 @@
 export interface AdminPageState {
   adminTabs: any[];
   activeTabId: number;
+  registerForm: any;
 }
 
 export enum AdminPageActionTypes {
   SET_ACTIVE_ADMIN_PAGE_TAB = "SET_ACTIVE_ADMIN_PAGE_TAB",
+  SET_REGISTER_FORM_FIELDS = "SET_REGISTER_FORM_FIELDS",
 }
 
 interface SetActiveAdminPageTabAction {
@@ -12,4 +14,11 @@ interface SetActiveAdminPageTabAction {
   payload: number;
 }
 
-export type AdminPageAction = SetActiveAdminPageTabAction;
+interface SetRegisterFormFieldsAction {
+  type: AdminPageActionTypes.SET_REGISTER_FORM_FIELDS;
+  payload: number;
+}
+
+export type AdminPageAction =
+  | SetActiveAdminPageTabAction
+  | SetRegisterFormFieldsAction;

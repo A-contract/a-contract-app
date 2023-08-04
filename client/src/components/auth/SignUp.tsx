@@ -3,8 +3,14 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   IconButton,
   InputAdornment,
+  Link,
   Snackbar,
   TextField,
   Typography,
@@ -14,26 +20,43 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
 import { useActions } from "@/hooks/useAction";
+import generatePassword from "password-generator";
 
 const SignUp = () => {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
+
   //const { setActiveAuthForm } = useActions();
-  const [validEmail, setValidEmail] = useState({
-    value: "",
-    isValid: true,
-  });
-  const [validPassword, setValidPassword] = useState({
-    value: "",
-    isValid: true,
+
+  const [formFields, setFormFields] = useState({
+    name: "",
+    nameValid: true,
+    surname: "",
+    surnameValid: true,
+    email: "",
+    emailValid: true,
+    password: "",
+    passwordValid: true,
+    passwordConfirmation: "",
+    passwordConfirmationValid: true,
+    terms: false,
+    termsValid: true,
   });
 
   const isValidEmail = (value: string) => {
     return value.includes("@") && value.includes(".") && value.length > 4;
   };
 
+  const isNotEmptyField = (value: string) => {
+    return value.length > 0;
+  };
+
   const isValidPassword = (value: string) => {
-    return value.length > 9;
+    return value.length > 11;
+  };
+
+  const isValidConfirmPassword = (password: string, confirmPasword: string) => {
+    return password === confirmPasword;
   };
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -54,30 +77,53 @@ const SignUp = () => {
   }, [openSnackbar]);
 
   const submit = () => {
-    const email = validEmail.value;
-    const password = validPassword.value;
-    if (isValidEmail(email) && isValidPassword(password)) {
+    if (
+      isValidEmail(formFields.email) &&
+      isNotEmptyField(formFields.name) &&
+      isNotEmptyField(formFields.surname) &&
+      isValidPassword(formFields.password) &&
+      isValidConfirmPassword(
+        formFields.password,
+        formFields.passwordConfirmation
+      ) &&
+      formFields.terms
+    ) {
       axios
         .post(
           "http://localhost:8000/auth/register",
           {
-            name: email.split("@")[0],
-            email: email,
-            password: password,
-            role: "customer",
+            name: formFields.name,
+            surname: formFields.surname,
+            username: formFields.email,
+            email: formFields.email,
+            //password: generatePassword(12, false),
+            //role: formFields.role,
           },
           {
             withCredentials: true,
           }
         )
-        .then(function (response: any) {
+        .then((response: any) => {
           if (response.data.status === 200) {
+            setFormFields({
+              name: "",
+              nameValid: true,
+              surname: "",
+              surnameValid: true,
+              email: "",
+              emailValid: true,
+              password: "",
+              passwordValid: true,
+              passwordConfirmation: "",
+              passwordConfirmationValid: true,
+              terms: true,
+              termsValid: true,
+            });
             setSnackbar({
               message: "Successful registration",
               severity: "success",
             });
             setOpenSnackbar(true);
-            console.log("Письмо подтверждение отправлено вам на почту.");
           }
           if (response.data.status === 401) {
             setSnackbar({
@@ -88,13 +134,22 @@ const SignUp = () => {
           }
         });
     } else {
-      setValidEmail({
-        value: email,
-        isValid: isValidEmail(email),
-      });
-      setValidPassword({
-        value: password,
-        isValid: isValidPassword(password),
+      setFormFields({
+        name: formFields.name,
+        nameValid: isNotEmptyField(formFields.name),
+        surname: formFields.surname,
+        surnameValid: isNotEmptyField(formFields.surname),
+        email: formFields.email,
+        emailValid: isValidEmail(formFields.email),
+        password: formFields.password,
+        passwordValid: isValidPassword(formFields.password),
+        passwordConfirmation: formFields.passwordConfirmation,
+        passwordConfirmationValid: isValidConfirmPassword(
+          formFields.password,
+          formFields.passwordConfirmation
+        ),
+        terms: formFields.terms,
+        termsValid: formFields.terms === true,
       });
     }
   };
@@ -105,42 +160,72 @@ const SignUp = () => {
         <Typography sx={{ fontWeight: "600" }}>Sign up</Typography>
       </Box>
       <Box sx={{ pb: "10px" }}>
+        <FormControl sx={{ minWidth: 120, width: 300 }} size="medium">
+          <TextField
+            required
+            placeholder={"name"}
+            label={"name"}
+            error={!formFields.nameValid}
+            helperText={!formFields.nameValid ? "Required field" : ""}
+            value={formFields.name}
+            autoComplete="off"
+            onChange={(event) => {
+              setFormFields({ ...formFields, name: event.target.value });
+            }}
+            sx={{ width: "300px" }}
+          />
+        </FormControl>
+      </Box>
+      <Box sx={{ pb: "10px" }}>
         <TextField
           required
-          placeholder={"email"}
-          label={"email"}
-          error={!validEmail.isValid}
-          helperText={
-            !validEmail.isValid
-              ? "Email is not correct. Example: example@email.com"
-              : ""
-          }
+          placeholder={"surname"}
+          label={"surname"}
+          error={!formFields.surnameValid}
+          helperText={!formFields.surnameValid ? "Required field" : ""}
+          value={formFields.surname}
+          autoComplete="off"
           onChange={(event) => {
-            setValidEmail({
-              value: event.target.value,
-              isValid: true,
-            });
+            setFormFields({ ...formFields, surname: event.target.value });
           }}
           sx={{ width: "300px" }}
         />
       </Box>
-      <Box sx={{ pb: "25px" }}>
+      <Box sx={{ pb: "10px" }}>
+        <TextField
+          required
+          placeholder={"email"}
+          label={"email"}
+          error={!formFields.emailValid}
+          helperText={
+            !formFields.emailValid
+              ? "Email is not correct. Example: example@email.com"
+              : ""
+          }
+          value={formFields.email}
+          autoComplete="off"
+          onChange={(event) => {
+            setFormFields({ ...formFields, email: event.target.value });
+          }}
+          sx={{ width: "300px" }}
+        />
+      </Box>
+      <Box sx={{ pb: "10px" }}>
         <TextField
           required
           placeholder={"password"}
           type={showPassword ? "text" : "password"}
           label={"password"}
-          error={!validPassword.isValid}
+          error={!formFields.passwordValid}
           helperText={
-            !validPassword.isValid
+            !formFields.passwordValid
               ? "Password is not correct. Min of 10 symbols with using special character"
-              : "Min of 10 symbols with using special character"
+              : ""
           }
+          autoComplete="off"
+          value={formFields.password}
           onChange={(event) => {
-            setValidPassword({
-              value: event.target.value,
-              isValid: true,
-            });
+            setFormFields({ ...formFields, password: event.target.value });
           }}
           InputProps={{
             endAdornment: (
@@ -159,7 +244,74 @@ const SignUp = () => {
           sx={{ width: "300px" }}
         />
       </Box>
-      <Box sx={{ pb: "25px" }}>
+      <Box sx={{ pb: "10px" }}>
+        <TextField
+          required
+          placeholder={"password confirmation"}
+          type={"password"}
+          label={"confirm password"}
+          error={
+            !formFields.passwordConfirmationValid || !formFields.passwordValid
+          }
+          helperText={
+            !formFields.passwordConfirmationValid
+              ? "Does not match the password"
+              : ""
+          }
+          autoComplete="off"
+          value={formFields.passwordConfirmation}
+          onChange={(event) => {
+            setFormFields({
+              ...formFields,
+              passwordConfirmation: event.target.value,
+            });
+          }}
+          sx={{ width: "300px" }}
+        />
+      </Box>
+      <Box
+        sx={{
+          pb: "10px",
+          pl: "10px",
+        }}
+      >
+        <FormControl sx={{ minWidth: 120, width: 300 }} size="medium">
+          <FormControlLabel
+            control={
+              <Checkbox
+                required
+                name="lgpd_agreement"
+                onChange={(event) => {
+                  setFormFields({ ...formFields, terms: event.target.checked });
+                }}
+              />
+            }
+            label={
+              <Link
+                sx={{
+                  textAlign: "center",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: theme.palette.info.main,
+                  },
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert("link clicked!");
+                }}
+              >
+                By signing up, you agree to our terms of service and privacy
+                policy
+              </Link>
+            }
+          />
+          {!formFields.termsValid && (
+            <FormHelperText error>Required field</FormHelperText>
+          )}
+        </FormControl>
+      </Box>
+      <Box sx={{ py: "15px" }}>
         <Button
           variant="outlined"
           onClick={submit}
@@ -177,21 +329,7 @@ const SignUp = () => {
           Sign up
         </Button>
       </Box>
-      <Box sx={{ pb: "10px" }}>
-        <Typography
-          sx={{
-            width: "300px",
-            textAlign: "center",
-            fontSize: "14px",
-            cursor: "pointer",
-            "&:hover": {
-              color: theme.palette.info.main,
-            },
-          }}
-        >
-          By signing up, you agree to our terms of service and privacy policy
-        </Typography>
-      </Box>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}

@@ -9,3 +9,12 @@ export const setActiveAdminPageTab = (id: number) => {
     });
   };
 };
+
+export const setRegisterFormFields = (registerForm: any) => {
+  return (dispatch: Dispatch<AdminPageAction>) => {
+    dispatch({
+      type: AdminPageActionTypes.SET_REGISTER_FORM_FIELDS,
+      payload: registerForm,
+    });
+  };
+};
