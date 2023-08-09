@@ -70,7 +70,7 @@ const SignUp = () => {
     if (openSnackbar) {
       const timeoutId = setTimeout(() => {
         setOpenSnackbar(false);
-      }, 3000);
+      }, 15000);
 
       return () => clearTimeout(timeoutId);
     }
@@ -96,8 +96,8 @@ const SignUp = () => {
             surname: formFields.surname,
             username: formFields.email,
             email: formFields.email,
-            //password: generatePassword(12, false),
-            //role: formFields.role,
+            password: formFields.password,
+            role: "customer",
           },
           {
             withCredentials: true,
@@ -116,11 +116,12 @@ const SignUp = () => {
               passwordValid: true,
               passwordConfirmation: "",
               passwordConfirmationValid: true,
-              terms: true,
+              terms: false,
               termsValid: true,
             });
             setSnackbar({
-              message: "Successful registration",
+              message:
+                "Successful registration! A message has been sent to your inbox containing a link to confirm the validity of your e-mail address and activate your account.",
               severity: "success",
             });
             setOpenSnackbar(true);
@@ -219,7 +220,7 @@ const SignUp = () => {
           error={!formFields.passwordValid}
           helperText={
             !formFields.passwordValid
-              ? "Password is not correct. Min of 10 symbols with using special character"
+              ? "Password is not correct. Min of 12 symbols with using special character"
               : ""
           }
           autoComplete="off"
@@ -281,6 +282,7 @@ const SignUp = () => {
               <Checkbox
                 required
                 name="lgpd_agreement"
+                checked={formFields.terms}
                 onChange={(event) => {
                   setFormFields({ ...formFields, terms: event.target.checked });
                 }}
@@ -298,7 +300,7 @@ const SignUp = () => {
                 }}
                 onClick={(e) => {
                   e.preventDefault();
-                  alert("link clicked!");
+                  alert("Terms!");
                 }}
               >
                 By signing up, you agree to our terms of service and privacy
@@ -331,8 +333,8 @@ const SignUp = () => {
       </Box>
 
       <Snackbar
+        sx={{ width: 500 }}
         open={openSnackbar}
-        autoHideDuration={3000}
         onClose={() => setOpenSnackbar(false)}
       >
         <Alert

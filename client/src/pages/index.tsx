@@ -3,7 +3,7 @@ import Header from "@/components/home/header/Header";
 import Footer from "@/components/home/footer/Footer";
 import Main from "@/components/home/main/Main";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <main className={styles.wrapper}>
@@ -13,4 +13,6 @@ export default function Home() {
       </main>
     </>
   );
-}
+};
+
+export default Home;
