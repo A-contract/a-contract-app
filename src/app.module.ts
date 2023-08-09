@@ -14,6 +14,10 @@ import { Photos } from './entities/photos.entity';
 import { ContractService } from './modules/contracts/contract.service';
 import { AdminController } from './modules/admin/admin.controller';
 import { AdminService } from './modules/admin/admin.service';
+import { MailerService } from './modules/mailer/mailer.service';
+import { ActivationToken } from './entities/activation_token.entity';
+import { UserService } from './modules/user/user.service';
+import { UserController } from './modules/user/user.controller';
 
 @Module({
   imports: [
@@ -31,6 +35,7 @@ import { AdminService } from './modules/admin/admin.service';
         Contracts,
         ContractsInProgress,
         Photos,
+        ActivationToken,
       ],
       synchronize: true,
     }),
@@ -41,6 +46,7 @@ import { AdminService } from './modules/admin/admin.service';
       Contracts,
       ContractsInProgress,
       Photos,
+      ActivationToken,
     ]),
     JwtModule.register({
       secret: 'abdulalhazred',
@@ -52,7 +58,15 @@ import { AdminService } from './modules/admin/admin.service';
     ContractController,
     ContractController,
     AdminController,
+    UserController,
   ],
-  providers: [AuthService, RoleService, ContractService, AdminService],
+  providers: [
+    AuthService,
+    UserService,
+    RoleService,
+    ContractService,
+    AdminService,
+    MailerService,
+  ],
 })
 export class AppModule {}

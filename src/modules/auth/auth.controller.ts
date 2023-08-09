@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
   Post,
   Req,
   Res,
@@ -14,12 +15,16 @@ import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { UsersRoles } from '../../entities/users_roles';
 import { getRepository } from 'typeorm';
+import { MailerService } from '../mailer/mailer.service';
+import { UserService } from '../user/user.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly roleService: RoleService,
+    private readonly mailerService: MailerService,
+    private readonly userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -33,9 +38,7 @@ export class AuthController {
     @Body('role') roleName: string,
   ) {
     const hashedPassword = await bcrypt.hash(password, 12);
-
     const findUser = await this.authService.findOne({ email: email });
-
     const findRole = await this.roleService.findOne({ name: roleName });
 
     if (findUser) {
@@ -43,29 +46,72 @@ export class AuthController {
         status: HttpStatus.UNAUTHORIZED,
         message: 'This e-mail already exists',
       };
+    } else {
+      // creation user in db
+
+      const user = await this.authService.create({
+        name: name,
+        surname: surname,
+        username: username,
+        email: email,
+        password: hashedPassword,
+        activated: roleName === 'customer' ? false : true,
+      });
+
+      delete user.password;
+
+      const usersRoles = new UsersRoles();
+      usersRoles.user = user;
+      usersRoles.role = findRole;
+
+      await getRepository(UsersRoles).save(usersRoles);
+
+      // sending email
+
+      const token = await this.userService.createActivationToken(user.id);
+
+      const createdEmail = await this.mailerService.createEmail(
+        roleName,
+        email,
+        password,
+        token,
+      );
+
+      this.mailerService.sendEmail(
+        createdEmail.email,
+        createdEmail.headerEmail,
+        createdEmail.contentEmail,
+      );
+
+      return {
+        status: HttpStatus.OK,
+        message: 'success',
+      };
     }
-    console.log(password);
+  }
 
-    const user = await this.authService.create({
-      name: name,
-      surname: surname,
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
-
-    delete user.password;
-
-    const usersRoles = new UsersRoles();
-    usersRoles.user = user;
-    usersRoles.role = findRole;
-
-    await getRepository(UsersRoles).save(usersRoles);
-
-    return {
-      status: HttpStatus.OK,
-      message: 'success',
-    };
+  @Get('activate/:token')
+  async activateUser(@Param('token') token: string) {
+    console.log(token);
+    try {
+      const payload = this.jwtService.verify(token);
+      if (!payload) {
+        await this.userService.activateUser(payload);
+        return {
+          status: HttpStatus.OK,
+          message: 'Account activated successfully',
+        };
+      } else
+        return {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Failed',
+        };
+    } catch (error: any) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Failed',
+      };
+    }
   }
 
   @Post('login')
@@ -80,6 +126,13 @@ export class AuthController {
       return {
         status: HttpStatus.UNAUTHORIZED,
         message: 'Invalid email',
+      };
+    }
+
+    if (!user.activated) {
+      return {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Account is not activated',
       };
     }
 

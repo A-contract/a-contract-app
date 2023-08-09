@@ -27,6 +27,9 @@ export class Users {
   @Column()
   password: string;
 
+  @Column()
+  activated: boolean;
+
   @OneToMany(() => UsersRoles, (userRole) => userRole.user, { cascade: true })
   userRoles: UsersRoles[];
 
