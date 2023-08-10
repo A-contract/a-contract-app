@@ -55,7 +55,7 @@ export class AuthController {
         username: username,
         email: email,
         password: hashedPassword,
-        activated: roleName === 'customer' ? false : true,
+        activated: false,
       });
 
       delete user.password;
@@ -92,15 +92,21 @@ export class AuthController {
 
   @Get('activate/:token')
   async activateUser(@Param('token') token: string) {
-    console.log(token);
     try {
       const payload = this.jwtService.verify(token);
-      if (!payload) {
-        await this.userService.activateUser(payload);
-        return {
-          status: HttpStatus.OK,
-          message: 'Account activated successfully',
-        };
+      if (payload) {
+        const result = await this.userService.activateUser(payload, token);
+        if (result) {
+          return {
+            status: HttpStatus.OK,
+            message: 'Account activated successfully',
+          };
+        } else {
+          return {
+            status: HttpStatus.BAD_REQUEST,
+            message: 'Failed',
+          };
+        }
       } else
         return {
           status: HttpStatus.BAD_REQUEST,
@@ -181,7 +187,7 @@ export class AuthController {
 
       const user: any = await this.authService.findOne({ id: data['id'] });
 
-      const { username, email, role } = user;
+      const { name, surname, username, email, role } = user;
 
       if (role === 'admin') user.route = 'admin-page';
       else if (role === 'lawyer' || role === 'customer') user.route = 'cabinet';
@@ -190,7 +196,7 @@ export class AuthController {
       return {
         status: HttpStatus.OK,
         message: 'success',
-        user: { username, email, role },
+        user: { name, surname, username, email, role },
         route: user.route,
       };
     } catch (e) {
