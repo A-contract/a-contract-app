@@ -232,7 +232,7 @@ export class ContractController {
     if (user.role === 'lawyer') {
       const fileName = request.body.fileName;
       const filePath = './uploads/contracts/' + fileName;
-      console.log(filePath);
+
       return response.sendFile(filePath, { root: '.' });
     } else if (user.role === 'customer') {
       const fileName = request.body.fileName;
@@ -240,6 +240,7 @@ export class ContractController {
         './uploads/contracts_ready/' +
         fileName.substr(0, fileName.lastIndexOf('.')) +
         '.pdf';
+
       return response.sendFile(filePath, { root: '.' });
     } else
       return {

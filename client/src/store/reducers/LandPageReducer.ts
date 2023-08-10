@@ -10,20 +10,30 @@ const initialState: LandPageState = {
       id: 0,
       name: "Analyse contract",
       href: "/#analyse-contract",
+      target: "",
       color: "secondary.light",
     },
     {
       id: 1,
       name: "Tariffs",
       href: "/#tariffs",
+      target: "",
       color: "secondary.light",
     },
     {
       id: 2,
       name: "Support",
       href: "/#support",
+      target: "",
       color: "secondary.light",
     },
+    // {
+    //   id: 3,
+    //   name: "Blog",
+    //   href: "/blog",
+    //   target: "_blank",
+    //   color: "secondary.light",
+    // },
   ],
   tabsMobile: [
     {
@@ -56,6 +66,16 @@ const initialState: LandPageState = {
       borderTop: "",
       divider: true,
     },
+    // {
+    //   id: 3,
+    //   name: "Blog",
+    //   href: "/blog",
+    //   target: "_blank",
+    //   color: "secondary.main",
+    //   marginTop: "",
+    //   borderTop: "",
+    //   divider: true,
+    // },
   ],
   activeTabId: 0,
 };

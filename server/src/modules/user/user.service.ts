@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, createQueryBuilder } from 'typeorm';
 import { Users } from '../../entities/users.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ActivationToken } from 'src/entities/activation_token.entity';
@@ -39,18 +39,25 @@ export class UserService {
 
   async createActivationToken(userId: number): Promise<string> {
     const payload = { id: userId };
-    const token = await this.jwtService.signAsync(payload, { expiresIn: '1d' });
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '10m',
+    });
     const entry = {
       userId: userId,
       token: token,
     };
-    this.activationTokenRepository.create(entry);
+    const result = this.activationTokenRepository.save(entry);
     return token;
   }
 
-  async activateUser(payload: any): Promise<void> {
+  async activateUser(payload: any, token: any): Promise<boolean> {
     const userId = payload.id;
-    await this.activationTokenRepository.delete({ userId: userId });
+    const result = await this.activationTokenRepository.delete({
+      token: token,
+    });
+    if (result.affected === 0) return false;
+
     await this.userRepository.update({ id: userId }, { activated: true });
+    return true;
   }
 }

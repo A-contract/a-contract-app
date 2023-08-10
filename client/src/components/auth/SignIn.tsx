@@ -44,6 +44,7 @@ const SignIn = () => {
     const email = validEmail.value;
     const password = validPassword.value;
     if (isValidEmail(email) && isValidPassword(password)) {
+      console.log(email, password);
       axios
         .post(
           "http://localhost:8000/auth/login",

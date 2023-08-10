@@ -10,12 +10,12 @@ const Main = (props: any) => {
     <Contracts role={props.user.role} />,
     <Workspace />,
     <Support />,
-    <Setting />,
+    <Setting user={props.user} />,
   ];
   const customerMain = [
     <Contracts role={props.user.role} />,
     <Support />,
-    <Setting />,
+    <Setting user={props.user} />,
   ];
   const theme = useTheme();
   const cabinetState = useTypedSelector((state: any) => state.cabinet);

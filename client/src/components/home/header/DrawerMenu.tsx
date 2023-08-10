@@ -25,7 +25,9 @@ const DrawerMenu = (props: any) => {
             bgcolor: theme.palette.primary.main,
           }}
           value={activeTab}
-          onChange={(event: any, value: any) => setActiveLandPageTab(value)}
+          onChange={(event: any, value: any) => {
+            if (value < 3) setActiveLandPageTab(value);
+          }}
           TabIndicatorProps={{
             sx: { backgroundColor: theme.palette.secondary.main },
           }}
@@ -46,6 +48,20 @@ const DrawerMenu = (props: any) => {
               }}
             />
           ))}
+          <Tab
+            key={3}
+            label={"Blog"}
+            href={"/blog"}
+            target={"_blank"}
+            sx={{
+              width: "100%",
+              color: "secondary.main",
+              opacity: "1",
+              mt: "",
+              mx: "auto",
+              borderTop: "",
+            }}
+          />
           <Tab
             component={Link}
             label="Sign in"

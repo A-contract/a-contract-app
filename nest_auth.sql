@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Час створення: Чрв 14 2023 р., 14:57
+-- Час створення: Сер 10 2023 р., 15:11
 -- Версія сервера: 10.4.17-MariaDB
 -- Версія PHP: 8.0.1
 
@@ -20,6 +20,18 @@ SET time_zone = "+00:00";
 --
 -- База даних: `nest_auth`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблиці `activation_token`
+--
+
+CREATE TABLE `activation_token` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,8 +56,7 @@ CREATE TABLE `contracts` (
 --
 
 INSERT INTO `contracts` (`id`, `userId`, `originalName`, `name`, `size`, `dateUploaded`, `pathToFile`, `progressStatus`, `paymentStatus`) VALUES
-(34, 6, '2023-05-31T13-19-53-952Z-CV.pdf', '2023-05-31T13-19-53-952Z-CV.pdf', 96691, '2023-05-31 16:19:53', './uploads/contracts', 1, 0),
-(35, 6, '2023-06-05T13-02-07-562Z-CV Tkachenko Anton.pdf', '2023-06-05T13-02-07-562Z-CV Tkachenko Anton.pdf', 1385149, '2023-06-05 16:02:07', './uploads/contracts', 0, 0);
+(2, 73, 'test2.docx', '2023-08-10T07-54-38-180Z-test2.docx', 18558, '2023-08-10 10:54:38', './uploads/contracts', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -60,20 +71,11 @@ CREATE TABLE `contracts_in_progress` (
   `name` varchar(50) NOT NULL,
   `size` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `lawerId` int(11) NOT NULL,
+  `lawyerId` int(11) NOT NULL,
   `pathToFile` varchar(255) NOT NULL,
   `datetimeStart` datetime NOT NULL,
   `datetimeFinish` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Дамп даних таблиці `contracts_in_progress`
---
-
-INSERT INTO `contracts_in_progress` (`id`, `contractId`, `originalName`, `name`, `size`, `userId`, `lawerId`, `pathToFile`, `datetimeStart`, `datetimeFinish`) VALUES
-(3, 34, '2023-05-31T13-19-53-952Z-CV.pdf', '2023-05-31T13-19-53-952Z-CV.pdf', 96691, 6, 7, './uploads/contracts', '0000-00-00 00:00:00', NULL),
-(4, 35, '2023-06-05T13-02-07-562Z-CV Tkachenko Anton.pdf', '2023-06-05T13-02-07-562Z-CV Tkachenko Anton.pdf', 1385149, 6, 7, './uploads/contracts', '0000-00-00 00:00:00', NULL),
-(5, 34, '2023-05-31T13-19-53-952Z-CV.pdf', '2023-05-31T13-19-53-952Z-CV.pdf', 96691, 6, 7, './uploads/contracts', '0000-00-00 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -120,19 +122,22 @@ INSERT INTO `roles` (`id`, `name`, `permissions`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `surname` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `activated` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп даних таблиці `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`) VALUES
-(5, '', 'demo@rte.com', '$2b$12$Uy3oiS2iqbwxSxTRAwdm.u1YDU0UJhV6uwn7/rCbVIdRmTsCRXzaS'),
-(6, '', 'kekr@123.com', '$2b$12$8JX0ie3eeqSoB46bZMhx0uuH4Q2q.CIeY8IltijuJ0ZN7FBql3wu.'),
-(7, '', 'retrik@yaya.com', '$2b$12$r39Kp45cie6MQsOHc1PwIOtSm2R8Of0GCDGR4Qr2DSL396q6B26d6');
+INSERT INTO `users` (`id`, `name`, `surname`, `username`, `email`, `password`, `activated`) VALUES
+(1, 'admin', 'admin', 'admin@gmail.com', 'admin@gmail.com', '$2b$12$LQZUcwrqMdF1atLikJR5HOUfMzlcE38UdiNLwhxgS1j4xwXrK2MdS', 1),
+(72, 'plautwork@gmail.com', 'plautwork@gmail.com', 'plautwork@gmail.com', 'plautwork@gmail.com', '$2b$12$0jHvw7UK57xmq6Wi64RF7eSye.DH7FTr6dA7vM58oJ8Zk1uOWmQwC', 1),
+(73, 'antfloppy@gmail.com', 'antfloppy@gmail.com', 'antfloppy@gmail.com', 'antfloppy@gmail.com', '$2b$12$fzPvnsMgoSNEnfVij69NrOaARsP.pIWJiIiXBTbFMqBb0N3UeOSvi', 1);
 
 -- --------------------------------------------------------
 
@@ -151,13 +156,19 @@ CREATE TABLE `users_roles` (
 --
 
 INSERT INTO `users_roles` (`id`, `userId`, `roleId`) VALUES
-(5, 5, 2),
-(6, 6, 3),
-(7, 7, 2);
+(1, 1, 1),
+(70, 72, 2),
+(71, 73, 3);
 
 --
 -- Індекси збережених таблиць
 --
+
+--
+-- Індекси таблиці `activation_token`
+--
+ALTER TABLE `activation_token`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Індекси таблиці `contracts`
@@ -188,6 +199,7 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `IDX_fe0bb3f6520ee0469504521e71` (`username`),
   ADD UNIQUE KEY `IDX_97672ac88f789774dd47f7c8be` (`email`);
 
 --
@@ -203,10 +215,16 @@ ALTER TABLE `users_roles`
 --
 
 --
+-- AUTO_INCREMENT для таблиці `activation_token`
+--
+ALTER TABLE `activation_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT для таблиці `contracts`
 --
 ALTER TABLE `contracts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблиці `contracts_in_progress`
@@ -230,13 +248,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT для таблиці `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT для таблиці `users_roles`
 --
 ALTER TABLE `users_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- Обмеження зовнішнього ключа збережених таблиць

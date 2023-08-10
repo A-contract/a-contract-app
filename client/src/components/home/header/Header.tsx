@@ -90,9 +90,9 @@ const Header = () => {
                 <Tabs
                   textColor="secondary"
                   value={activeTab}
-                  onChange={(event: any, value: any) =>
-                    setActiveLandPageTab(value)
-                  }
+                  onChange={(event: any, value: any) => {
+                    if (value < 3) setActiveLandPageTab(value);
+                  }}
                   TabIndicatorProps={{
                     sx: { backgroundColor: theme.palette.secondary.main },
                   }}
@@ -102,9 +102,18 @@ const Header = () => {
                       key={index}
                       label={tab.name}
                       href={tab.href}
+                      target={tab.target}
                       sx={{ color: tab.color }}
                     />
                   ))}
+
+                  <Tab
+                    key={3}
+                    label={"Blog"}
+                    href={"/blog"}
+                    target={"_blank"}
+                    sx={{ color: "secondary.light" }}
+                  />
                 </Tabs>
               </Box>
 

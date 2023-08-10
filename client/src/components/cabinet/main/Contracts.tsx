@@ -26,6 +26,7 @@ const Contracts = (props: any) => {
     id: null,
     number: null,
     originalName: null,
+    name: null,
     progressStatus: 0,
   });
   const selectedContractRef = useRef(selectedContract);
@@ -54,6 +55,9 @@ const Contracts = (props: any) => {
               sx={{
                 color: theme.palette.info.main,
                 bgcolor: theme.palette.secondary.light,
+              }}
+              onClick={() => {
+                toPay(params.row);
               }}
             >
               To pay
@@ -129,7 +133,8 @@ const Contracts = (props: any) => {
                   params.row.info.name.substr(
                     0,
                     params.row.info.name.lastIndexOf(".")
-                  ) + ".docx"
+                  ) + ".docx",
+                  params.row.originalName
                 )
               }
             >
@@ -150,7 +155,8 @@ const Contracts = (props: any) => {
                     params.row.info.name.substr(
                       0,
                       params.row.info.name.lastIndexOf(".")
-                    ) + ".pdf"
+                    ) + ".pdf",
+                    params.row.originalName
                   )
                 }
               >
@@ -188,6 +194,7 @@ const Contracts = (props: any) => {
               id: filteredContract[0].id,
               number: indexContract,
               originalName: filteredContract[0].originalName,
+              name: filteredContract[0].name,
               progressStatus: filteredContract[0].progressStatus,
             });
             setDataFile({
@@ -255,6 +262,10 @@ const Contracts = (props: any) => {
     dropzoneRef.current.deleteFile(file, 0);
   };
 
+  const toPay = (info: any) => {
+    console.log("toPay", info);
+  };
+
   const toProcessingContract = (id: number) => {
     console.log(id);
     axios.post(
@@ -268,8 +279,7 @@ const Contracts = (props: any) => {
     );
   };
 
-  const downloadContract = async (name: any) => {
-    console.log(name);
+  const downloadContract = async (name: any, originalName: any) => {
     try {
       const response = await axios.post(
         "http://localhost:8000/contracts/download",
@@ -286,7 +296,8 @@ const Contracts = (props: any) => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = name;
+      a.download =
+        originalName.substr(0, originalName.lastIndexOf(".")) + ".pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -300,12 +311,13 @@ const Contracts = (props: any) => {
   const finishContract = () => {
     if (selectedContract.progressStatus && file) {
       const formData = new FormData();
+      console.log(selectedContract);
       formData.append(
         "file",
         file,
-        selectedContract.originalName.substr(
+        selectedContract.name.substr(
           0,
-          selectedContract.originalName.lastIndexOf(".")
+          selectedContract.name.lastIndexOf(".")
         ) + ".pdf"
       );
 
@@ -330,6 +342,7 @@ const Contracts = (props: any) => {
             setSelectedContract({
               id: null,
               number: null,
+              originalName: null,
               name: null,
               progressStatus: 0,
             });
