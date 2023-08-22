@@ -133,15 +133,13 @@ const Contracts = (props: any) => {
                                 color: theme.palette.info.main,
                                 bgcolor: theme.palette.secondary.light,
                             }}
-                            onClick={() =>
+                            onClick={() => {
+                                console.log(params.row.info.name);
                                 downloadContract(
-                                    params.row.info.name.substr(
-                                        0,
-                                        params.row.info.name.lastIndexOf(".")
-                                    ) + ".docx",
+                                    params.row.info.name,
                                     params.row.originalName
-                                )
-                            }
+                                );
+                            }}
                         >
                             Download
                         </Button>
@@ -289,6 +287,7 @@ const Contracts = (props: any) => {
     };
 
     const downloadContract = async (name: any, originalName: any) => {
+        console.log(name, originalName);
         try {
             const response = await axios.post(
                 "http://localhost:8000/contracts/download",
@@ -304,8 +303,8 @@ const Contracts = (props: any) => {
             const url = URL.createObjectURL(response.data);
             const a = document.createElement("a");
             a.href = url;
-            a.download =
-                originalName.substr(0, originalName.lastIndexOf(".")) + ".pdf";
+            a.download = name;
+            //originalName.substr(0, originalName.lastIndexOf(".")) + ".pdf";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
