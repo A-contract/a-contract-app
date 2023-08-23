@@ -284,38 +284,21 @@ const AnalyseContract = () => {
               <Paper
                 variant="outlined"
                 sx={{
-                  height: "500px",
+                  height: "300px",
                   width: isMatch ? "350px" : "530px",
                   borderColor: theme.palette.info.dark,
                   bgcolor: "#f9f9f9",
                   px: "30px",
-                  py: "20px",
+                  py: "110px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                 }}
               >
-                <Box component="div" sx={{ mb: "10px" }}>
-                  <Box component="h4">Your info</Box>
-                </Box>
-                <Box component="div" sx={{ mb: "10px" }}>
-                  <TextField
-                    id="outlined-basic"
-                    label="Email"
-                    variant="outlined"
-                    sx={{
-                      bgcolor: theme.palette.secondary.main,
-                      width: "320px",
-                    }}
-                  />
-                </Box>
-                <Box sx={{ mb: "20px", width: "320px" }}>
-                  <Box
-                    component={DropzoneArea}
-                    acceptedFiles={[".doc", ".docx,", ".pdf"]}
-                    dropzoneText={"Attach your contract"}
-                    onChange={(files) => console.log("Files:", files)}
-                  />
+                <Box component="div" sx={{ mb: "10px", textAlign: "center" }}>
+                  <Typography component="h1" sx={{ fontWeight: 500 }}>
+                    Qualitative and quick analysis of your contracts
+                  </Typography>
                 </Box>
 
                 <Box>
@@ -331,18 +314,6 @@ const AnalyseContract = () => {
                   >
                     Analyse
                   </Button>
-                </Box>
-                <Box sx={{ mb: "10px" }}>
-                  <Typography
-                    sx={{
-                      width: "320px",
-                      fontSize: "14px",
-                      textAlign: "center",
-                    }}
-                  >
-                    By signing up, you agree to our terms of service and privacy
-                    policy
-                  </Typography>
                 </Box>
               </Paper>
             </Box>
