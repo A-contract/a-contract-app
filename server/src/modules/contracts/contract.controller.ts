@@ -96,12 +96,9 @@ export class ContractController {
   async user(@Req() request: any) {
     try {
       const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
-
-      const user: any = await this.authService.findOne({ id: data['id'] });
-      const contracts: any = await this.contractService.findAll(
-        user.role,
-        data['id'],
-      );
+      const { id } = data;
+      const user: any = await this.authService.findOne({ id: id });
+      const contracts: any = await this.contractService.findAll(user.role, id);
 
       if (user.role === 'customer') {
         return {
@@ -150,8 +147,18 @@ export class ContractController {
       }
 
       const user: any = await this.authService.findOne({ id: data['id'] });
-
+      console.log(user);
       const contract: any = await this.contractService.findOne(request.body.id);
+      console.log(contract);
+      console.log({
+        contractId: contract.id,
+        originalName: contract.originalName,
+        name: contract.name,
+        size: contract.size,
+        userId: contract.userId,
+        lawyerId: user.id,
+        pathToFile: contract.pathToFile,
+      });
 
       await this.contractService.createProcessing({
         contractId: contract.id,
@@ -165,7 +172,6 @@ export class ContractController {
 
       await this.contractService.update(contract.id, 1);
 
-      // Пример использования функции
       const sourceFilePath = contract.pathToFile + '/' + contract.name;
       const destinationFilePath =
         './uploads/contracts_in_progress/' + contract.name;

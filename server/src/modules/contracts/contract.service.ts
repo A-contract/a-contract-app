@@ -18,32 +18,35 @@ export class ContractService {
     return this.contractRepository.save(data);
   }
 
-  async findOne(id: number): Promise<Contracts> {
+  async findOne(id: any): Promise<Contracts> {
+    console.log(id);
+    console.log(await this.contractRepository.findOne(id));
     return this.contractRepository.findOne(id);
   }
 
   async findAll(role: any, id: number): Promise<Contracts[]> {
     const query = this.contractRepository
       .createQueryBuilder('contracts')
-      .select(['contracts'])
-      .leftJoin(
+      .leftJoinAndSelect(
         'contracts_in_progress',
         'contracts_in_progress',
         'contracts_in_progress.contractId = contracts.id',
       );
-    if (role === 'customer') {
-      query.where('contracts.userId = :id', { id });
-    } else if (role === 'lawyer') {
-      query
-        .where('contracts_in_progress.lawyerId = :id', { id })
-        .orWhere('contracts.paymentStatus = 1');
-    }
+    // if (role === 'customer') {
+    //   query.where('contracts.userId = :id', { id: id });
+    // } else if (role === 'lawyer') {
+    //   query
+    //     .where('contracts_in_progress.lawyerId = :id', { id: id })
+    //     .orWhere('contracts.paymentStatus = 1');
+    // }
 
-    return await query.getMany();
+    const result = await query.getMany();
+
+    return result;
   }
 
   async createProcessing(data: any): Promise<ContractsInProgress> {
-    //console.log(data);
+    console.log(data);
     return this.contractInProgressRepository.save(data);
   }
 

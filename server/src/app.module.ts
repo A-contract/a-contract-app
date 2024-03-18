@@ -27,7 +27,7 @@ import { UserController } from './modules/user/user.controller';
       port: 3306,
       username: 'root',
       password: '',
-      database: 'nest_auth',
+      database: 'a-contract',
       entities: [
         Users,
         Roles,

@@ -22,11 +22,11 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async findOne(id: number): Promise<Users> {
+  async findOne(id: any): Promise<Users> {
     return this.userRepository.findOne(id);
   }
 
-  async update(id: number, user: Users): Promise<Users> {
+  async update(id: any, user: Users): Promise<Users> {
     await this.userRepository.update(id, user);
     return this.userRepository.findOne(id);
   }

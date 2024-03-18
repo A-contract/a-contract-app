@@ -16,8 +16,9 @@ export class AuthService {
     return this.userRepository.save(data);
   }
 
-  async findOne(condition: any): Promise<Users> {
-    const user = await this.userRepository.findOne(condition, {
+  async findOne(data: any): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: data,
       relations: ['userRoles', 'userRoles.role'],
     });
     return user;

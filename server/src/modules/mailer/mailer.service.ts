@@ -36,7 +36,7 @@ export class MailerService {
       service: 'gmail',
       auth: {
         user: 'antfloppy@gmail.com', // Ваша почта Gmail
-        pass: 'aqyfmrqkfhssuozj', // Пароль приложения (создается в настройках безопасности вашей учетной записи Google)
+        pass: 'rwaj chut mtgn shsq', // Пароль приложения (создается в настройках безопасности вашей учетной записи Google)
       },
     });
 

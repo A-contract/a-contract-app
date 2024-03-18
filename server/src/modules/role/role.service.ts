@@ -18,11 +18,13 @@ export class RoleService {
     return this.roleRepository.find();
   }
 
-  async findOne(condition: any): Promise<Roles> {
-    return this.roleRepository.findOne(condition);
+  async findOne(data: any): Promise<Roles> {
+    return this.roleRepository.findOne({
+      where: data,
+    });
   }
 
-  async update(id: number, role: Roles): Promise<Roles> {
+  async update(id: any, role: Roles): Promise<Roles> {
     await this.roleRepository.update(id, role);
     return this.roleRepository.findOne(id);
   }

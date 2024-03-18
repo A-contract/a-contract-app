@@ -10,13 +10,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RoleService } from '../role/role.service';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
+import * as bcrypt from 'bcrypt';
 import { UsersRoles } from '../../entities/users_roles';
-import { getRepository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { MailerService } from '../mailer/mailer.service';
 import { UserService } from '../user/user.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +27,8 @@ export class AuthController {
     private readonly mailerService: MailerService,
     private readonly userService: UserService,
     private jwtService: JwtService,
+    @InjectRepository(UsersRoles)
+    private usersRolesRepository: Repository<UsersRoles>,
   ) {}
 
   @Post('register')
@@ -37,9 +40,11 @@ export class AuthController {
     @Body('password') password: string,
     @Body('role') roleName: string,
   ) {
+    console.log(email, roleName);
     const hashedPassword = await bcrypt.hash(password, 12);
     const findUser = await this.authService.findOne({ email: email });
     const findRole = await this.roleService.findOne({ name: roleName });
+    console.log(findUser, findRole);
 
     if (findUser) {
       return {
@@ -64,7 +69,7 @@ export class AuthController {
       usersRoles.user = user;
       usersRoles.role = findRole;
 
-      await getRepository(UsersRoles).save(usersRoles);
+      await this.usersRolesRepository.save(usersRoles);
 
       // sending email
 
@@ -126,6 +131,7 @@ export class AuthController {
     @Body('password') password: string,
     @Res({ passthrough: true }) response: Response,
   ) {
+    console.log(email, password);
     const user = await this.authService.findOne({ email });
 
     if (!user) {
@@ -148,6 +154,7 @@ export class AuthController {
         message: 'Invalid pass',
       };
     }
+    console.log(user);
 
     const jwt = await this.jwtService.signAsync({ id: user.id });
 
