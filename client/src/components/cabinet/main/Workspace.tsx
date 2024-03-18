@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
+//import "react-quill/dist/quill.snow.css";
 import { Paper } from "@mui/material";
 import axios from "axios";
 import mammoth from "mammoth";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
 
-const ReactQuill = dynamic(() => import("react-quill-with-table"), {
-  ssr: false,
-});
+// const ReactQuill = dynamic(() => import("react-quill-with-table"), {
+//   ssr: false,
+// });
 
 const Workspace = () => {
   const workspaceState = useTypedSelector((state: any) => state.workspace);

@@ -24,18 +24,18 @@ const Cabinet = () => {
         } else router.push("/auth");
       }
     })();
-  }, [auth, user]);
+  });
 
-  if (auth)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <Header user={user} />
-        <SideBar user={user} />
-        <Main user={user} />
-      </Box>
-    );
-  else return <></>;
+  // if (auth)
+  return (
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <Header user={user} />
+      <SideBar user={user} />
+      <Main user={user} />
+    </Box>
+  );
+  // else return <></>;
 };
 
 export default Cabinet;
