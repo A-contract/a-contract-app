@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, createQueryBuilder } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Contracts } from 'src/entities/contracts.entity';
 import { ContractsInProgress } from 'src/entities/contracts_in_progress.entity';
 import { formatDateTime } from 'src/utils/dateUtils';
@@ -18,10 +18,14 @@ export class ContractService {
     return this.contractRepository.save(data);
   }
 
-  async findOne(id: any): Promise<Contracts> {
-    console.log(id);
-    console.log(await this.contractRepository.findOne(id));
-    return this.contractRepository.findOne(id);
+  async findOne(id: any): Promise<Contracts[]> {
+    const query = this.contractRepository
+      .createQueryBuilder('contract')
+      .where('contract.id = :id', { id: id });
+
+    const result = await query.getMany();
+
+    return result;
   }
 
   async findAll(role: any, id: number): Promise<Contracts[]> {
@@ -51,22 +55,31 @@ export class ContractService {
   }
 
   async update(id: any, progressStatus: any): Promise<Contracts> {
-    //console.log(id);
     await this.contractRepository.update(id, {
       progressStatus: progressStatus,
     });
     return await this.contractRepository.findOne(id);
   }
 
-  async finish(id: any, progressStatus: any): Promise<Contracts> {
-    await this.contractInProgressRepository.update(
-      { datetimeFinish: new Date(formatDateTime()) },
-      { contractId: id },
+  async updatePay(id: any, paymentStatus: any) {
+    await this.contractRepository.update(
+      { id: id },
+      { paymentStatus: paymentStatus },
     );
-    await this.contractRepository.update(id, {
-      progressStatus: progressStatus,
-    });
-    return await this.contractRepository.findOne(id);
+  }
+
+  async finish(id: any, progressStatus: any) {
+    try {
+      await this.contractInProgressRepository.update(
+        { datetimeFinish: new Date(formatDateTime()) },
+        { contractId: id },
+      );
+      await this.contractRepository.update(id, {
+        progressStatus: progressStatus,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async findSelected(lawyerId: number): Promise<ContractsInProgress> {

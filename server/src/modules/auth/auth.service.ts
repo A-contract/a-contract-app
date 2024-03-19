@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     @InjectRepository(Users) private readonly userRepository: Repository<Users>,
     @InjectRepository(UsersRoles)
-    private readonly userRoleRepository: Repository<UsersRoles>, // инжектируем репозиторий для UserRole
+    private readonly userRoleRepository: Repository<UsersRoles>,
   ) {}
 
   async create(data: any): Promise<Users> {

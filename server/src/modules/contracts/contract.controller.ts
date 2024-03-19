@@ -105,7 +105,8 @@ export class ContractController {
           status: HttpStatus.OK,
           message: 'success',
           contracts: contracts.map((element: any, index: number) => ({
-            id: index + 1,
+            id: element.id,
+            userId: element.userId,
             originalName: element.originalName,
             paymentStatus: element.paymentStatus,
             progressStatus: element.progressStatus,
@@ -134,6 +135,35 @@ export class ContractController {
     }
   }
 
+  @Post('toPay')
+  async toPay(@Req() request: any) {
+    try {
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+
+      if (!data) {
+        return {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'success',
+        };
+      }
+
+      console.log(request.body.id);
+
+      const [contract] = await this.contractService.findOne(request.body.id);
+
+      this.contractService.updatePay(contract.id, 1);
+      return {
+        status: HttpStatus.OK,
+        message: 'success',
+      };
+    } catch (e) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'unsuccess',
+      };
+    }
+  }
+
   @Post('processing')
   async processing(@Req() request: any) {
     try {
@@ -147,18 +177,7 @@ export class ContractController {
       }
 
       const user: any = await this.authService.findOne({ id: data['id'] });
-      console.log(user);
-      const contract: any = await this.contractService.findOne(request.body.id);
-      console.log(contract);
-      console.log({
-        contractId: contract.id,
-        originalName: contract.originalName,
-        name: contract.name,
-        size: contract.size,
-        userId: contract.userId,
-        lawyerId: user.id,
-        pathToFile: contract.pathToFile,
-      });
+      const [contract] = await this.contractService.findOne(request.body.id);
 
       await this.contractService.createProcessing({
         contractId: contract.id,
@@ -278,6 +297,8 @@ export class ContractController {
         };
       }
       const { selectedContract } = JSON.parse(request.body.data);
+
+      console.log(selectedContract);
       await this.contractService.finish(selectedContract.id, 2);
 
       return {

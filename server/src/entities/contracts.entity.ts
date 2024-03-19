@@ -27,5 +27,5 @@ export class Contracts {
   progressStatus: number;
 
   @Column()
-  paymentStatus: boolean;
+  paymentStatus: number;
 }
