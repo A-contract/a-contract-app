@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
 import axios from "axios";
+import router from "next/router";
 
 const drawerWidth = 200;
 
@@ -38,6 +39,7 @@ const SideBar = (props: any) => {
       )
       .then(function (response: any) {
         setActiveCabinetTab(0);
+        router.push("/auth");
       })
       .catch(function (error: any) {
         console.log(error);

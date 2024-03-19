@@ -7,35 +7,34 @@ import router from "next/router";
 import { useEffect, useState } from "react";
 
 const Cabinet = () => {
-  const [auth, setAuth] = useState(false);
   const [user, setUser] = useState(false);
   const alowRoles = ["customer", "lawyer"];
 
   useEffect(() => {
-    (async () => {
+    const getData = async () => {
       const response = await axios.get("http://localhost:8000/auth/user", {
         withCredentials: true,
       });
       if (response.data.status === 401) router.push("/auth");
       if (response.data.status === 200) {
         if (alowRoles.includes(response.data.user.role)) {
-          setAuth(true);
           setUser(response.data.user);
         } else router.push("/auth");
       }
-    })();
-  });
+    };
+    getData();
+  }, []);
 
-  // if (auth)
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <Header user={user} />
-      <SideBar user={user} />
-      <Main user={user} />
-    </Box>
-  );
-  // else return <></>;
+  if (user)
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <Header user={user} />
+        <SideBar user={user} />
+        <Main user={user} />
+      </Box>
+    );
+  else return null;
 };
 
 export default Cabinet;

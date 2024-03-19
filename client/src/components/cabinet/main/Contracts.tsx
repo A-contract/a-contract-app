@@ -29,6 +29,7 @@ const Contracts = (props: any) => {
     name: null,
     progressStatus: 0,
   });
+  const [actionTrigger, setActionTrigger] = useState<any>(false);
   const selectedContractRef = useRef(selectedContract);
   const dropzoneRef = useRef<any>(null);
   const isLawyer = props.role === "lawyer" ? true : false;
@@ -57,7 +58,7 @@ const Contracts = (props: any) => {
                 bgcolor: theme.palette.secondary.light,
               }}
               onClick={() => {
-                toPay(params.row);
+                toPay(params.row.info);
               }}
             >
               To pay
@@ -73,10 +74,11 @@ const Contracts = (props: any) => {
       headerName: "Progress Status",
       width: 250,
       renderCell: (params: any) => {
+        console.log(params.row.paymentStatus === 1);
         if (isLawyer) {
           if (
             selectedContract.progressStatus !== 1 &&
-            params.row.paymentStatus === true
+            params.row.paymentStatus === 1
           ) {
             return (
               <Button
@@ -98,17 +100,17 @@ const Contracts = (props: any) => {
             return <>In process</>;
           } else if (
             (params.row.progressStatus === 1 || 2) &&
-            params.row.paymentStatus === true
+            params.row.paymentStatus === 1
           ) {
             return <>Pending process</>;
           }
         } else if (isCustomer) {
-          if (params.row.paymentStatus === false) return <>Wait for payment</>;
+          if (params.row.paymentStatus === 0) return <>Wait for payment</>;
           else if (params.row.progressStatus === 1) return <>In process</>;
           else if (params.row.progressStatus === 2) return <>Ready</>;
           else if (
             params.row.progressStatus === 0 &&
-            params.row.paymentStatus === true
+            params.row.paymentStatus === 1
           )
             return <>In process</>;
         }
@@ -167,62 +169,63 @@ const Contracts = (props: any) => {
   ];
 
   useEffect(() => {
-    const intervalId = setInterval(async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/contracts/contracts",
-          { withCredentials: true }
-        );
+    try {
+      const getData = async () => {
+        await axios
+          .get("http://localhost:8000/contracts/contracts", {
+            withCredentials: true,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              const contracts = response.data.contracts;
+              console.log(contracts);
+              if (!contracts) return;
+              let indexContract = 0;
+              const filteredContract = contracts.filter((element: any) => {
+                indexContract++;
+                return element.progressStatus === 1;
+              });
 
-        if (response.status === 200) {
-          const contracts = response.data.contracts;
-          let indexContract = 0;
-          const filteredContract = contracts.filter((element: any) => {
-            indexContract++;
-            return element.progressStatus === 1;
+              if (
+                filteredContract.length > 0 &&
+                filteredContract[0].progressStatus === 1
+              ) {
+                setSelectedContract({
+                  id: filteredContract[0].id,
+                  number: indexContract,
+                  originalName: filteredContract[0].originalName,
+                  name: filteredContract[0].name,
+                  progressStatus: filteredContract[0].progressStatus,
+                });
+                setDataFile({
+                  id: filteredContract[0].id,
+                  number: indexContract,
+                  originalName: filteredContract[0].originalName,
+                  progressStatus: filteredContract[0].progressStatus,
+                  content: "",
+                });
+              }
+
+              setRows(
+                contracts.map((element: any, index: number) => ({
+                  id: index + 1,
+                  originalName: element.originalName,
+                  paymentStatus: element.paymentStatus,
+                  progressStatus: element.progressStatus,
+                  info: {
+                    id: element.id,
+                    userId: element.userId,
+                    name: element.name,
+                  },
+                }))
+              );
+            }
           });
+      };
 
-          if (
-            filteredContract.length > 0 &&
-            filteredContract[0].progressStatus === 1
-          ) {
-            setSelectedContract({
-              id: filteredContract[0].id,
-              number: indexContract,
-              originalName: filteredContract[0].originalName,
-              name: filteredContract[0].name,
-              progressStatus: filteredContract[0].progressStatus,
-            });
-            setDataFile({
-              id: filteredContract[0].id,
-              number: indexContract,
-              originalName: filteredContract[0].originalName,
-              progressStatus: filteredContract[0].progressStatus,
-              content: "",
-            });
-          }
-
-          setRows(
-            contracts.map((element: any, index: number) => ({
-              id: index + 1,
-              originalName: element.originalName,
-              paymentStatus: element.paymentStatus,
-              progressStatus: element.progressStatus,
-              info: {
-                id: element.id,
-                userId: element.userId,
-                name: element.name,
-              },
-            }))
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }, 100);
-
-    return () => clearInterval(intervalId);
-  }, [selectedContractRef.current]);
+      getData();
+    } catch (e) {}
+  }, [selectedContractRef, actionTrigger]);
 
   const sendContract = () => {
     if (file) {
@@ -251,6 +254,7 @@ const Contracts = (props: any) => {
         .catch(function (error) {
           console.log(error);
         });
+      setActionTrigger(!actionTrigger);
     }
   };
 
@@ -259,11 +263,20 @@ const Contracts = (props: any) => {
   };
 
   const toPay = (info: any) => {
-    console.log("toPay", info);
+    console.log(info);
+    axios.post(
+      "http://localhost:8000/contracts/toPay",
+      {
+        id: info.id,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    setActionTrigger(!actionTrigger);
   };
 
   const toProcessingContract = (id: number) => {
-    console.log(id);
     axios.post(
       "http://localhost:8000/contracts/processing",
       {
@@ -273,6 +286,7 @@ const Contracts = (props: any) => {
         withCredentials: true,
       }
     );
+    setActionTrigger(!actionTrigger);
   };
 
   const downloadContract = async (name: any, originalName: any) => {
@@ -297,6 +311,7 @@ const Contracts = (props: any) => {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      setActionTrigger(!actionTrigger);
 
       URL.revokeObjectURL(url);
     } catch (error) {
@@ -334,7 +349,6 @@ const Contracts = (props: any) => {
         .then(function (response: any) {
           if (response.data.status === 200) {
             console.log("Ваш файл был успешно загружен!");
-
             setSelectedContract({
               id: null,
               number: null,
@@ -343,6 +357,7 @@ const Contracts = (props: any) => {
               progressStatus: 0,
             });
             deleteFile();
+            setActionTrigger(!actionTrigger);
           } else console.log("Bad request");
         })
         .catch(function (error) {
