@@ -50,7 +50,7 @@ const Auth = () => {
           <Box>
             <Box
               component="img"
-              src={"/images/logo.png"}
+              src={"/static/images/logo.png"}
               alt="logo"
               sx={{
                 width: "160px",

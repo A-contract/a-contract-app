@@ -9,7 +9,7 @@ const initialState: AdminPageState = {
     {
       id: 0,
       name: "Users",
-      iconPath: "/images/contract_icon.png",
+      iconPath: "/static/images/contract_icon.png",
       iconml: "14px",
       textml: "11px",
     },

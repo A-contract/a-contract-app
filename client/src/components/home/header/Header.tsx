@@ -31,14 +31,14 @@ const Header = () => {
   useEffect(() => {
     setActiveLandPageTab(
       router.asPath !== "/"
-        ? tabs.filter((element: any) => element.href === router.asPath)[0].id
+        ? tabs.filter((element: any) => router.asPath.includes(element.href))[0]
+            .id
         : 0
     );
     (async () => {
       const response = await axios.get("http://localhost:8000/auth/user", {
         withCredentials: true,
       });
-      //console.log(response.data);
       if (response.data.status === 200) {
         setUser(response.data.user);
         setUserRoute(response.data.route);
@@ -74,7 +74,7 @@ const Header = () => {
                 <Box component="a" href="/">
                   <Box
                     component="img"
-                    src={"images/logo.png"}
+                    src={"/static/images/logo.png"}
                     alt="logo"
                     sx={{ width: "160px" }}
                   />
@@ -106,14 +106,6 @@ const Header = () => {
                       sx={{ color: tab.color }}
                     />
                   ))}
-
-                  <Tab
-                    key={3}
-                    label={"Blog"}
-                    href={"/blog"}
-                    target={"_blank"}
-                    sx={{ color: "secondary.light" }}
-                  />
                 </Tabs>
               </Box>
 

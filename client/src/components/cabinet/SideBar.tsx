@@ -7,7 +7,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Link from "next/link";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useActions } from "@/hooks/useAction";
 import axios from "axios";
@@ -66,7 +65,7 @@ const SideBar = (props: any) => {
         <Box component="a" href="/">
           <Box
             component="img"
-            src={"images/logo.png"}
+            src={"/static/images/logo.png"}
             alt="logo"
             sx={{ width: "140px" }}
           />
@@ -131,7 +130,7 @@ const SideBar = (props: any) => {
           icon={
             <Box
               component={"img"}
-              src={"/images/logout_icon.png"}
+              src={"/static/images/logout_icon.png"}
               sx={{ ml: "15px" }}
             />
           }

@@ -129,7 +129,7 @@ const Footer = () => {
               >
                 <Box
                   component="img"
-                  src={"images/logo.png"}
+                  src={"/static/images/logo.png"}
                   alt="logo"
                   sx={{ width: "160px" }}
                 />
@@ -224,7 +224,7 @@ const Footer = () => {
               <Box component="div" sx={{ mr: "auto" }}>
                 <Box
                   component="img"
-                  src={"images/logo.png"}
+                  src={"static/images/logo.png"}
                   alt="logo"
                   sx={{ width: "160px" }}
                 />

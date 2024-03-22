@@ -49,23 +49,9 @@ const DrawerMenu = (props: any) => {
             />
           ))}
           <Tab
-            key={3}
-            label={"Blog"}
-            href={"/blog"}
-            target={"_blank"}
-            sx={{
-              width: "100%",
-              color: "secondary.main",
-              opacity: "1",
-              mt: "",
-              mx: "auto",
-              borderTop: "",
-            }}
-          />
-          <Tab
             component={Link}
             label="Sign in"
-            href="auth"
+            href="/auth"
             onClick={() => setActiveAuthForm(0)}
             sx={{
               width: "100%",
@@ -79,7 +65,7 @@ const DrawerMenu = (props: any) => {
           <Tab
             component={Link}
             label="Sign up"
-            href="auth"
+            href="/auth"
             onClick={() => setActiveAuthForm(1)}
             sx={{
               width: "100%",

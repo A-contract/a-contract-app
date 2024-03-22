@@ -1,41 +1,41 @@
-import Header from "@/components/admin-panel/Header";
-import Main from "@/components/admin-panel/Main";
-import SideBar from "@/components/admin-panel/SideBar";
-import { Box, CssBaseline } from "@mui/material";
-import axios from "axios";
-import router from "next/router";
-import { useEffect, useState } from "react";
+// import Header from "@/components/admin-panel/Header";
+// import Main from "@/components/admin-panel/Main";
+// import SideBar from "@/components/admin-panel/SideBar";
+// import { Box, CssBaseline } from "@mui/material";
+// import axios from "axios";
+// import router from "next/router";
+// import { useEffect, useState } from "react";
 
-const AdminPage = () => {
-  const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState(false);
-  const alowRoles = ["admin"];
+// const AdminPage = () => {
+//   const [auth, setAuth] = useState(false);
+//   const [user, setUser] = useState(false);
+//   const alowRoles = ["admin"];
 
-  useEffect(() => {
-    (async () => {
-      const response = await axios.get("http://localhost:8000/auth/user", {
-        withCredentials: true,
-      });
-      if (response.data.status === 401) router.push("/auth");
-      if (response.data.status === 200) {
-        if (alowRoles.includes(response.data.user.role)) {
-          setAuth(true);
-          setUser(response.data.user);
-        } else router.push("/auth");
-      }
-    })();
-  });
+//   useEffect(() => {
+//     (async () => {
+//       const response = await axios.get("http://localhost:8000/auth/user", {
+//         withCredentials: true,
+//       });
+//       if (response.data.status === 401) router.push("/auth");
+//       if (response.data.status === 200) {
+//         if (alowRoles.includes(response.data.user.role)) {
+//           setAuth(true);
+//           setUser(response.data.user);
+//         } else router.push("/auth");
+//       }
+//     })();
+//   });
 
-  if (auth)
-    return (
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <Header user={user} />
-        <SideBar user={user} />
-        <Main user={user} />
-      </Box>
-    );
-  else return <></>;
-};
+//   if (auth)
+//     return (
+//       <Box sx={{ display: "flex" }}>
+//         <CssBaseline />
+//         <Header user={user} />
+//         <SideBar user={user} />
+//         <Main user={user} />
+//       </Box>
+//     );
+//   else return <></>;
+// };
 
-export default AdminPage;
+// export default AdminPage;
