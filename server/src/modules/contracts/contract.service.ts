@@ -15,8 +15,15 @@ export class ContractService {
   ) {}
 
   async create(data: any): Promise<Contracts> {
-    return this.contractRepository.save(data);
+    try {
+      const result = await this.contractRepository.save(data);
+      return result;
+    } catch (error) {
+      console.error("Ошибка при сохранении данных:", error);
+      throw error; 
+    }
   }
+  
 
   async findOne(id: any): Promise<Contracts[]> {
     const query = this.contractRepository
@@ -24,7 +31,7 @@ export class ContractService {
       .where('contract.id = :id', { id: id });
 
     const result = await query.getMany();
-
+ 
     return result;
   }
 
@@ -36,13 +43,14 @@ export class ContractService {
         'contracts_in_progress',
         'contracts_in_progress.contractId = contracts.id',
       );
-    // if (role === 'customer') {
-    //   query.where('contracts.userId = :id', { id: id });
-    // } else if (role === 'lawyer') {
-    //   query
-    //     .where('contracts_in_progress.lawyerId = :id', { id: id })
-    //     .orWhere('contracts.paymentStatus = 1');
-    // }
+    if (role === 'customer') {
+      query.where('contracts.userId = :id', { id: id });
+    } else if (role === 'lawyer') {
+      query
+        .where('contracts_in_progress.lawyerId = :id', { id: id })
+        .orWhere('contracts.paymentStatus = 1');
+    }
+
 
     const result = await query.getMany();
 
@@ -50,7 +58,7 @@ export class ContractService {
   }
 
   async createProcessing(data: any): Promise<ContractsInProgress> {
-    console.log(data);
+
     return this.contractInProgressRepository.save(data);
   }
 

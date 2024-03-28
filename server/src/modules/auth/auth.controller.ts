@@ -52,7 +52,6 @@ export class AuthController {
         message: 'This e-mail already exists',
       };
     } else {
-      // creation user in db
 
       const user = await this.authService.create({
         name: name,
@@ -71,7 +70,6 @@ export class AuthController {
 
       await this.usersRolesRepository.save(usersRoles);
 
-      // sending email
 
       const token = await this.userService.createActivationToken(user.id);
 
@@ -158,9 +156,9 @@ export class AuthController {
 
     const jwt = await this.jwtService.signAsync({ id: user.id });
 
-    response.cookie('jwt', jwt, {
+    response.cookie('jwt-a.contract', jwt, {
       httpOnly: true,
-      domain: 'localhost',
+      domain: process.env.SERVER_HOST,
       secure: true,
       sameSite: 'lax',
       path: '/',
@@ -183,7 +181,7 @@ export class AuthController {
   @Get('user')
   async user(@Req() request: Request) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
 
       if (!data) {
         return {
@@ -216,10 +214,10 @@ export class AuthController {
 
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
-    response.cookie('jwt', '', {
+    response.cookie('jwt-a.contract', '', {
       httpOnly: true,
       secure: true,
-      domain: 'localhost',
+      domain: process.env.SERVER_HOST,
       path: '/',
       sameSite: 'lax',
       expires: new Date(0),

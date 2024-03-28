@@ -9,8 +9,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Users } from '../../entities/users.entity';
-import { Roles } from '../../enums/roles.decorator';
-import { Roles as Role } from '../../enums/roles.enum';
 
 @Controller('users')
 export class UserController {

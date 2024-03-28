@@ -8,10 +8,10 @@ export class Contracts {
   @Column()
   userId: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 1000 })
   originalName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 1000 })
   name: string;
 
   @Column()
@@ -26,6 +26,6 @@ export class Contracts {
   @Column()
   progressStatus: number;
 
-  @Column()
+  @Column({ default: 0})
   paymentStatus: number;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, createQueryBuilder } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Users } from '../../entities/users.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ActivationToken } from 'src/entities/activation_token.entity';

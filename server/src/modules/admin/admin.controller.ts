@@ -14,7 +14,7 @@ export class AdminController {
   @Get('users')
   async getUsers(@Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt']);
+      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
       if (!data) {
         return {
           status: HttpStatus.UNAUTHORIZED,

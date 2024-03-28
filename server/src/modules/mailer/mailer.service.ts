@@ -18,10 +18,10 @@ export class MailerService {
           ' Pass: ' +
           password +
           ' Link activation: ' +
-          ' localhost:3000/activation-page?token=' +
+          ` ${process.env.SERVER_HOST}:${process.env.CLIENT_PORT}/activation-page?token=` +
           token
         : 'Link activation: ' +
-          ' localhost:3000/activation-page?token=' +
+          ` ${process.env.SERVER_HOST}:${process.env.CLIENT_PORT}/activation-page?token=` +
           token;
 
     return {
@@ -35,14 +35,14 @@ export class MailerService {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'antfloppy@gmail.com', // Ваша почта Gmail
-        pass: 'aqyfmrqkfhssu', // Пароль приложения (создается в настройках безопасности вашей учетной записи Google)
+        user: 'a.contract.company@gmail.com', 
+        pass: 'lthxajarbmzuegtc', 
       },
     });
 
     const mailOptions = {
-      from: 'antfloppy@gmail.com', // Отправитель
-      to: email, // Получатель
+      from: 'a.contract.company@gmail.com', 
+      to: email, 
       subject: subject,
       text: text,
     };

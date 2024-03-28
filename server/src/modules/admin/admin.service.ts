@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, createQueryBuilder } from 'typeorm';
-import { Contracts } from 'src/entities/contracts.entity';
-import { ContractsInProgress } from 'src/entities/contracts_in_progress.entity';
-import { formatDateTime } from 'src/utils/dateUtils';
+import { Repository } from 'typeorm';
 import { Users } from 'src/entities/users.entity';
 import { Roles } from 'src/entities/roles.entity';
 import { UsersRoles } from 'src/entities/users_roles';
