@@ -30,7 +30,7 @@ const SideBar = (props: any) => {
   const logout = () => {
     axios
       .post(
-        "http://localhost:8000/auth/logout",
+        `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/logout`,
         {},
         {
           withCredentials: true,

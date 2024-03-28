@@ -90,7 +90,7 @@ const SignUp = () => {
     ) {
       axios
         .post(
-          "http://localhost:8000/auth/register",
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/register`,
           {
             name: formFields.name,
             surname: formFields.surname,

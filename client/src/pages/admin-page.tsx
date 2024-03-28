@@ -13,7 +13,7 @@
 
 //   useEffect(() => {
 //     (async () => {
-//       const response = await axios.get("http://localhost:8000/auth/user", {
+//       const response = await axios.get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`, {
 //         withCredentials: true,
 //       });
 //       if (response.data.status === 401) router.push("/auth");

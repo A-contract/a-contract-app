@@ -18,7 +18,7 @@ const ActivationPage = () => {
     }
     if (token) {
       axios
-        .get("http://localhost:8000/auth/activate/" + token)
+        .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/activate/` + token)
         .then((response: any) => {
           console.log(response.data);
           if (response.data.status === 400) {

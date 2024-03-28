@@ -28,6 +28,8 @@ const Header = () => {
   const [user, setUser] = useState(false);
   const [userRoute, setUserRoute] = useState("");
 
+  
+
   useEffect(() => {
     setActiveLandPageTab(
       router.asPath !== "/"
@@ -36,7 +38,7 @@ const Header = () => {
         : 0
     );
     (async () => {
-      const response = await axios.get("http://localhost:8000/auth/user", {
+      const response = await axios.get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`, {
         withCredentials: true,
       });
       if (response.data.status === 200) {
@@ -102,7 +104,6 @@ const Header = () => {
                       key={index}
                       label={tab.name}
                       href={tab.href}
-                      target={tab.target}
                       sx={{ color: tab.color }}
                     />
                   ))}

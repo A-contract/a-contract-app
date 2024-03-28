@@ -4,13 +4,11 @@ import Footer from "@/components/home/footer/Footer";
 import { useState } from "react";
 import AllPosts from "@/components/home/blog/AllPosts";
 
+
 const tabs = [{ name: "All Posts", component: <AllPosts /> }];
 
 const Posts = () => {
-  const [tabValue, setTabValue] = useState({
-    name: "All Posts",
-    component: <AllPosts />,
-  });
+  const [tabValue, setTabValue] = useState(tabs[0]);
 
   const handleTabChange = (
     event: React.SyntheticEvent,
@@ -37,10 +35,10 @@ const Posts = () => {
         </Box>
         <Divider />
 
-        <Box sx={{ width: "100%", mt: "5px", mb: "5px" }}>
+        <Box sx={{ width: "100%", mt: "5px", mb: "5px", color: "text.main" }}>
           <Tabs value={tabValue} onChange={handleTabChange}>
-            {tabs.map((element: any) => (
-              <Tab value={element} label={element.name} />
+            {tabs.map((element: any, index: number) => (
+              <Tab value={element} label={element.name} key={index} />
             ))}
           </Tabs>
         </Box>

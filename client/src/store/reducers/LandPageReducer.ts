@@ -70,7 +70,7 @@ const initialState: LandPageState = {
       id: 3,
       name: "Blog",
       href: "/blog",
-      target: "_blank",
+      target: "",
       color: "secondary.main",
       marginTop: "",
       borderTop: "",

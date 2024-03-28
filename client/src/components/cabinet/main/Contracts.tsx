@@ -172,7 +172,7 @@ const Contracts = (props: any) => {
     try {
       const getData = async () => {
         await axios
-          .get("http://localhost:8000/contracts/contracts", {
+          .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contracts`, {
             withCredentials: true,
           })
           .then((response) => {
@@ -239,7 +239,7 @@ const Contracts = (props: any) => {
 
       formData.append("data", JSON.stringify(dataToSubmit));
       axios
-        .post("http://localhost:8000/contracts/upload", formData, {
+        .post(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/upload`, formData, {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
@@ -265,7 +265,7 @@ const Contracts = (props: any) => {
   const toPay = (info: any) => {
     console.log(info);
     axios.post(
-      "http://localhost:8000/contracts/toPay",
+      `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/toPay`,
       {
         id: info.id,
       },
@@ -278,7 +278,7 @@ const Contracts = (props: any) => {
 
   const toProcessingContract = (id: number) => {
     axios.post(
-      "http://localhost:8000/contracts/processing",
+      `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/processing`,
       {
         id: id,
       },
@@ -293,7 +293,7 @@ const Contracts = (props: any) => {
     console.log(name, originalName);
     try {
       const response = await axios.post(
-        "http://localhost:8000/contracts/download",
+        `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/download`,
         {
           fileName: name,
         },
@@ -340,7 +340,7 @@ const Contracts = (props: any) => {
       formData.append("data", JSON.stringify(dataToSubmit));
 
       axios
-        .post("http://localhost:8000/contracts/finish", formData, {
+        .post(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/finish`, formData, {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",

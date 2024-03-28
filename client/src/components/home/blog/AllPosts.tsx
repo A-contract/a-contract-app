@@ -6,6 +6,7 @@ import {
   CardActions,
   Button,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
@@ -13,7 +14,7 @@ import ShareIcon from "@mui/icons-material/Share";
 const posts = [
   {
     id: 1,
-    image: "/static/images/blog/the-definitive-guide-preview.jpg",
+    image: "/static/images/blog/the-definitive-guide-preview.png",
     name: "the-definitive-guide",
     title:
       "The Definitive Guide to Empowering Your Business Through Contract Analysis",
@@ -23,6 +24,7 @@ const posts = [
 ];
 
 const AllPosts = () => {
+  const theme = useTheme();
   return (
     <>
       {posts.map((element: any) => (
@@ -41,8 +43,9 @@ const AllPosts = () => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" href={`/blog/post/${element.name}`}>
-              {element.subtitle}
+            <Button size="medium" href={`/blog/post/${element.name}`} sx={{color: theme.palette.info.main}} >
+              <Typography >{element.subtitle}</Typography>
+              
             </Button>
           </CardActions>
           <CardActions disableSpacing>

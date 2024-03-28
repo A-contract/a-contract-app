@@ -44,10 +44,10 @@ const SignIn = () => {
     const email = validEmail.value;
     const password = validPassword.value;
     if (isValidEmail(email) && isValidPassword(password)) {
-      console.log(email, password);
+      console.log(process.env.SERVER_HOST + ':' + process.env.SERVER_PORT)
       axios
         .post(
-          "http://localhost:8000/auth/login",
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/login`,
           {
             email: email,
             password: password,

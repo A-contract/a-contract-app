@@ -35,14 +35,6 @@ const Custom404 = () => {
               Go Auth
             </Button>
           </Grid>
-          {/* <Grid xs={6}>
-            <img
-              src="https://cdn.pixabay.com/photo/2017/03/09/12/31/error-2129569__340.jpg"
-              alt=""
-              width={500}
-              height={250}
-            />
-          </Grid> */}
         </Grid>
       </Container>
     </Box>

@@ -8,6 +8,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import TelegramIcon from '@mui/icons-material/Telegram';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const navigation = [
   {
@@ -16,6 +19,7 @@ const navigation = [
       {
         name: "Analyse contract",
         href: "#analyse-contract",
+        target: "",
         color: "secondary.main",
         pt: "0",
         pb: "0",
@@ -23,6 +27,7 @@ const navigation = [
       {
         name: "Tariffs",
         href: "#tariffs",
+        target: "",
         color: "secondary.main",
         pt: "0",
         pb: "0",
@@ -30,6 +35,7 @@ const navigation = [
       {
         name: "Support",
         href: "#support",
+        target: "",
         color: "secondary.main",
         pt: "0",
         pb: "20px",
@@ -43,6 +49,7 @@ const navigation = [
       {
         name: "Terms & Conditions",
         href: "#",
+        target: "",
         color: "secondary.main",
         pt: "0",
         pb: "0",
@@ -50,6 +57,7 @@ const navigation = [
       {
         name: "Privacy policy",
         href: "#",
+        target: "",
         color: "secondary.main",
         pt: "0",
         pb: "20px",
@@ -61,22 +69,25 @@ const navigation = [
     title: "Social",
     items: [
       {
-        name: "Telegram",
-        href: "#",
+        name: <TelegramIcon/>,
+        href: "https://telegram.org/",
+        target: "_blank",
         color: "secondary.main",
         pt: "0",
         pb: "0",
       },
       {
-        name: "Instagram",
-        href: "#",
+        name: <InstagramIcon/>,
+        href: "https://www.instagram.com/",
+        target: "_blank",
         color: "secondary.main",
         pt: "0",
         pb: "0",
       },
       {
-        name: "LinkedIn",
-        href: "#",
+        name: <LinkedInIcon/>,
+        href: "https://www.linkedin.com/login/",
+        target: "_blank",
         color: "secondary.main",
         pt: "0",
         pb: "20px",
@@ -92,111 +103,6 @@ const Footer = () => {
 
   return (
     <>
-      {isMatch ? (
-        <Box
-          component="footer"
-          sx={{
-            bgcolor: theme.palette.primary.main,
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            py: "20px",
-          }}
-        >
-          <Box
-            component="div"
-            sx={{
-              maxWidth: "inherit",
-              width: "inherit",
-            }}
-          >
-            <Toolbar
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Box
-                component="div"
-                sx={{
-                  mb: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={"/static/images/logo.png"}
-                  alt="logo"
-                  sx={{ width: "160px" }}
-                />
-                <Typography
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    textAlign: "center",
-                  }}
-                >
-                  © 2023, A-contract. All Rights Reserved.
-                </Typography>
-              </Box>
-              <Box
-                component="div"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {navigation.map((value, index) => (
-                  <Box component="div" key={index}>
-                    <List>
-                      <ListItem sx={{ pb: "0" }}>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              sx={{
-                                color: value.color,
-                                letterSpacing: "0.7px",
-                                fontSize: "18px",
-                                textAlign: "center",
-                              }}
-                            >
-                              {value.title}
-                            </Typography>
-                          }
-                        ></ListItemText>
-                      </ListItem>
-                      {value.items.map((valueItem, indexItem) => (
-                        <ListItem
-                          component="a"
-                          href={valueItem.href}
-                          key={indexItem}
-                          sx={{ pb: valueItem.pb, pt: valueItem.pt }}
-                        >
-                          <ListItemText
-                            primary={
-                              <Typography
-                                sx={{
-                                  color: valueItem.color,
-                                  textAlign: "center",
-                                }}
-                              >
-                                {valueItem.name}
-                              </Typography>
-                            }
-                          ></ListItemText>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                ))}
-              </Box>
-            </Toolbar>
-          </Box>
-        </Box>
-      ) : (
         <Box
           component="footer"
           sx={{
@@ -217,7 +123,7 @@ const Footer = () => {
           >
             <Toolbar
               sx={{
-                display: "flex",
+                display: isMatch ? "grid" : "flex",
                 alignItems: "center",
               }}
             >
@@ -229,12 +135,12 @@ const Footer = () => {
                   sx={{ width: "160px" }}
                 />
                 <Typography sx={{ color: theme.palette.secondary.main }}>
-                  © 2023, A-contract. All Rights Reserved.
+                  © 2023-{new Date().getFullYear()}, A-contract. All Rights Reserved.
                 </Typography>
               </Box>
-              <Box component="div" sx={{ display: "flex" }}>
+              <Box component="div" sx={{ display: isMatch ? "grid" : "flex" }}>
                 {navigation.map((value, index) => (
-                  <Box component="div" key={index} sx={{ pl: "30px" }}>
+                  <Box component="div" key={index} sx={{ pl: isMatch ? "" : "30px" }}>
                     <List>
                       <ListItem>
                         <ListItemText
@@ -255,6 +161,7 @@ const Footer = () => {
                         <ListItem
                           component="a"
                           href={valueItem.href}
+                          target={valueItem.target}
                           key={indexItem}
                         >
                           <ListItemText
@@ -273,7 +180,6 @@ const Footer = () => {
             </Toolbar>
           </Box>
         </Box>
-      )}
     </>
   );
 };

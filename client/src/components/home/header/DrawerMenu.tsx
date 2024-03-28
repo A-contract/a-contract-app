@@ -37,7 +37,6 @@ const DrawerMenu = (props: any) => {
               key={index}
               label={tab.name}
               href={tab.href}
-              target={tab.target}
               sx={{
                 width: "100%",
                 color: tab.color,

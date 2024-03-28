@@ -17,7 +17,7 @@ const Workspace = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/contracts/contractInProcess", {
+      .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contractInProcess`, {
         withCredentials: true,
       })
       .then((response) => {
