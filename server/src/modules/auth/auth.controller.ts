@@ -44,7 +44,6 @@ export class AuthController {
     const hashedPassword = await bcrypt.hash(password, 12);
     const findUser = await this.authService.findOne({ email: email });
     const findRole = await this.roleService.findOne({ name: roleName });
-    console.log(findUser, findRole);
 
     if (findUser) {
       return {
@@ -52,7 +51,6 @@ export class AuthController {
         message: 'This e-mail already exists',
       };
     } else {
-
       const user = await this.authService.create({
         name: name,
         surname: surname,
@@ -69,7 +67,6 @@ export class AuthController {
       usersRoles.role = findRole;
 
       await this.usersRolesRepository.save(usersRoles);
-
 
       const token = await this.userService.createActivationToken(user.id);
 
@@ -129,7 +126,6 @@ export class AuthController {
     @Body('password') password: string,
     @Res({ passthrough: true }) response: Response,
   ) {
-    console.log(email, password);
     const user = await this.authService.findOne({ email });
 
     if (!user) {
@@ -152,7 +148,6 @@ export class AuthController {
         message: 'Invalid pass',
       };
     }
-    console.log(user);
 
     const jwt = await this.jwtService.signAsync({ id: user.id });
 
@@ -181,7 +176,9 @@ export class AuthController {
   @Get('user')
   async user(@Req() request: Request) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
 
       if (!data) {
         return {

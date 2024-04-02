@@ -22,6 +22,10 @@ import { Support } from './entities/support.entity';
 import { SupportController } from './modules/support/support.controller';
 import { SupportService } from './modules/support/support.service';
 import { ConfigModule } from '@nestjs/config';
+import { SettingsController } from './modules/settings/settings.controller';
+import { SettingsService } from './modules/settings/settings.service';
+import { Chats } from './entities/chats.entity';
+import { Messages } from './entities/messages.entity';
 
 @Module({
   imports: [
@@ -29,7 +33,7 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.SERVER_HOST,
-      port: parseInt(process.env.DB_PORT) ,
+      port: parseInt(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
@@ -41,7 +45,9 @@ import { ConfigModule } from '@nestjs/config';
         ContractsInProgress,
         Photos,
         ActivationToken,
-        Support
+        Support,
+        Chats,
+        Messages,
       ],
       synchronize: true,
     }),
@@ -53,7 +59,9 @@ import { ConfigModule } from '@nestjs/config';
       ContractsInProgress,
       Photos,
       ActivationToken,
-      Support
+      Support,
+      Chats,
+      Messages,
     ]),
     JwtModule.register({
       secret: 'abdulalhazred',
@@ -66,7 +74,8 @@ import { ConfigModule } from '@nestjs/config';
     ContractController,
     AdminController,
     UserController,
-    SupportController
+    SupportController,
+    SettingsController,
   ],
   providers: [
     AuthService,
@@ -75,7 +84,8 @@ import { ConfigModule } from '@nestjs/config';
     ContractService,
     AdminService,
     MailerService,
-    SupportService
+    SupportService,
+    SettingsService,
   ],
 })
 export class AppModule {}

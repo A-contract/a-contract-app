@@ -14,18 +14,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ContractService } from './contract.service';
 import { JwtService } from '@nestjs/jwt';
-import { RoleService } from '../role/role.service';
 import { AuthService } from '../auth/auth.service';
 import { convertDocxToHtml } from 'src/utils/docsFormatter';
 import { copyFileWithReplacement } from 'src/utils/fileUtils';
-
 
 @Controller('contracts')
 export class ContractController {
   constructor(
     private readonly contractService: ContractService,
     private readonly authService: AuthService,
-    private readonly roleService: RoleService,
     private jwtService: JwtService,
   ) {}
 
@@ -53,9 +50,9 @@ export class ContractController {
     @Req() request: any,
   ) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
-
-      
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
 
       if (!data) {
         return {
@@ -65,7 +62,6 @@ export class ContractController {
       }
 
       const { originalName } = JSON.parse(request.body.data);
-
 
       await this.contractService.create({
         userId: data['id'],
@@ -95,7 +91,9 @@ export class ContractController {
   @Get('contracts')
   async user(@Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
       const { id } = data;
       const user: any = await this.authService.findOne({ id: id });
       const contracts: any = await this.contractService.findAll(user.role, id);
@@ -138,7 +136,9 @@ export class ContractController {
   @Post('toPay')
   async toPay(@Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
 
       if (!data) {
         return {
@@ -167,7 +167,9 @@ export class ContractController {
   @Post('processing')
   async processing(@Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
 
       if (!data) {
         return {
@@ -207,7 +209,9 @@ export class ContractController {
   @Get('contractInProcess')
   async contractInProcess(@Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
 
       if (!data) {
         return {
@@ -244,7 +248,9 @@ export class ContractController {
 
   @Post('download')
   async downloadFile(@Res() response: any, @Req() request: any) {
-    const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+    const data = await this.jwtService.verifyAsync(
+      request.cookies['jwt-a.contract'],
+    );
 
     if (!data) {
       return {
@@ -257,7 +263,7 @@ export class ContractController {
     if (user.role === 'lawyer') {
       const fileName = request.body.fileName;
       const filePath = './uploads/contracts/' + fileName;
-      console.log(fileName)
+      console.log(fileName);
 
       return response.sendFile(filePath, { root: '.' });
     } else if (user.role === 'customer') {
@@ -290,7 +296,9 @@ export class ContractController {
   )
   async finish(@UploadedFile() file: Express.Multer.File, @Req() request: any) {
     try {
-      const data = await this.jwtService.verifyAsync(request.cookies['jwt-a.contract']);
+      const data = await this.jwtService.verifyAsync(
+        request.cookies['jwt-a.contract'],
+      );
       if (!data) {
         return {
           status: HttpStatus.UNAUTHORIZED,

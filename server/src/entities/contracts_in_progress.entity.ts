@@ -1,12 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { formatDateTime } from 'src/utils/dateUtils';
+import { Users } from './users.entity';
+import { Contracts } from './contracts.entity';
 
 @Entity()
 export class ContractsInProgress {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @ManyToOne(() => Contracts)
+  @JoinColumn({ name: 'contractId' })
   contractId: number;
 
   @Column({ length: 50 })
@@ -18,10 +29,12 @@ export class ContractsInProgress {
   @Column()
   size: number;
 
-  @Column()
+  @ManyToOne(() => Users)
+  @JoinColumn({ name: 'userId' })
   userId: number;
 
-  @Column()
+  @ManyToOne(() => Users)
+  @JoinColumn({ name: 'lawyerId' })
   lawyerId: number;
 
   @Column()

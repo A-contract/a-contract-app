@@ -19,11 +19,10 @@ export class ContractService {
       const result = await this.contractRepository.save(data);
       return result;
     } catch (error) {
-      console.error("Ошибка при сохранении данных:", error);
-      throw error; 
+      console.error('Ошибка при сохранении данных:', error);
+      throw error;
     }
   }
-  
 
   async findOne(id: any): Promise<Contracts[]> {
     const query = this.contractRepository
@@ -31,7 +30,7 @@ export class ContractService {
       .where('contract.id = :id', { id: id });
 
     const result = await query.getMany();
- 
+
     return result;
   }
 
@@ -51,14 +50,12 @@ export class ContractService {
         .orWhere('contracts.paymentStatus = 1');
     }
 
-
     const result = await query.getMany();
 
     return result;
   }
 
   async createProcessing(data: any): Promise<ContractsInProgress> {
-
     return this.contractInProgressRepository.save(data);
   }
 
