@@ -17,9 +17,12 @@ const Workspace = () => {
 
   useEffect(() => {
     axios
-      .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contractInProcess`, {
-        withCredentials: true,
-      })
+      .get(
+        `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contractInProcess`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         if (response.data.status === 200) {
           if (!workspaceState.draft.edited) {
@@ -31,7 +34,7 @@ const Workspace = () => {
           }
         }
       });
-  }, []);
+  }, [updateDraft, workspaceState.draft.edited]);
 
   const draftEditorOnChange = (content: any) => {
     updateDraft({ content: content, edited: true });

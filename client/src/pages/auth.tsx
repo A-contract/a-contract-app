@@ -14,7 +14,7 @@ const Auth = () => {
     (state: any) => state.auth.activeFormId
   );
   const { setActiveAuthForm } = useActions();
-  const tabs = [<SignIn />, <SignUp />];
+  const tabs = [<SignIn key={""} />, <SignUp key={""} />];
 
   return (
     <Box

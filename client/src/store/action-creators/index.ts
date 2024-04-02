@@ -4,10 +4,12 @@ import * as CabinetActionCreators from "./cabinet";
 import * as WorkspaceActionCreators from "./workspace";
 import * as AdminPageActionCreators from "./adminPage";
 
-export default {
+const actionCreators = {
   ...AuthActionCreators,
   ...LandPageActionCreators,
   ...CabinetActionCreators,
   ...WorkspaceActionCreators,
   ...AdminPageActionCreators,
 };
+
+export default actionCreators;

@@ -226,7 +226,7 @@ const Contracts = (props: any) => {
 
       getData();
     } catch (e) {}
-  }, [selectedContractRef, actionTrigger]);
+  }, [selectedContractRef, actionTrigger, setDataFile]);
 
   const sendContract = () => {
     if (file) {

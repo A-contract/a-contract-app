@@ -44,7 +44,7 @@ const SignIn = () => {
     const email = validEmail.value;
     const password = validPassword.value;
     if (isValidEmail(email) && isValidPassword(password)) {
-      console.log(process.env.SERVER_HOST + ':' + process.env.SERVER_PORT)
+      console.log(process.env.SERVER_HOST + ":" + process.env.SERVER_PORT);
       axios
         .post(
           `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/login`,
@@ -156,7 +156,7 @@ const SignIn = () => {
               },
             }}
           >
-            Don't remember your password?
+            Don&apos;t remember your password?
           </Typography>
         </Link>
       </Box>
@@ -173,7 +173,7 @@ const SignIn = () => {
           }}
           onClick={() => setActiveAuthForm(1)}
         >
-          Don't have an account? Sign up{" "}
+          Don&apos;t have an account? Sign up{" "}
         </Typography>
       </Box>
       <Snackbar

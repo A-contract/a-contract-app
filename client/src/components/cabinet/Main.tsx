@@ -7,22 +7,24 @@ import Settings from "./main/Settings";
 
 const Main = (props: any) => {
   const lawyerMain = [
-    <Contracts role={props.user.role} />,
-    <Workspace />,
-    <Support />,
+    <Contracts role={props.user.role} key={""} />,
+    <Workspace key={""} />,
+    <Support key={""} />,
     <Settings
       user={props.user}
       setActionTrigger={props.setActionTrigger}
       actionTrigger={props.actionTrigger}
+      key={""}
     />,
   ];
   const customerMain = [
-    <Contracts role={props.user.role} />,
-    <Support />,
+    <Contracts role={props.user.role} key={""} />,
+    <Support key={""} />,
     <Settings
       user={props.user}
       setActionTrigger={props.setActionTrigger}
       actionTrigger={props.actionTrigger}
+      key={""}
     />,
   ];
   const theme = useTheme();

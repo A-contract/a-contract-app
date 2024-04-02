@@ -18,7 +18,10 @@ const ActivationPage = () => {
     }
     if (token) {
       axios
-        .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/activate/` + token)
+        .get(
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/activate/` +
+            token
+        )
         .then((response: any) => {
           console.log(response.data);
           if (response.data.status === 400) {
@@ -30,7 +33,7 @@ const ActivationPage = () => {
           }
         });
     }
-  }, [token]);
+  }, [token, router.asPath]);
 
   return (
     <>
