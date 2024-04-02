@@ -1,4 +1,5 @@
 import { AppBar, Toolbar, useTheme } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const drawerWidth = 200;
 
@@ -15,7 +16,12 @@ const Header = (props: any) => {
         color: theme.palette.primary.main,
       }}
     >
-      <Toolbar>{props.user.email}</Toolbar>
+      <Toolbar sx={{ ml: "auto" }}>
+        {props.user.name} {props.user.surname}
+        <AccountCircleIcon
+          sx={{ fontSize: "40px", ml: 1, color: "#cbcbcb" }}
+        ></AccountCircleIcon>
+      </Toolbar>
     </AppBar>
   );
 };

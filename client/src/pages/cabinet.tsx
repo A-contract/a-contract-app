@@ -9,21 +9,26 @@ import { useEffect, useState } from "react";
 const Cabinet = () => {
   const [user, setUser] = useState(false);
   const alowRoles = ["customer", "lawyer"];
+  const [actionTrigger, setActionTrigger] = useState<boolean>(false);
+
+  const getData = async () => {
+    const response = await axios.get(
+      `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`,
+      {
+        withCredentials: true,
+      }
+    );
+    if (response.data.status === 401) router.push("/auth");
+    if (response.data.status === 200) {
+      if (alowRoles.includes(response.data.user.role)) {
+        setUser(response.data.user);
+      } else router.push("/auth");
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await axios.get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`, {
-        withCredentials: true,
-      });
-      if (response.data.status === 401) router.push("/auth");
-      if (response.data.status === 200) {
-        if (alowRoles.includes(response.data.user.role)) {
-          setUser(response.data.user);
-        } else router.push("/auth");
-      }
-    };
     getData();
-  }, []);
+  }, [actionTrigger]);
 
   if (user)
     return (
@@ -31,7 +36,11 @@ const Cabinet = () => {
         <CssBaseline />
         <Header user={user} />
         <SideBar user={user} />
-        <Main user={user} />
+        <Main
+          user={user}
+          actionTrigger={actionTrigger}
+          setActionTrigger={setActionTrigger}
+        />
       </Box>
     );
   else return null;

@@ -5,6 +5,13 @@ import {
   AppBar,
   Box,
   Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  ListItemIcon,
+  MenuItem,
+  Select,
   Tab,
   Tabs,
   Toolbar,
@@ -12,10 +19,13 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LanguageIcon from "@mui/icons-material/Language";
 import { useActions } from "@/hooks/useAction";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { ArrowDropDown } from "@mui/icons-material";
 
 const Header = () => {
   const landPageState = useTypedSelector((state: any) => state.landPage);
@@ -27,8 +37,7 @@ const Header = () => {
   const router = useRouter();
   const [user, setUser] = useState(false);
   const [userRoute, setUserRoute] = useState("");
-
-  
+  const [language, setLanguage] = useState("En");
 
   useEffect(() => {
     setActiveLandPageTab(
@@ -38,9 +47,12 @@ const Header = () => {
         : 0
     );
     (async () => {
-      const response = await axios.get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/auth/user`,
+        {
+          withCredentials: true,
+        }
+      );
       if (response.data.status === 200) {
         setUser(response.data.user);
         setUserRoute(response.data.route);
@@ -110,7 +122,41 @@ const Header = () => {
                 </Tabs>
               </Box>
 
-              <Box component="div" sx={{ mf: "auto" }}>
+              <Box component="div" sx={{ display: "contents" }}>
+                <Box color="white" sx={{ mx: 2 }}>
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="language-select-label"
+                      id="language-select"
+                      variant="outlined"
+                      color="secondary"
+                      value={language}
+                      renderValue={(selected) => (
+                        <span style={{ color: "white" }}>{selected}</span>
+                      )}
+                      onChange={(e) => {
+                        setLanguage(e.target.value);
+                      }}
+                      label="Choose the language"
+                      sx={{
+                        color: "white",
+                        boxShadow: "none",
+                        ".MuiOutlinedInput-notchedOutline": { border: 0 },
+                        "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                          {
+                            border: 0,
+                          },
+                        "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            border: 0,
+                          },
+                      }}
+                    >
+                      <MenuItem value="En">En</MenuItem>
+                      <MenuItem value="Uk">Uk</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
                 {user ? (
                   <Box component={Link} href={"/" + userRoute}>
                     <Button variant="outlined" color="secondary">
@@ -122,7 +168,7 @@ const Header = () => {
                 )}
                 <Box
                   component={Link}
-                  href="auth"
+                  href="/auth"
                   onClick={() => setActiveAuthForm(0)}
                   sx={{ ml: "10px" }}
                 >
@@ -132,7 +178,7 @@ const Header = () => {
                 </Box>
                 <Box
                   component={Link}
-                  href="auth"
+                  href="/auth"
                   onClick={() => setActiveAuthForm(1)}
                   sx={{ ml: "10px" }}
                 >

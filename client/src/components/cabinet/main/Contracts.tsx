@@ -74,7 +74,6 @@ const Contracts = (props: any) => {
       headerName: "Progress Status",
       width: 250,
       renderCell: (params: any) => {
-        console.log(params.row.paymentStatus === 1);
         if (isLawyer) {
           if (
             selectedContract.progressStatus !== 1 &&
@@ -93,10 +92,9 @@ const Contracts = (props: any) => {
               </Button>
             );
           } else if (
-            params.row.info.name === selectedContract.originalName &&
+            params.row.info.id === selectedContract.id &&
             selectedContract.progressStatus === 1
           ) {
-            console.log(selectedContract);
             return <>In process</>;
           } else if (
             (params.row.progressStatus === 1 || 2) &&
@@ -172,9 +170,12 @@ const Contracts = (props: any) => {
     try {
       const getData = async () => {
         await axios
-          .get(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contracts`, {
-            withCredentials: true,
-          })
+          .get(
+            `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/contracts`,
+            {
+              withCredentials: true,
+            }
+          )
           .then((response) => {
             if (response.status === 200) {
               const contracts = response.data.contracts;
@@ -239,12 +240,16 @@ const Contracts = (props: any) => {
 
       formData.append("data", JSON.stringify(dataToSubmit));
       axios
-        .post(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/upload`, formData, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/upload`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .then(function (response: any) {
           if (response.data.status === 200) {
             console.log("Ваш файл был успешно загружен!");
@@ -340,12 +345,16 @@ const Contracts = (props: any) => {
       formData.append("data", JSON.stringify(dataToSubmit));
 
       axios
-        .post(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/finish`, formData, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/contracts/finish`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .then(function (response: any) {
           if (response.data.status === 200) {
             console.log("Ваш файл был успешно загружен!");

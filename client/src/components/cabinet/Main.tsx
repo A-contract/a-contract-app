@@ -1,21 +1,29 @@
 import { Box, useTheme } from "@mui/material";
 import Contracts from "./main/Contracts";
 import Workspace from "./main/Workspace";
-import Setting from "./main/Setting";
 import Support from "./main/Support";
 import { useTypedSelector } from "@/hooks/useTypeSelector";
+import Settings from "./main/Settings";
 
 const Main = (props: any) => {
   const lawyerMain = [
     <Contracts role={props.user.role} />,
     <Workspace />,
     <Support />,
-    <Setting user={props.user} />,
+    <Settings
+      user={props.user}
+      setActionTrigger={props.setActionTrigger}
+      actionTrigger={props.actionTrigger}
+    />,
   ];
   const customerMain = [
     <Contracts role={props.user.role} />,
     <Support />,
-    <Setting user={props.user} />,
+    <Settings
+      user={props.user}
+      setActionTrigger={props.setActionTrigger}
+      actionTrigger={props.actionTrigger}
+    />,
   ];
   const theme = useTheme();
   const cabinetState = useTypedSelector((state: any) => state.cabinet);

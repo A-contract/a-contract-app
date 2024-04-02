@@ -48,16 +48,16 @@ const navigation = [
     items: [
       {
         name: "Terms & Conditions",
-        href: "#",
-        target: "",
+        href: "/legal/terms-and-conditions",
+        target: "_blank",
         color: "secondary.main",
         pt: "0",
         pb: "0",
       },
       {
         name: "Privacy policy",
-        href: "#",
-        target: "",
+        href: "/legal/privacy-policy",
+        target: "_blank",
         color: "secondary.main",
         pt: "0",
         pb: "20px",

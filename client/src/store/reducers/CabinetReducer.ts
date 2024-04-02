@@ -29,7 +29,7 @@ const initialState: CabinetState = {
     },
     {
       id: 3,
-      name: "Setting",
+      name: "Settings",
       iconPath: "/static/images/setting_icon.png",
       iconml: "12px",
       textml: "11px",
@@ -52,7 +52,7 @@ const initialState: CabinetState = {
     },
     {
       id: 2,
-      name: "Setting",
+      name: "Settings",
       iconPath: "/static/images/setting_icon.png",
       iconml: "12px",
       textml: "11px",

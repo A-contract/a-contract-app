@@ -19,8 +19,6 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
-import { useActions } from "@/hooks/useAction";
-import generatePassword from "password-generator";
 
 const SignUp = () => {
   const theme = useTheme();
