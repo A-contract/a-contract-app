@@ -58,7 +58,7 @@ const Header = () => {
         setUserRoute(response.data.route);
       }
     })();
-  }, [router.asPath, setActiveLandPageTab, tabs]);
+  }, [router.asPath]);
 
   return (
     <AppBar color="primary" sx={{ alignItems: "center" }}>

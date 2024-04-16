@@ -14,44 +14,6 @@ import {
   useTheme,
 } from "@mui/material";
 
-const analyse = {
-  name: "Analyse contract",
-  items: [
-    {
-      icon: "•",
-      text: "names of the parties;",
-    },
-    {
-      icon: "•",
-      text: "subject of the contact;",
-    },
-    {
-      icon: "•",
-      text: "payment procedure(Fees);",
-    },
-    {
-      icon: "•",
-      text: "the term of the contract;",
-    },
-    {
-      icon: "•",
-      text: "the procedure for termination of the contract;",
-    },
-    {
-      icon: "•",
-      text: "procedure for resolving disputes;",
-    },
-    {
-      icon: "•",
-      text: "confidentiality;",
-    },
-    {
-      icon: "•",
-      text: "the pitfalls of the contract;",
-    },
-  ],
-};
-
 const Tariffs = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));

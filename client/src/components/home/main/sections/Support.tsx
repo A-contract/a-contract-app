@@ -16,52 +16,55 @@ import { useState } from "react";
 const Support = () => {
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  const [email, setEmail ] = useState("")
+  const [email, setEmail] = useState("");
   const [question, setQuestion] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [textSnackbar, setTextSnackbar] = useState("");
-  const [isError, setError] = useState(false)
-
+  const [isError, setError] = useState(false);
 
   const isValidEmail = (value: string) => {
-    const result = value.includes("@") && value.includes(".") && value.length > 4;
-    if(!result) {
+    const result =
+      value.includes("@") && value.includes(".") && value.length > 4;
+    if (!result) {
       setTextSnackbar("Wrong format of email!");
-      setError(true)
-    } 
+      setError(true);
+    }
     return result;
   };
 
   const isValidQuestion = (value: string) => {
     const result = value.length > 0;
-    if(!result){
-      setTextSnackbar("Wrong format of question!")
-      setError(true)
+    if (!result) {
+      setTextSnackbar("Wrong format of question!");
+      setError(true);
     }
-    return result
+    return result;
   };
 
   const setQuestionReq = () => {
-    console.log(question, email)
-    if(isValidQuestion(question) && isValidEmail(email)) {
-      axios.post(`http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/support/setQuestion`, {
-        email: email,
-        question: question,
-      },
-      {
-        withCredentials: true,
-      }).then(response => {
-        console.log(response.data.status)
-      })
-      setError(false)
-      setTextSnackbar("Your question sent!")
+    console.log(question, email);
+    if (isValidQuestion(question) && isValidEmail(email)) {
+      axios
+        .post(
+          `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/support/setQuestion`,
+          {
+            email: email,
+            question: question,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          console.log(response.data.status);
+        });
+      setError(false);
+      setTextSnackbar("Your question sent!");
       setEmail("");
       setQuestion("");
-    } 
+    }
     setOpenSnackbar(true);
-    
-  
-  }
+  };
 
   return (
     <>
@@ -135,7 +138,7 @@ const Support = () => {
                   variant="outlined"
                   value={email}
                   onChange={(e) => {
-                    setEmail(e.target.value)
+                    setEmail(e.target.value);
                   }}
                   sx={{
                     bgcolor: theme.palette.secondary.main,
@@ -151,7 +154,7 @@ const Support = () => {
                   variant="outlined"
                   value={question}
                   onChange={(e) => {
-                    setQuestion(e.target.value)
+                    setQuestion(e.target.value);
                   }}
                   sx={{
                     bgcolor: theme.palette.secondary.main,
@@ -172,7 +175,9 @@ const Support = () => {
                       borderColor: theme.palette.info.main,
                     },
                   }}
-                  onClick={() => { setQuestionReq()}}
+                  onClick={() => {
+                    setQuestionReq();
+                  }}
                 >
                   Submit
                 </Button>
@@ -181,19 +186,22 @@ const Support = () => {
           </Box>
         </Container>
         <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => setOpenSnackbar(false)}
-        sx={{
-          left: "auto !important",
-          right: "auto !important",
-          bottom: "20% !important",
-        }}
-      >
-        <Alert onClose={() => setOpenSnackbar(false)} severity={isError ? "error" : "success"}>
-        {textSnackbar}
-        </Alert>
-      </Snackbar>
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={() => setOpenSnackbar(false)}
+          sx={{
+            left: "auto !important",
+            right: "auto !important",
+            bottom: "20% !important",
+          }}
+        >
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={isError ? "error" : "success"}
+          >
+            {textSnackbar}
+          </Alert>
+        </Snackbar>
       </Box>
     </>
   );
